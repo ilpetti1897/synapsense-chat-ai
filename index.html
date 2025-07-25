@@ -50,22 +50,24 @@
       gap: 0.25rem;
       font-weight: 600;
     }
-    select, textarea, button {
+    select, textarea {
       font-size: 1rem;
       padding: 0.5rem var(--spacing);
       border: 1px solid #ccc;
       border-radius: var(--radius);
       background: var(--white);
+      flex: 1;
     }
-    select, textarea { flex: 1; }
     textarea { resize: vertical; min-height: 4rem; }
     button {
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
       background: var(--purple);
       color: var(--white);
       border: none;
+      border-radius: var(--radius);
       cursor: pointer;
       font-weight: 600;
-      padding: 0.75rem 1.5rem;
     }
     button:disabled {
       opacity: 0.6;
@@ -103,16 +105,13 @@
   <main>
     <div class="controls">
       <label>
-        <input type="radio" name="mode" value="chat" checked>
-        Chat libera
+        <input type="radio" name="mode" value="chat"> Chat libera
       </label>
       <label>
-        <input type="radio" name="mode" value="exercise">
-        Consigli esercizio
+        <input type="radio" name="mode" value="exercise"> Consigli esercizio
       </label>
 
-      <!-- SELECT ESERCIZI -->
-      <select id="exerciseSelect" style="display:none">
+      <select id="exerciseSelect">
         <option value="1">1 – Respira profondamente</option>
         <option value="2">2 – Tecnica dei 5 secondi</option>
         <option value="3">3 – Focus su un obiettivo</option>
@@ -145,10 +144,7 @@
         <option value="30">30 – Cammina lentamente e ascolta il passo</option>
       </select>
 
-      <!-- TEXTAREA CHAT -->
       <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
-
-      <!-- PULSANTE INVIA -->
       <button id="sendBtn">Invia</button>
     </div>
 
@@ -167,19 +163,27 @@
     const sendBtn     = document.getElementById('sendBtn');
     const chatBox     = document.getElementById('chatBox');
 
-    // toggle tra chat libera / esercizio
-    modeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (radio.value === 'exercise' && radio.checked) {
-          exSelect.style.display    = 'block';
-          freeMessage.style.display = 'none';
-        }
-        if (radio.value === 'chat' && radio.checked) {
-          exSelect.style.display    = 'none';
-          freeMessage.style.display = 'block';
-        }
-      });
+    // funzione di toggle
+    function updateModeDisplay() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      if (mode === 'exercise') {
+        exSelect.style.display    = 'block';
+        freeMessage.style.display = 'none';
+      } else {
+        exSelect.style.display    = 'none';
+        freeMessage.style.display = 'block';
+      }
+    }
+
+    // al load setta textarea vs select
+    window.addEventListener('DOMContentLoaded', () => {
+      // di default selezioniamo chat libera
+      document.querySelector('input[value="chat"]').checked = true;
+      updateModeDisplay();
     });
+
+    // al cambio radio
+    modeRadios.forEach(radio => radio.addEventListener('change', updateModeDisplay));
 
     // invio
     sendBtn.addEventListener('click', () => {
@@ -197,33 +201,30 @@
         url.searchParams.set('message', text);
       }
 
-      sendBtn.disabled = true;
-      chatBox.innerHTML = '<p>Caricamento…</p>';
+      sendBtn.disabled   = true;
+      chatBox.innerHTML  = '<p>Caricamento…</p>';
 
-      fetch(url.toString())
+      fetch(url)
         .then(r => r.json())
-        .then(json => renderReply(json.reply))
+        .then(json => {
+          // spezzetta e formatta
+          chatBox.innerHTML = '';
+          json.reply.split(/\r?\n{1,2}|\*\*/).forEach(line => {
+            const t = line.trim();
+            if (!t) return;
+            const p = document.createElement('p');
+            p.textContent = t.replace(/^\*/, '•');
+            chatBox.append(p);
+          });
+          chatBox.scrollTop = chatBox.scrollHeight;
+        })
         .catch(() => {
           chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>';
         })
-        .finally(() => {
-          sendBtn.disabled = false;
-        });
+        .finally(() => sendBtn.disabled = false);
     });
-
-    // formatta il testo in paragrafi/bullet
-    function renderReply(text) {
-      chatBox.innerHTML = '';
-      text.split(/\r?\n{1,2}|\*\*/).forEach(line => {
-        const t = line.trim();
-        if (!t) return;
-        const p = document.createElement('p');
-        p.textContent = t.replace(/^\*/, '•');
-        chatBox.append(p);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
   </script>
 
 </body>
 </html>
+
