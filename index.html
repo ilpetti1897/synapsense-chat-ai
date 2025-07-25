@@ -57,7 +57,7 @@
       border-radius: var(--radius);
       background: var(--white);
     }
-    select, textarea { flex: 1; min-width: 200px; }
+    select, textarea { flex: 1; }
     textarea { resize: vertical; min-height: 4rem; }
     button {
       background: var(--purple);
@@ -65,7 +65,7 @@
       border: none;
       cursor: pointer;
       font-weight: 600;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1.5rem;
     }
     button:disabled {
       opacity: 0.6;
@@ -92,7 +92,7 @@
     @media (max-width: 480px) {
       header { font-size: 1.1rem; }
       .controls { flex-direction: column; }
-      select, textarea, button { width: 100%; }
+      button { width: 100%; }
     }
   </style>
 </head>
@@ -102,14 +102,53 @@
 
   <main>
     <div class="controls">
-      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
-      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
+      <label>
+        <input type="radio" name="mode" value="chat" checked>
+        Chat libera
+      </label>
+      <label>
+        <input type="radio" name="mode" value="exercise">
+        Consigli esercizio
+      </label>
 
+      <!-- SELECT ESERCIZI -->
       <select id="exerciseSelect" style="display:none">
-        <option>Caricamento…</option>
+        <option value="1">1 – Respira profondamente</option>
+        <option value="2">2 – Tecnica dei 5 secondi</option>
+        <option value="3">3 – Focus su un obiettivo</option>
+        <option value="4">4 – Visualizza il tuo successo</option>
+        <option value="5">5 – Silenzia il giudizio interiore</option>
+        <option value="6">6 – La regola dei 20 minuti</option>
+        <option value="7">7 – Potenzia la memoria con la ripetizione attiva</option>
+        <option value="8">8 – Rilassamento muscolare progressivo</option>
+        <option value="9">9 – Scrivi tre cose per cui sei grato</option>
+        <option value="10">10 – Il potere delle affermazioni positive</option>
+        <option value="11">11 – Leggi 1 pagina di un libro oggi</option>
+        <option value="12">12 – Tecnica pomodoro: 25 minuti di focus</option>
+        <option value="13">13 – Lascia andare ciò che non controlli</option>
+        <option value="14">14 – Reset mentale: 3 respiri e 1 sorriso</option>
+        <option value="15">15 – Mini meditazione guidata</option>
+        <option value="16">16 – Concentrati su ciò che conta</option>
+        <option value="17">17 – Un pensiero positivo appena sveglio</option>
+        <option value="18">18 – Evita multitasking per 1 ora</option>
+        <option value="19">19 – Torna nel presente: cosa senti ora?</option>
+        <option value="20">20 – Fissa piccoli obiettivi giornalieri</option>
+        <option value="21">21 – Respira in 4-7-8</option>
+        <option value="22">22 – Dì a te stesso: 'Posso farcela'</option>
+        <option value="23">23 – Rituale mattutino di energia</option>
+        <option value="24">24 – Spegni il telefono per 30 minuti</option>
+        <option value="25">25 – Ascolta il tuo corpo 5 minuti</option>
+        <option value="26">26 – Bevi un bicchiere d’acqua consapevolmente</option>
+        <option value="27">27 – Allena la mente con un quiz veloce</option>
+        <option value="28">28 – Focalizzati su un suono per 1 minuto</option>
+        <option value="29">29 – Guarda il cielo per 2 minuti</option>
+        <option value="30">30 – Cammina lentamente e ascolta il passo</option>
       </select>
 
+      <!-- TEXTAREA CHAT -->
       <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
+
+      <!-- PULSANTE INVIA -->
       <button id="sendBtn">Invia</button>
     </div>
 
@@ -121,45 +160,28 @@
   <footer>© 2025 SynapSense</footer>
 
   <script>
-    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev';
-    const exercisesApi = WORKER_URL + '/exercises';
-
+    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev/';
     const modeRadios  = document.querySelectorAll('input[name="mode"]');
     const exSelect    = document.getElementById('exerciseSelect');
     const freeMessage = document.getElementById('freeMessage');
     const sendBtn     = document.getElementById('sendBtn');
     const chatBox     = document.getElementById('chatBox');
 
-    // 1) Carica dinamicamente gli esercizi
-    fetch(exercisesApi)
-      .then(r => r.json())
-      .then(list => {
-        exSelect.innerHTML = ''; 
-        list.forEach(ex => {
-          const opt = document.createElement('option');
-          opt.value = ex.id;
-          opt.textContent = `${ex.id} – ${ex.titolo}`;
-          exSelect.append(opt);
-        });
-      })
-      .catch(() => {
-        exSelect.innerHTML = '<option disabled>Errore caricamento</option>';
-      });
-
-    // 2) Toggle tra chat libera e exercise
+    // toggle tra chat libera / esercizio
     modeRadios.forEach(radio => {
       radio.addEventListener('change', () => {
         if (radio.value === 'exercise' && radio.checked) {
           exSelect.style.display    = 'block';
           freeMessage.style.display = 'none';
-        } else if (radio.value === 'chat' && radio.checked) {
+        }
+        if (radio.value === 'chat' && radio.checked) {
           exSelect.style.display    = 'none';
           freeMessage.style.display = 'block';
         }
       });
     });
 
-    // 3) Invia richiesta
+    // invio
     sendBtn.addEventListener('click', () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
       let url   = new URL(WORKER_URL);
@@ -168,12 +190,15 @@
         url.searchParams.set('exerciseId', exSelect.value);
       } else {
         const text = freeMessage.value.trim();
-        if (!text) { alert('Inserisci un testo da inviare.'); return; }
+        if (!text) {
+          alert('Inserisci un testo da inviare.');
+          return;
+        }
         url.searchParams.set('message', text);
       }
 
-      sendBtn.disabled    = true;
-      chatBox.innerHTML   = '<p>Caricamento…</p>';
+      sendBtn.disabled = true;
+      chatBox.innerHTML = '<p>Caricamento…</p>';
 
       fetch(url.toString())
         .then(r => r.json())
@@ -186,4 +211,19 @@
         });
     });
 
-    // 4) Suddiv
+    // formatta il testo in paragrafi/bullet
+    function renderReply(text) {
+      chatBox.innerHTML = '';
+      text.split(/\r?\n{1,2}|\*\*/).forEach(line => {
+        const t = line.trim();
+        if (!t) return;
+        const p = document.createElement('p');
+        p.textContent = t.replace(/^\*/, '•');
+        chatBox.append(p);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
