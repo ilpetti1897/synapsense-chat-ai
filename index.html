@@ -1,189 +1,95 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>SynapSense Chat AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --purple: #7c4dff;
-      --bg: #f0f2f5;
-      --fg: #333;
-      --white: #fff;
-      --radius: 8px;
-      --spacing: 1rem;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      color: var(--fg);
-      background: var(--bg);
-    }
-    header {
-      background: var(--purple);
-      color: var(--white);
-      text-align: center;
-      padding: var(--spacing);
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
-    main {
-      flex: 1;
-      overflow: auto;
-      padding: var(--spacing);
-    }
-    .controls {
-      margin-bottom: var(--spacing);
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--spacing);
-      align-items: flex-start;
-    }
-    .controls label {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      font-weight: 600;
-    }
-    select, textarea, button {
-      font-size: 1rem;
-      padding: 0.5rem var(--spacing);
-      border: 1px solid #ccc;
-      border-radius: var(--radius);
-      background: var(--white);
-      width: 100%;
-    }
-    textarea { resize: vertical; min-height: 4rem; }
-    button {
-      background: var(--purple);
-      color: var(--white);
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      max-width: 8rem;
-    }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-    .chat-box {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: var(--spacing);
-      max-height: 60vh;
-      overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .chat-box p {
-      margin: 0 0 1em;
-      line-height: 1.6;
-    }
-    footer {
-      text-align: center;
-      padding: 0.5rem;
-      font-size: 0.85rem;
-      background: #e0e0e0;
-    }
-    @media (max-width: 480px) {
-      header { font-size: 1.1rem; }
-    }
+    body { font-family: sans-serif; margin:0; padding:0; background:#f2f5f8; }
+    header { background:#6c5ce7; color:white; padding:1rem; text-align:center; }
+    main { padding:1rem; }
+    .hidden { display:none; }
+    label { display:block; margin-top:.5rem; }
+    select, textarea, input { width:100%; padding:.5rem; margin-top:.3rem; }
+    button { margin-top:1rem; padding:.7rem 1.2rem; background:#6c5ce7; color:white; border:none; cursor:pointer; }
+    .reply { margin-top:1rem; padding:1rem; background:white; border-radius:4px; }
   </style>
 </head>
 <body>
-
-  <header>SynapSense Chat AI</header>
-
+  <header>
+    <h1>SynapSense Chat AI</h1>
+  </header>
   <main>
-    <div class="controls">
-      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
-      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
-      <select id="exerciseSelect" style="display:none">
-        <!-- Ecco la tua lista di 30 esercizi: -->
-        <option value="1">1 – Respira profondamente</option>
-        <option value="2">2 – Body scan</option>
-        <option value="3">3 – Osserva i pensieri</option>
-        <!-- ... fino a 30 -->
-      </select>
-      <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
-      <button id="sendBtn">Invia</button>
+    <label>
+      <input type="radio" name="mode" value="free" checked> Chat libera
+    </label>
+    <label>
+      <input type="radio" name="mode" value="exercise"> Consigli esercizio
+    </label>
+
+    <div id="free-block">
+      <label for="free-msg">Scrivi la tua domanda:</label>
+      <textarea id="free-msg" rows="3"></textarea>
     </div>
 
-    <div class="chat-box" id="chatBox">
-      <p>Seleziona modalità, scrivi un messaggio o scegli un esercizio e premi “Invia”.</p>
+    <div id="ex-block" class="hidden">
+      <label for="ex-select">Scegli esercizio:</label>
+      <select id="ex-select"><option>Caricamento…</option></select>
     </div>
+
+    <button id="send">Invia</button>
+
+    <div id="response" class="reply hidden"></div>
   </main>
 
-  <footer>© 2025 SynapSense</footer>
-
   <script>
-    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev/';
-    const modeRadios   = document.querySelectorAll('input[name="mode"]');
-    const exSelect     = document.getElementById('exerciseSelect');
-    const freeMessage  = document.getElementById('freeMessage');
-    const sendBtn      = document.getElementById('sendBtn');
-    const chatBox      = document.getElementById('chatBox');
+    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev';
 
-    // Mostra/nascondi select vs textarea
-    modeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (radio.value === 'exercise' && radio.checked) {
-          exSelect.style.display = 'block';
-          freeMessage.style.display = 'none';
-        } else if (radio.value === 'chat' && radio.checked) {
-          exSelect.style.display = 'none';
-          freeMessage.style.display = 'block';
-        }
-      });
-    });
+    // Mostra/nascondi blocchi a seconda della modalità
+    document.querySelectorAll('input[name=mode]')
+      .forEach(radio => radio.addEventListener('change', e => {
+        document.getElementById('free-block').classList.toggle('hidden', e.target.value!=='free');
+        document.getElementById('ex-block').classList.toggle('hidden', e.target.value!=='exercise');
+        document.getElementById('response').classList.add('hidden');
+      }));
 
-    // Invia richiesta
-    sendBtn.addEventListener('click', () => {
-      const mode = document.querySelector('input[name="mode"]:checked').value;
+    // Carica lista esercizi
+    fetch(WORKER_URL + '/exercises')
+      .then(r => r.json())
+      .then(list => {
+        const sel = document.getElementById('ex-select');
+        sel.innerHTML = list.map(ex =>
+          `<option value="${ex.id}">${ex.id} – ${ex.titolo}</option>`
+        ).join('');
+      })
+      .catch(console.error);
+
+    // Invio
+    document.getElementById('send').onclick = async () => {
+      const mode = document.querySelector('input[name=mode]:checked').value;
       let url = new URL(WORKER_URL);
-
-      if (mode === 'exercise') {
-        url.searchParams.set('exerciseId', exSelect.value);
+      if (mode==='free') {
+        const msg = encodeURIComponent(document.getElementById('free-msg').value.trim());
+        if (!msg) return alert('Inserisci un testo');
+        url.searchParams.set('message', msg);
       } else {
-        const text = freeMessage.value.trim();
-        if (!text) {
-          alert('Inserisci un testo da inviare.');
-          return;
-        }
-        url.searchParams.set('message', text);
+        const exId = document.getElementById('ex-select').value;
+        url.searchParams.set('exerciseId', exId);
       }
+      document.getElementById('response').classList.add('hidden');
+      document.getElementById('send').disabled = true;
 
-      sendBtn.disabled = true;
-      chatBox.innerHTML = '<p>Caricamento…</p>';
-
-      fetch(url.toString())
-        .then(r => r.json())
-        .then(json => renderReply(json.reply))
-        .catch(() => {
-          chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>';
-        })
-        .finally(() => {
-          sendBtn.disabled = false;
-        });
-    });
-
-    // Funzione per spezzare e formattare in paragrafi
-    function renderReply(text) {
-      chatBox.innerHTML = '';
-      text.split(/(?:\r?\n){1,2}|\*\*/).forEach(line => {
-        const t = line.trim();
-        if (!t) return;
-        const p = document.createElement('p');
-        p.textContent = t.replace(/^\*/, '•');
-        chatBox.append(p);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+      try {
+        const res = await fetch(url);
+        const js = await res.json();
+        document.getElementById('response').textContent = js.reply || js.error;
+      } catch (err) {
+        document.getElementById('response').textContent = 'Errore di connessione';
+      } finally {
+        document.getElementById('response').classList.remove('hidden');
+        document.getElementById('send').disabled = false;
+      }
+    };
   </script>
-
 </body>
 </html>
