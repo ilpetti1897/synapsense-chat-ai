@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SynapSense Chat AI</title>
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -43,7 +42,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: var(--spacing);
-      align-items: center;
+      align-items: flex-start;
     }
     .controls label {
       display: flex;
@@ -51,19 +50,22 @@
       gap: 0.25rem;
       font-weight: 600;
     }
-    select, button {
+    select, textarea, button {
       font-size: 1rem;
       padding: 0.5rem var(--spacing);
       border: 1px solid #ccc;
       border-radius: var(--radius);
       background: var(--white);
+      width: 100%;
     }
+    textarea { resize: vertical; min-height: 4rem; }
     button {
       background: var(--purple);
       color: var(--white);
       border: none;
       cursor: pointer;
       font-weight: 600;
+      max-width: 8rem;
     }
     button:disabled {
       opacity: 0.6;
@@ -89,8 +91,6 @@
     }
     @media (max-width: 480px) {
       header { font-size: 1.1rem; }
-      select, button { width: 100%; }
-      .controls { flex-direction: column; }
     }
   </style>
 </head>
@@ -100,22 +100,21 @@
 
   <main>
     <div class="controls">
-      <label>
-        <input type="radio" name="mode" value="chat" checked>
-        Chat libera
-      </label>
-      <label>
-        <input type="radio" name="mode" value="exercise">
-        Consigli esercizio
-      </label>
+      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
       <select id="exerciseSelect" style="display:none">
-        <!-- popolato da JS -->
+        <!-- Ecco la tua lista di 30 esercizi: -->
+        <option value="1">1 – Respira profondamente</option>
+        <option value="2">2 – Body scan</option>
+        <option value="3">3 – Osserva i pensieri</option>
+        <!-- ... fino a 30 -->
       </select>
+      <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
       <button id="sendBtn">Invia</button>
     </div>
 
     <div class="chat-box" id="chatBox">
-      <p>Seleziona “Chat libera” o “Consigli esercizio”, scegli l’esercizio se serve, e clicca “Invia”.</p>
+      <p>Seleziona modalità, scrivi un messaggio o scegli un esercizio e premi “Invia”.</p>
     </div>
   </main>
 
@@ -123,33 +122,68 @@
 
   <script>
     const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev/';
-    const modeRadios = document.querySelectorAll('input[name="mode"]');
-    const exSelect   = document.getElementById('exerciseSelect');
-    const sendBtn    = document.getElementById('sendBtn');
-    const chatBox    = document.getElementById('chatBox');
+    const modeRadios   = document.querySelectorAll('input[name="mode"]');
+    const exSelect     = document.getElementById('exerciseSelect');
+    const freeMessage  = document.getElementById('freeMessage');
+    const sendBtn      = document.getElementById('sendBtn');
+    const chatBox      = document.getElementById('chatBox');
 
-    // 1) Pre-carica la lista esercizi dallo sheet (via tuo worker)
-    fetch(WORKER_URL + '?listExercises=true')
-      .then(r => r.json())
-      .then(data => {
-        data.exercises.forEach(ex => {
-          const opt = document.createElement('option');
-          opt.value = ex.id;
-          opt.textContent = `${ex.id} – ${ex.titolo}`;
-          exSelect.append(opt);
-        });
-      })
-      .catch(_ => {
-        console.warn('Non ho potuto caricare la lista esercizi.');
+    // Mostra/nascondi select vs textarea
+    modeRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'exercise' && radio.checked) {
+          exSelect.style.display = 'block';
+          freeMessage.style.display = 'none';
+        } else if (radio.value === 'chat' && radio.checked) {
+          exSelect.style.display = 'none';
+          freeMessage.style.display = 'block';
+        }
       });
+    });
 
-    // 2) Mostra/nascondi dropdown
-    modeRadios.forEach(r =>
-      r.addEventListener('change', () => {
-        exSelect.style.display = (r.value==='exercise' && r.checked) ? 'inline-block' : 'none';
-      })
-    );
-
-    // 3) Invia richiesta al worker
+    // Invia richiesta
     sendBtn.addEventListener('click', () => {
-      sendB
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      let url = new URL(WORKER_URL);
+
+      if (mode === 'exercise') {
+        url.searchParams.set('exerciseId', exSelect.value);
+      } else {
+        const text = freeMessage.value.trim();
+        if (!text) {
+          alert('Inserisci un testo da inviare.');
+          return;
+        }
+        url.searchParams.set('message', text);
+      }
+
+      sendBtn.disabled = true;
+      chatBox.innerHTML = '<p>Caricamento…</p>';
+
+      fetch(url.toString())
+        .then(r => r.json())
+        .then(json => renderReply(json.reply))
+        .catch(() => {
+          chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>';
+        })
+        .finally(() => {
+          sendBtn.disabled = false;
+        });
+    });
+
+    // Funzione per spezzare e formattare in paragrafi
+    function renderReply(text) {
+      chatBox.innerHTML = '';
+      text.split(/(?:\r?\n){1,2}|\*\*/).forEach(line => {
+        const t = line.trim();
+        if (!t) return;
+        const p = document.createElement('p');
+        p.textContent = t.replace(/^\*/, '•');
+        chatBox.append(p);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
