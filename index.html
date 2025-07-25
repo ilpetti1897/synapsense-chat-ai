@@ -1,18 +1,72 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SynapSense Chat AI</title>
   <style>
-    body { font-family: sans-serif; margin:0; padding:0; background:#f2f5f8; }
-    header { background:#6c5ce7; color:white; padding:1rem; text-align:center; }
-    main { padding:1rem; }
-    .hidden { display:none; }
-    label { display:block; margin-top:.5rem; }
-    select, textarea, input { width:100%; padding:.5rem; margin-top:.3rem; }
-    button { margin-top:1rem; padding:.7rem 1.2rem; background:#6c5ce7; color:white; border:none; cursor:pointer; }
-    .reply { margin-top:1rem; padding:1rem; background:white; border-radius:4px; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f6f9fc;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background: #6c5ce7;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .mode {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .mode label {
+      cursor: pointer;
+    }
+    select, button {
+      font-size: 1rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #6c5ce7;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    #response {
+      margin-top: 1.5rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    audio {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      width: 250px;
+      opacity: 0.7;
+    }
   </style>
 </head>
 <body>
@@ -20,76 +74,71 @@
     <h1>SynapSense Chat AI</h1>
   </header>
   <main>
-    <label>
-      <input type="radio" name="mode" value="free" checked> Chat libera
-    </label>
-    <label>
-      <input type="radio" name="mode" value="exercise"> Consigli esercizio
-    </label>
-
-    <div id="free-block">
-      <label for="free-msg">Scrivi la tua domanda:</label>
-      <textarea id="free-msg" rows="3"></textarea>
+    <div class="mode">
+      <label><input type="radio" name="mode" value="chat"> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise" checked> Consigli esercizio</label>
     </div>
-
-    <div id="ex-block" class="hidden">
-      <label for="ex-select">Scegli esercizio:</label>
-      <select id="ex-select"><option>Caricamento…</option></select>
+    <div id="exercise-picker">
+      <label for="exercise">Scegli esercizio:</label>
+      <select id="exercise"></select>
     </div>
-
+    <div>
+      <label for="message">Oppure scrivi qui:</label>
+      <textarea id="message" rows="2" style="width:100%; padding:0.5rem; margin-top:0.5rem;"></textarea>
+    </div>
     <button id="send">Invia</button>
-
-    <div id="response" class="reply hidden"></div>
+    <div id="response"></div>
   </main>
-
+  <audio controls loop>
+    <source src="relaxing-music.mp3" type="audio/mpeg">
+    Il tuo browser non supporta l'elemento audio.
+  </audio>
   <script>
-    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev';
-
-    // Mostra/nascondi blocchi a seconda della modalità
-    document.querySelectorAll('input[name=mode]')
-      .forEach(radio => radio.addEventListener('change', e => {
-        document.getElementById('free-block').classList.toggle('hidden', e.target.value!=='free');
-        document.getElementById('ex-block').classList.toggle('hidden', e.target.value!=='exercise');
-        document.getElementById('response').classList.add('hidden');
-      }));
+    const select = document.getElementById('exercise');
+    const msgBox = document.getElementById('message');
+    const sendBtn = document.getElementById('send');
+    const responseEl = document.getElementById('response');
+    const modes = document.getElementsByName('mode');
+    const picker = document.getElementById('exercise-picker');
 
     // Carica lista esercizi
-    fetch(WORKER_URL + '/exercises')
+    fetch('/exercises')
       .then(r => r.json())
-      .then(list => {
-        const sel = document.getElementById('ex-select');
-        sel.innerHTML = list.map(ex =>
-          `<option value="${ex.id}">${ex.id} – ${ex.titolo}</option>`
-        ).join('');
-      })
-      .catch(console.error);
+      .then(data => {
+        data.forEach(ex => {
+          const opt = document.createElement('option');
+          opt.value = ex.id;
+          opt.textContent = ex.id + ' – ' + ex.titolo;
+          select.appendChild(opt);
+        });
+      });
 
-    // Invio
-    document.getElementById('send').onclick = async () => {
-      const mode = document.querySelector('input[name=mode]:checked').value;
-      let url = new URL(WORKER_URL);
-      if (mode==='free') {
-        const msg = encodeURIComponent(document.getElementById('free-msg').value.trim());
-        if (!msg) return alert('Inserisci un testo');
-        url.searchParams.set('message', msg);
+    // Cambia visibilità textarea vs dropdown
+    modes.forEach(r => r.addEventListener('change', () => {
+      if (r.value === 'chat' && r.checked) {
+        picker.style.display = 'none';
+        msgBox.disabled = false;
       } else {
-        const exId = document.getElementById('ex-select').value;
-        url.searchParams.set('exerciseId', exId);
+        picker.style.display = '';
+        msgBox.disabled = true;
       }
-      document.getElementById('response').classList.add('hidden');
-      document.getElementById('send').disabled = true;
+    }));
 
-      try {
-        const res = await fetch(url);
-        const js = await res.json();
-        document.getElementById('response').textContent = js.reply || js.error;
-      } catch (err) {
-        document.getElementById('response').textContent = 'Errore di connessione';
-      } finally {
-        document.getElementById('response').classList.remove('hidden');
-        document.getElementById('send').disabled = false;
+    sendBtn.addEventListener('click', () => {
+      responseEl.textContent = 'Caricamento…';
+      let url = '/';
+      if (document.querySelector('input[name=mode]:checked').value === 'chat') {
+        url += '?message=' + encodeURIComponent(msgBox.value);
+      } else {
+        url += '?exerciseId=' + select.value;
       }
-    };
+      fetch(url)
+        .then(r => r.json())
+        .then(j => {
+          responseEl.textContent = j.reply;
+        })
+        .catch(e => responseEl.textContent = 'Errore di connessione.');
+    });
   </script>
 </body>
 </html>
