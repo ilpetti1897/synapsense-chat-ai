@@ -13,59 +13,62 @@
       --white: #fff;
       --radius: 8px;
       --spacing: 1rem;
+      --font: 'Inter', sans-serif;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font);
       display: flex;
       flex-direction: column;
       height: 100vh;
-      color: var(--fg);
       background: var(--bg);
+      color: var(--fg);
     }
     header {
       background: var(--purple);
       color: var(--white);
       text-align: center;
       padding: var(--spacing);
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 600;
     }
     main {
       flex: 1;
-      overflow: auto;
+      overflow-y: auto;
       padding: var(--spacing);
     }
     .controls {
-      margin-bottom: var(--spacing);
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: var(--spacing);
-      align-items: flex-start;
+      margin-bottom: var(--spacing);
     }
     .controls label {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.5rem;
       font-weight: 600;
     }
-    select, textarea, button {
-      font-size: 1rem;
-      padding: 0.5rem var(--spacing);
+    select, textarea {
+      width: 100%;
+      padding: 0.75rem;
       border: 1px solid #ccc;
       border-radius: var(--radius);
       background: var(--white);
-      width: 100%;
+      font-size: 1rem;
+      line-height: 1.4;
     }
-    textarea { resize: vertical; min-height: 4rem; }
+    textarea { resize: vertical; min-height: 5rem; }
     button {
+      grid-column: span 2;
+      padding: 0.75rem;
       background: var(--purple);
       color: var(--white);
       border: none;
-      cursor: pointer;
+      border-radius: var(--radius);
+      font-size: 1rem;
       font-weight: 600;
-      max-width: 8rem;
+      cursor: pointer;
     }
     button:disabled {
       opacity: 0.6;
@@ -75,22 +78,23 @@
       background: var(--white);
       border-radius: var(--radius);
       padding: var(--spacing);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       max-height: 60vh;
       overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .chat-box p {
-      margin: 0 0 1em;
+      margin-bottom: 1rem;
       line-height: 1.6;
     }
     footer {
       text-align: center;
-      padding: 0.5rem;
-      font-size: 0.85rem;
+      padding: 0.75rem;
       background: #e0e0e0;
+      font-size: 0.85rem;
     }
     @media (max-width: 480px) {
-      header { font-size: 1.1rem; }
+      .controls { grid-template-columns: 1fr; }
+      header { font-size: 1.25rem; }
     }
   </style>
 </head>
@@ -102,13 +106,40 @@
     <div class="controls">
       <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
       <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
+
       <select id="exerciseSelect" style="display:none">
-        <!-- Ecco la tua lista di 30 esercizi: -->
         <option value="1">1 – Respira profondamente</option>
         <option value="2">2 – Body scan</option>
         <option value="3">3 – Osserva i pensieri</option>
-        <!-- ... fino a 30 -->
+        <option value="4">4 – Camminata consapevole</option>
+        <option value="5">5 – Tecnica dei 5 secondi</option>
+        <option value="6">6 – Rilassamento muscolare</option>
+        <option value="7">7 – Potenzia la memoria</option>
+        <option value="8">8 – Sintonizza i suoni</option>
+        <option value="9">9 – Visualizzazione guidata</option>
+        <option value="10">10 – Gratitudine attiva</option>
+        <option value="11">11 – Osserva il corpo</option>
+        <option value="12">12 – Conta i respiri</option>
+        <option value="13">13 – Rilassamento progressivo</option>
+        <option value="14">14 – Meditazione del respiro</option>
+        <option value="15">15 – Punto di fuga</option>
+        <option value="16">16 – Rilassa lo sguardo</option>
+        <option value="17">17 – Concentrazione tattile</option>
+        <option value="18">18 – Ascolta il cuore</option>
+        <option value="19">19 – Silenzio mentale</option>
+        <option value="20">20 – Scansione rapida</option>
+        <option value="21">21 – Connessione con il terreno</option>
+        <option value="22">22 – Meditazione camminata lenta</option>
+        <option value="23">23 – Respirazione quadrata</option>
+        <option value="24">24 – Silenzio esterno</option>
+        <option value="25">25 – Rilassamento oculare</option>
+        <option value="26">26 – Focalizza un suono</option>
+        <option value="27">27 – Emozioni in tasca</option>
+        <option value="28">28 – Osserva le nuvole</option>
+        <option value="29">29 – Meditazione del sorriso</option>
+        <option value="30">30 – Rilassamento muscolare profondo</option>
       </select>
+
       <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
       <button id="sendBtn">Invia</button>
     </div>
@@ -128,62 +159,50 @@
     const sendBtn      = document.getElementById('sendBtn');
     const chatBox      = document.getElementById('chatBox');
 
-    // Mostra/nascondi select vs textarea
-    modeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (radio.value === 'exercise' && radio.checked) {
-          exSelect.style.display = 'block';
-          freeMessage.style.display = 'none';
-        } else if (radio.value === 'chat' && radio.checked) {
-          exSelect.style.display = 'none';
-          freeMessage.style.display = 'block';
-        }
-      });
-    });
+    // alterna select/textarea
+    modeRadios.forEach(r => r.addEventListener('change', () => {
+      if (r.value === 'exercise' && r.checked) {
+        exSelect.style.display = 'block';
+        freeMessage.style.display = 'none';
+      } else {
+        exSelect.style.display = 'none';
+        freeMessage.style.display = 'block';
+      }
+    }));
 
-    // Invia richiesta
+    // invio
     sendBtn.addEventListener('click', () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      let url = new URL(WORKER_URL);
+      const url  = new URL(WORKER_URL);
 
       if (mode === 'exercise') {
         url.searchParams.set('exerciseId', exSelect.value);
       } else {
         const text = freeMessage.value.trim();
-        if (!text) {
-          alert('Inserisci un testo da inviare.');
-          return;
-        }
+        if (!text) return alert('Inserisci un testo da inviare.');
         url.searchParams.set('message', text);
       }
 
       sendBtn.disabled = true;
       chatBox.innerHTML = '<p>Caricamento…</p>';
 
-      fetch(url.toString())
-        .then(r => r.json())
+      fetch(url)
+        .then(res => res.json())
         .then(json => renderReply(json.reply))
-        .catch(() => {
-          chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>';
-        })
-        .finally(() => {
-          sendBtn.disabled = false;
-        });
+        .catch(() => chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>')
+        .finally(() => sendBtn.disabled = false);
     });
 
-    // Funzione per spezzare e formattare in paragrafi
+    // formatta output
     function renderReply(text) {
       chatBox.innerHTML = '';
-      text.split(/(?:\r?\n){1,2}|\*\*/).forEach(line => {
-        const t = line.trim();
+      text.split(/\n{1,2}|\*\*/).forEach(chunk => {
+        const t = chunk.trim();
         if (!t) return;
         const p = document.createElement('p');
         p.textContent = t.replace(/^\*/, '•');
-        chatBox.append(p);
+        chatBox.appendChild(p);
       });
       chatBox.scrollTop = chatBox.scrollHeight;
     }
   </script>
-
-</body>
-</html>
