@@ -14,15 +14,14 @@
       --radius: 8px;
       --spacing: 1rem;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin:0; padding:0 }
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
       display: flex;
       flex-direction: column;
       height: 100vh;
-      color: var(--fg);
-      background: var(--bg);
     }
     header {
       background: var(--purple);
@@ -34,15 +33,15 @@
     }
     main {
       flex: 1;
-      overflow: auto;
+      overflow-y: auto;
       padding: var(--spacing);
     }
     .controls {
-      margin-bottom: var(--spacing);
       display: flex;
       flex-wrap: wrap;
       gap: var(--spacing);
       align-items: center;
+      margin-bottom: var(--spacing);
     }
     .controls label {
       display: flex;
@@ -51,23 +50,23 @@
       font-weight: 600;
     }
     select, textarea {
-      font-size: 1rem;
+      flex: 1;
       padding: 0.5rem var(--spacing);
       border: 1px solid #ccc;
       border-radius: var(--radius);
-      background: var(--white);
-      flex: 1;
-    }
-    textarea { resize: vertical; min-height: 4rem; }
-    button {
       font-size: 1rem;
+      background: var(--white);
+    }
+    textarea { min-height: 4rem; resize: vertical; }
+    button {
       padding: 0.75rem 1.5rem;
       background: var(--purple);
       color: var(--white);
       border: none;
       border-radius: var(--radius);
-      cursor: pointer;
+      font-size: 1rem;
       font-weight: 600;
+      cursor: pointer;
     }
     button:disabled {
       opacity: 0.6;
@@ -77,19 +76,19 @@
       background: var(--white);
       border-radius: var(--radius);
       padding: var(--spacing);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       max-height: 60vh;
       overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .chat-box p {
-      margin: 0 0 1em;
+      margin-bottom: 1em;
       line-height: 1.6;
     }
     footer {
       text-align: center;
       padding: 0.5rem;
-      font-size: 0.85rem;
       background: #e0e0e0;
+      font-size: 0.85rem;
     }
     @media (max-width: 480px) {
       header { font-size: 1.1rem; }
@@ -160,10 +159,9 @@
     const chatBox     = document.getElementById('chatBox');
     const history     = [];
 
-    // Mostra/nasconde select vs textarea
-    function updateModeDisplay(){
+    function updateModeDisplay() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      if(mode === 'exercise'){
+      if (mode === 'exercise') {
         exSelect.style.display    = 'block';
         freeMessage.style.display = 'none';
       } else {
@@ -174,46 +172,43 @@
     modeRadios.forEach(r => r.addEventListener('change', updateModeDisplay));
     window.addEventListener('DOMContentLoaded', updateModeDisplay);
 
-    sendBtn.addEventListener('click', ()=>{
+    sendBtn.addEventListener('click', () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      let text;
-      if(mode === 'exercise'){
-        text = ''; // non usiamo freeMessage
+      let userText = '';
+
+      if (mode === 'exercise') {
+        // prendo esercizio selezionato
+        userText = `Esercizio #${exSelect.value}`;
       } else {
-        text = freeMessage.value.trim();
-        if(!text){
+        userText = freeMessage.value.trim();
+        if (!userText) {
           alert('Inserisci un testo da inviare.');
           return;
         }
       }
 
-      // **Svota subito il campo di input**
+      // svuoto subito il campo testo
       freeMessage.value = '';
 
-      // Aggiungi la domanda dell'utente alla cronologia
-      history.push({ role:'user', content: mode==='exercise'
-        ? `Esercizio #${exSelect.value}: ${text}`
-        : text
-      });
+      // aggiungo alla cronologia
+      history.push({ role:'user', content: userText });
 
-      // Costruisci URL
+      // preparo la fetch
       const url = new URL(WORKER_URL);
-      if(mode === 'exercise'){
+      if (mode === 'exercise') {
         url.searchParams.set('exerciseId', exSelect.value);
-        if(text) url.searchParams.set('message', text);
       } else {
-        url.searchParams.set('message', text);
+        url.searchParams.set('message', userText);
       }
 
-      sendBtn.disabled  = true;
+      sendBtn.disabled = true;
       chatBox.innerHTML = '<p>Caricamento…</p>';
 
       fetch(url)
         .then(r => r.json())
         .then(json => {
-          // Aggiungi risposta alla cronologia
           history.push({ role:'assistant', content: json.reply });
-          // Render in chat-box
+          // render della chat
           chatBox.innerHTML = '';
           history.forEach(m => {
             const p = document.createElement('p');
@@ -222,10 +217,10 @@
           });
           chatBox.scrollTop = chatBox.scrollHeight;
         })
-        .catch(()=>{
+        .catch(() => {
           chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>';
         })
-        .finally(()=>{
+        .finally(() => {
           sendBtn.disabled = false;
         });
     });
@@ -233,3 +228,4 @@
 
 </body>
 </html>
+
