@@ -85,7 +85,6 @@
       margin: 0 0 1rem;
       line-height: 1.6;
     }
-    /* Titoli “Passo” e “Variante” */
     .chat-box .step {
       font-weight: 600;
       margin-top: 1rem;
@@ -113,10 +112,16 @@
 
   <main>
     <div class="controls">
-      <label><input type="radio" name="mode" value="chat"> Chat libera</label>
-      <label><input type="radio" name="mode" value="exercise" checked> Consigli esercizio</label>
+      <label>
+        <input type="radio" name="mode" value="chat"> Chat libera
+      </label>
+      <label>
+        <input type="radio" name="mode" value="exercise" checked> Consigli esercizio
+      </label>
 
+      <!-- dropdown solo in exercise mode -->
       <select id="exerciseSelect">
+        <!-- qui tutte le 30 opzioni -->
         <option value="1">1 – Respira profondamente</option>
         <option value="2">2 – Tecnica dei 5 secondi</option>
         <option value="3">3 – Focus su un obiettivo</option>
@@ -149,7 +154,8 @@
         <option value="30">30 – Cammina lentamente e ascolta il passo</option>
       </select>
 
-      <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…" style="display:none"></textarea>
+      <!-- textarea sempre visibile -->
+      <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
       <button id="sendBtn">Invia</button>
     </div>
 
@@ -171,62 +177,75 @@
 
     function updateModeDisplay() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      exSelect.style.display    = mode === 'exercise' ? 'block' : 'none';
-      freeMessage.style.display = mode === 'chat'     ? 'block' : 'none';
+      exSelect.style.display = mode === 'exercise' ? 'block' : 'none';
+      // resetto cronologia e messaggi d’input
       history = [];
-      chatBox.innerHTML = '<p>Scegli tra Chat Libera o Consigli sui 30 esercizi di Synapsense</p>';
+      renderHistory();
       freeMessage.value = '';
     }
-    modeRadios.forEach(r=>r.addEventListener('change', updateModeDisplay));
+
+    modeRadios.forEach(r => r.addEventListener('change', updateModeDisplay));
     window.addEventListener('DOMContentLoaded', updateModeDisplay);
 
-    sendBtn.addEventListener('click', ()=>{
+    sendBtn.addEventListener('click', () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
       const text = freeMessage.value.trim();
-      if(!text){ alert('Inserisci un testo da inviare.'); return; }
+      if (!text) {
+        alert('Inserisci un testo da inviare.');
+        return;
+      }
 
       history.push({role:'user',content:text});
-      freeMessage.value = '';
+      freeMessage.value = '';      // svuoto subito
       sendBtn.disabled  = true;
       chatBox.innerHTML = '<p>Caricamento…</p>';
 
       const url = new URL(WORKER_URL);
-      if(mode==='exercise') url.searchParams.set('exerciseId', exSelect.value);
-      url.searchParams.set('message', text);
+      if (mode === 'exercise') {
+        url.searchParams.set('exerciseId', exSelect.value);
+      } else {
+        url.searchParams.set('message', text);
+      }
 
       fetch(url)
-        .then(r=>r.json())
-        .then(j=>{
-          history.push({role:'assistant',content:j.reply});
+        .then(res => res.json())
+        .then(json => {
+          history.push({role:'assistant',content:json.reply});
           renderHistory();
         })
-        .catch(_=>{
+        .catch(_ => {
           chatBox.innerHTML = '<p>Errore di connessione. Riprova più tardi.</p>';
         })
-        .finally(()=>sendBtn.disabled=false);
+        .finally(() => sendBtn.disabled = false);
     });
 
     function renderHistory() {
       chatBox.innerHTML = '';
-      history.forEach(m=>{
-        if(m.role === 'assistant') {
-          const wrapper = document.createElement('div');
-          const parts = m.content
+      if (history.length === 0) {
+        chatBox.innerHTML = '<p>Scegli tra Chat Libera o Consigli sui 30 esercizi di Synapsense</p>';
+        return;
+      }
+      history.forEach(msg => {
+        const wrapper = document.createElement('div');
+        if (msg.role === 'user') {
+          const p = document.createElement('p');
+          p.textContent = 'Tu: ' + msg.content;
+          wrapper.appendChild(p);
+        } else {
+          // split per Passo, Variante, Esempio concreto
+          const parts = msg.content
             .split(/(Passo\s*\d+:|Variante:|Esempio concreto:)/)
-            .map(s=>s.trim()).filter(Boolean);
-          parts.forEach(part=>{
+            .map(s => s.trim())
+            .filter(Boolean);
+          parts.forEach(part => {
             const p = document.createElement('p');
-            if(/^Passo\s*\d+:/.test(part))      p.classList.add('step');
-            else if(/^Variante:|^Esempio concreto:/.test(part)) p.classList.add('variant');
+            if (/^Passo\s*\d+:/.test(part))      p.classList.add('step');
+            else if (/^Variante:|^Esempio concreto:/.test(part)) p.classList.add('variant');
             p.textContent = part;
             wrapper.appendChild(p);
           });
-          chatBox.appendChild(wrapper);
-        } else {
-          const p = document.createElement('p');
-          p.textContent = 'Tu: ' + m.content;
-          chatBox.appendChild(p);
         }
+        chatBox.appendChild(wrapper);
       });
       chatBox.scrollTop = chatBox.scrollHeight;
     }
