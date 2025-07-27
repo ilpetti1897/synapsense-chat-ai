@@ -77,7 +77,7 @@
       background: var(--white);
       border-radius: var(--radius);
       padding: var(--spacing);
-      flex: 1;
+      height: calc(100% - 200px);
       overflow-y: auto;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
@@ -94,7 +94,6 @@
     @media (max-width: 480px) {
       .controls { flex-direction: column; }
       button { width: 100%; }
-      header { font-size: 1.1rem; }
     }
   </style>
 </head>
@@ -104,11 +103,14 @@
 
   <main>
     <div class="controls">
-      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
-      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
+      <label>
+        <input type="radio" name="mode" value="chat" checked> Chat libera
+      </label>
+      <label>
+        <input type="radio" name="mode" value="exercise"> Consigli esercizio
+      </label>
 
       <select id="exerciseSelect" style="display:none">
-        <!-- Lista completa dei 30 esercizi -->
         <option value="1">1 – Respira profondamente</option>
         <option value="2">2 – Tecnica dei 5 secondi</option>
         <option value="3">3 – Focus su un obiettivo</option>
@@ -146,7 +148,7 @@
     </div>
 
     <div class="chat-box" id="chatBox">
-      <p>Scegli tra Chat Libera o Consigli sui 30 esercizi di Synapsense</p>
+      <p>Scegli tra Chat Libera o Consigli sui 30 esercizi di Synapsense</p>
     </div>
   </main>
 
@@ -160,83 +162,74 @@
     const sendBtn     = document.getElementById('sendBtn');
     const chatBox     = document.getElementById('chatBox');
 
-    // qui manteniamo la cronologia
-    let history = [];
+    // Cronologia turni
+    const history = [];
 
-    function updateModeDisplay(){
+    // Toggle campo exercise / free
+    function updateMode() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      // se cambio modalità ripulisco la cronologia
-      history = [];
-      // mostro/nascondo select vs textarea
       if (mode === 'exercise') {
         exSelect.style.display    = 'block';
-        freeMessage.style.display = 'block';
-        freeMessage.placeholder   = 'Scrivi qui il tuo dubbio sull’esercizio…';
+        freeMessage.style.display = 'none';
       } else {
         exSelect.style.display    = 'none';
         freeMessage.style.display = 'block';
-        freeMessage.placeholder   = 'Scrivi qui il tuo messaggio…';
       }
-      renderHistory();
     }
-    modeRadios.forEach(r=>r.addEventListener('change', updateModeDisplay));
-    exSelect.addEventListener('change', ()=>{
-      // quando selezioni un nuovo esercizio, svuotiamo la chat
-      history = [];
-      renderHistory();
-    });
+    modeRadios.forEach(r => r.addEventListener('change', updateMode));
+    window.addEventListener('DOMContentLoaded', updateMode);
 
-    sendBtn.addEventListener('click', async ()=>{
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      const text = freeMessage.value.trim();
-      if (!text) return alert('Inserisci un testo da inviare.');
-
-      // salviamo turno utente
-      history.push({
-        role: 'user',
-        mode,
-        exerciseId: mode==='exercise'?exSelect.value:null,
-        content: text
-      });
-
-      freeMessage.value = '';     // pulisco l’input subito
-      renderHistory();            // aggiorno subito
-
-      sendBtn.disabled = true;
-      // POST con tutta la cronologia
-      let res, json;
-      try {
-        res = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ history })
-        });
-        json = await res.json();
-      } catch(e) {
-        history.push({ role:'assistant', content:'Errore di connessione. Riprova più tardi.' });
-        sendBtn.disabled = false;
-        return renderHistory();
-      }
-
-      // aggiungo risposta e ristampo
-      history.push({ role:'assistant', content: json.reply });
-      sendBtn.disabled = false;
-      renderHistory();
-    });
-
-    function renderHistory(){
-      chatBox.innerHTML = '';
-      if (history.length === 0) {
-        chatBox.innerHTML = `<p>Scegli tra Chat Libera o Consigli sui 30 esercizi di Synapsense</p>`;
-        return;
-      }
-      history.forEach(msg => {
-        const p = document.createElement('p');
-        p.textContent = (msg.role==='user' ? 'Tu: ' : 'AI: ') + msg.content;
-        chatBox.appendChild(p);
-      });
+    // Render chat-box
+    function appendBubble(role, text) {
+      const p = document.createElement('p');
+      p.textContent = (role === 'user' ? 'Tu: ' : 'AI: ') + text;
+      chatBox.append(p);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    // Invia POST con tutta la history
+    sendBtn.addEventListener('click', async () => {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      let content;
+      let turn = { role: 'user', mode };
+
+      if (mode === 'exercise') {
+        content = freeMessage.value.trim() || 'Chiedo consigli sull’esercizio';
+        turn.exerciseId = exSelect.value;
+        turn.content    = content;
+      } else {
+        content = freeMessage.value.trim();
+        if (!content) { alert('Inserisci un testo da inviare.'); return; }
+        turn.content = content;
+      }
+
+      // Salvo e mostro il turno utente
+      history.push(turn);
+      appendBubble('user', content);
+      freeMessage.value = ''; // pulisco
+
+      // Disabilito pulsante fino alla risposta
+      sendBtn.disabled = true;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ history })
+        });
+        const { reply } = await res.json();
+
+        // salvo e mostro risposta AI
+        history.push({ role: 'assistant', content: reply });
+        reply.split(/\r?\n{1,2}/).forEach(block => {
+          if (block.trim()) appendBubble('assistant', block.trim());
+        });
+      } catch (e) {
+        appendBubble('assistant', 'Errore di connessione. Riprova più tardi.');
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
   </script>
 
 </body>
