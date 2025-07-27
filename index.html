@@ -70,9 +70,7 @@
     <div class="controls">
       <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
       <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
-      <select id="exerciseSelect" style="display:none">
-        <!-- opzioni popolate da JS -->
-      </select>
+      <select id="exerciseSelect" style="display:none"></select>
       <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
       <button id="sendBtn">Invia</button>
     </div>
@@ -92,9 +90,9 @@
     const sendBtn      = document.getElementById("sendBtn");
     const chatBox      = document.getElementById("chatBox");
 
-    let history = []; // manterremo tutta la cronologia
+    let history = [];
 
-    // 1) Popola dropdown esercizi
+    // Popola dropdown esercizi
     fetch(WORKER + "/exercises")
       .then(r => r.json())
       .then(exs => {
@@ -103,36 +101,44 @@
         ).join("");
       });
 
-    // 2) Gestione cambio modalità
-    function updateUI() {
+    // Funzione di reset chat + history + placeholder
+    function resetChat(){
+      history = [];
+      chatBox.innerHTML = `<p>Scegli tra Chat libera o Consigli sui 30 esercizi di SynapSense</p>`;
+      msgInput.value = "";
+    }
+
+    // Gestione cambio modalità
+    function updateMode(){
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      if (mode === "exercise") {
+      if(mode === "exercise"){
         selExercise.style.display = "block";
         msgInput.placeholder = "Scrivi qui il tuo dubbio sull’esercizio…";
       } else {
         selExercise.style.display = "none";
         msgInput.placeholder = "Scrivi qui il tuo messaggio…";
       }
-      msgInput.value = "";
-      history = [];
-      chatBox.innerHTML = `<p>Scegli tra Chat libera o Consigli sui 30 esercizi di SynapSense</p>`;
+      resetChat();
     }
-    modeRadios.forEach(r => r.addEventListener("change", updateUI));
+    modeRadios.forEach(r => r.addEventListener("change", updateMode));
 
-    // 3) Invia messaggio
+    // Reset anche al cambio esercizio
+    selExercise.addEventListener("change", resetChat);
+
+    // Invio messaggio
     sendBtn.addEventListener("click", async () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
       const text = msgInput.value.trim();
       if (!text) return alert("Inserisci un testo da inviare.");
 
-      // 3a) aggiorna UI e history utente
-      const you = document.createElement("p");
-      you.textContent = "Tu: " + text;
-      you.style.fontWeight = "600";
-      chatBox.append(you);
-      history.push({ role: "user", content: text });
+      // Stampa tu
+      const youP = document.createElement("p");
+      youP.textContent = "Tu: " + text;
+      youP.style.fontWeight = "600";
+      chatBox.append(youP);
 
-      // 3b) prepara payload
+      history.push({ role:"user", content:text });
+
       const payload = {
         mode,
         exerciseId: mode==="exercise" ? selExercise.value : null,
@@ -140,36 +146,40 @@
       };
 
       sendBtn.disabled = true;
-      // 3c) chiamata
+
       try {
         const res = await fetch(WORKER + "/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
           body: JSON.stringify(payload)
         });
         const { reply, error } = await res.json();
-        if (error) throw Error(error);
+        if(error) throw Error(error);
 
-        // 3d) aggiorna UI e history AI
+        // Stampa AI divisa in paragrafi
         reply.split(/\r?\n{2,}|\*\*/).forEach(par => {
           const t = par.trim();
-          if (!t) return;
+          if(!t) return;
           const p = document.createElement("p");
           p.textContent = "AI: " + t.replace(/^\*/, "•");
           chatBox.append(p);
         });
-        history.push({ role: "assistant", content: reply });
+
+        history.push({ role:"assistant", content:reply });
         chatBox.scrollTop = chatBox.scrollHeight;
 
-      } catch(err) {
+      } catch(_) {
         chatBox.appendChild(Object.assign(document.createElement("p"), {
-          textContent: "Errore di connessione. Riprova più tardi."
+          textContent:"Errore di connessione. Riprova più tardi."
         }));
       } finally {
         sendBtn.disabled = false;
-        msgInput.value = "";     // ** svuota input dopo invio **
+        msgInput.value = "";  // svuota input
       }
     });
+
+    // Inizializzazione
+    window.addEventListener("DOMContentLoaded", updateMode);
   </script>
 
 </body>
