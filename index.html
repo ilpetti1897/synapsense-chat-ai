@@ -21,8 +21,8 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      color: var(--fg);
       background: var(--bg);
+      color: var(--fg);
     }
     header {
       background: var(--purple);
@@ -34,7 +34,8 @@
     }
     main {
       flex: 1;
-      overflow: auto;
+      display: flex;
+      flex-direction: column;
       padding: var(--spacing);
     }
     .controls {
@@ -56,9 +57,13 @@
       border: 1px solid #ccc;
       border-radius: var(--radius);
       background: var(--white);
-      flex: 1;
     }
-    textarea { resize: vertical; min-height: 4rem; }
+    select { min-width: 200px; }
+    textarea {
+      flex: 1;
+      resize: vertical;
+      min-height: 3rem;
+    }
     button {
       font-size: 1rem;
       padding: 0.75rem 1.5rem;
@@ -77,12 +82,12 @@
       background: var(--white);
       border-radius: var(--radius);
       padding: var(--spacing);
-      height: calc(100% - 200px);
+      flex: 1;
       overflow-y: auto;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .chat-box p {
-      margin: 0 0 1em;
+      margin: 0 0 var(--spacing);
       line-height: 1.6;
     }
     footer {
@@ -93,7 +98,7 @@
     }
     @media (max-width: 480px) {
       .controls { flex-direction: column; }
-      button { width: 100%; }
+      select, textarea, button { width: 100%; }
     }
   </style>
 </head>
@@ -103,14 +108,10 @@
 
   <main>
     <div class="controls">
-      <label>
-        <input type="radio" name="mode" value="chat" checked> Chat libera
-      </label>
-      <label>
-        <input type="radio" name="mode" value="exercise"> Consigli esercizio
-      </label>
+      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
 
-      <select id="exerciseSelect" style="display:none">
+      <select id="exerciseSelect">
         <option value="1">1 – Respira profondamente</option>
         <option value="2">2 – Tecnica dei 5 secondi</option>
         <option value="3">3 – Focus su un obiettivo</option>
@@ -155,61 +156,44 @@
   <footer>© 2025 SynapSense</footer>
 
   <script>
-    const WORKER_URL  = 'https://synapsense-agent.ilpetti1897.workers.dev/';
+    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev/';
     const modeRadios  = document.querySelectorAll('input[name="mode"]');
     const exSelect    = document.getElementById('exerciseSelect');
     const freeMessage = document.getElementById('freeMessage');
     const sendBtn     = document.getElementById('sendBtn');
     const chatBox     = document.getElementById('chatBox');
 
-    // Cronologia turni
-    const history = [];
+    let history = []; // terrà la conversazione
 
-    // Toggle campo exercise / free
-    function updateMode() {
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      if (mode === 'exercise') {
-        exSelect.style.display    = 'block';
-        freeMessage.style.display = 'none';
-      } else {
-        exSelect.style.display    = 'none';
-        freeMessage.style.display = 'block';
-      }
-    }
-    modeRadios.forEach(r => r.addEventListener('change', updateMode));
-    window.addEventListener('DOMContentLoaded', updateMode);
+    // switch mode: non nascondiamo più nulla
+    modeRadios.forEach(r => r.addEventListener('change', () => {
+      freeMessage.focus();
+    }));
 
-    // Render chat-box
-    function appendBubble(role, text) {
+    // aggiunge un bubble
+    function appendBubble(who, text) {
       const p = document.createElement('p');
-      p.textContent = (role === 'user' ? 'Tu: ' : 'AI: ') + text;
+      p.textContent = (who === 'user' ? 'Tu: ' : 'AI: ') + text;
       chatBox.append(p);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Invia POST con tutta la history
     sendBtn.addEventListener('click', async () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      let content;
-      let turn = { role: 'user', mode };
-
-      if (mode === 'exercise') {
-        content = freeMessage.value.trim() || 'Chiedo consigli sull’esercizio';
-        turn.exerciseId = exSelect.value;
-        turn.content    = content;
-      } else {
-        content = freeMessage.value.trim();
-        if (!content) { alert('Inserisci un testo da inviare.'); return; }
-        turn.content = content;
+      const userText = freeMessage.value.trim();
+      if (!userText) {
+        alert('Inserisci un testo da inviare');
+        return;
       }
 
-      // Salvo e mostro il turno utente
+      // nuovo turno utente
+      const turn = { role: 'user', mode, content: userText };
+      if (mode === 'exercise') turn.exerciseId = exSelect.value;
       history.push(turn);
-      appendBubble('user', content);
-      freeMessage.value = ''; // pulisco
+      appendBubble('user', userText);
 
-      // Disabilito pulsante fino alla risposta
-      sendBtn.disabled = true;
+      freeMessage.value = '';      // pulisco il campo
+      sendBtn.disabled = true;     // disabilito
 
       try {
         const res = await fetch(WORKER_URL, {
@@ -219,12 +203,12 @@
         });
         const { reply } = await res.json();
 
-        // salvo e mostro risposta AI
         history.push({ role: 'assistant', content: reply });
+        // formattazione paragrafi
         reply.split(/\r?\n{1,2}/).forEach(block => {
           if (block.trim()) appendBubble('assistant', block.trim());
         });
-      } catch (e) {
+      } catch {
         appendBubble('assistant', 'Errore di connessione. Riprova più tardi.');
       } finally {
         sendBtn.disabled = false;
