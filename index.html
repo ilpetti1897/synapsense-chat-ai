@@ -1,105 +1,176 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>SynapSense Chat AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
-    /* STILI COME PRIMA… */
-    :root{--purple:#7c4dff;--bg:#f0f2f5;--fg:#333;--white:#fff;--radius:8px;--spacing:1rem}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:'Inter',sans-serif;display:flex;flex-direction:column;height:100vh;background:var(--bg);color:var(--fg)}
-    header{background:var(--purple);color:var(--white);text-align:center;padding:var(--spacing);font-size:1.25rem;font-weight:600}
-    main{flex:1;display:flex;flex-direction:column;padding:var(--spacing)}
-    .controls{display:flex;flex-wrap:wrap;gap:var(--spacing);align-items:center;margin-bottom:var(--spacing)}
-    label{display:flex;align-items:center;gap:0.25rem;font-weight:600}
-    select,textarea,button{border-radius:var(--radius);padding:0.5rem var(--spacing);font-size:1rem}
-    select,textarea{border:1px solid #ccc;background:var(--white)}
-    select{min-width:200px}
-    textarea{flex:1;resize:vertical;min-height:3rem}
-    button{background:var(--purple);color:var(--white);border:none;cursor:pointer;font-weight:600}
-    button:disabled{opacity:0.6;cursor:default}
-    .chat-box{background:var(--white);border-radius:var(--radius);padding:var(--spacing);flex:1;overflow-y:auto;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
-    .chat-box p{margin:0 0 var(--spacing);line-height:1.6}
-    footer{text-align:center;padding:0.5rem;font-size:0.85rem;background:#e0e0e0}
-    @media(max-width:480px){.controls{flex-direction:column}select,textarea,button{width:100%}}
+    :root {
+      --purple: #7c4dff;
+      --bg: #f0f2f5;
+      --fg: #333;
+      --white: #fff;
+      --radius: 8px;
+      --spacing: 1rem;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family:'Inter',sans-serif;
+      display:flex; flex-direction:column;
+      height:100vh; background:var(--bg); color:var(--fg);
+    }
+    header {
+      background:var(--purple); color:var(--white);
+      text-align:center; padding:var(--spacing);
+      font-size:1.25rem; font-weight:600;
+    }
+    main {
+      flex:1; overflow:auto; padding:var(--spacing);
+    }
+    .controls {
+      display:flex; flex-wrap:wrap; gap:var(--spacing);
+      align-items:center; margin-bottom:var(--spacing);
+    }
+    .controls label { display:flex; align-items:center; gap:0.25rem; font-weight:600; }
+    select, textarea {
+      flex:1; font-size:1rem; padding:0.5rem var(--spacing);
+      border:1px solid #ccc; border-radius:var(--radius);
+      background:var(--white);
+    }
+    textarea { resize:vertical; min-height:3rem; }
+    button {
+      background:var(--purple); color:var(--white);
+      border:none; border-radius:var(--radius);
+      cursor:pointer; font-weight:600; padding:0.75rem 1.5rem;
+    }
+    button:disabled { opacity:0.6; cursor:default; }
+    .chat-box {
+      background:var(--white); border-radius:var(--radius);
+      padding:var(--spacing); box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      height:60vh; overflow-y:auto;
+    }
+    .chat-box p { margin:0 0 1em; line-height:1.6; }
+    footer {
+      text-align:center; padding:0.5rem; background:#e0e0e0;
+      font-size:0.85rem;
+    }
+    @media(max-width:480px){
+      .controls { flex-direction:column; }
+      button { width:100%; }
+      header { font-size:1.1rem; }
+    }
   </style>
 </head>
 <body>
+
   <header>SynapSense Chat AI</header>
+
   <main>
     <div class="controls">
       <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
       <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
-      <select id="exerciseSelect">
-        <!-- …30 option come sopra… -->
+      <select id="exerciseSelect" style="display:none">
+        <!-- opzioni popolate da JS -->
       </select>
-      <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
+      <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
       <button id="sendBtn">Invia</button>
     </div>
+
     <div class="chat-box" id="chatBox">
-      <p>Scegli tra Chat Libera o Consigli sui 30 esercizi di Synapsense</p>
+      <p>Scegli tra Chat libera o Consigli sui 30 esercizi di SynapSense</p>
     </div>
   </main>
-  <footer>© 2025 SynapSense</footer>
+
+  <footer>© 2025 SynapSense</footer>
 
   <script>
-    const WORKER = 'https://synapsense-agent.ilpetti1897.workers.dev/';
-    const modes = document.querySelectorAll('input[name="mode"]');
-    const sel   = document.getElementById('exerciseSelect');
-    const txt   = document.getElementById('freeMessage');
-    const btn   = document.getElementById('sendBtn');
-    const box   = document.getElementById('chatBox');
-    let history = [];
+    const WORKER = "https://synapsense-agent.ilpetti1897.workers.dev";
+    const modeRadios   = [...document.querySelectorAll('input[name="mode"]')];
+    const selExercise  = document.getElementById("exerciseSelect");
+    const msgInput     = document.getElementById("messageInput");
+    const sendBtn      = document.getElementById("sendBtn");
+    const chatBox      = document.getElementById("chatBox");
 
-    function renderLine(who, text) {
-      const p = document.createElement('p');
-      p.textContent = `${who==='user'?'Tu':'AI'}: ${text}`;
-      box.append(p);
-      box.scrollTop = box.scrollHeight;
-    }
+    let history = []; // manterremo tutta la cronologia
 
-    // toggla textarea vs dropdown
-    function updateView() {
-      const m = document.querySelector('input[name="mode"]:checked').value;
-      sel.style.display = m==='exercise' ? 'block' : 'none';
-      txt.style.display = m==='chat'     ? 'block' : 'none';
-    }
-    modes.forEach(r=>r.addEventListener('change', updateView));
-    window.addEventListener('DOMContentLoaded', updateView);
+    // 1) Popola dropdown esercizi
+    fetch(WORKER + "/exercises")
+      .then(r => r.json())
+      .then(exs => {
+        selExercise.innerHTML = exs.map(e =>
+          `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
+        ).join("");
+      });
 
-    btn.addEventListener('click', async ()=>{
+    // 2) Gestione cambio modalità
+    function updateUI() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      const content = mode==='exercise'
-        ? txt.value.trim()
-        : txt.value.trim();
-      if (!content) { alert('Inserisci un testo'); return; }
-      const turn = { mode, content };
-      if (mode==='exercise') turn.exerciseId = sel.value;
+      if (mode === "exercise") {
+        selExercise.style.display = "block";
+        msgInput.placeholder = "Scrivi qui il tuo dubbio sull’esercizio…";
+      } else {
+        selExercise.style.display = "none";
+        msgInput.placeholder = "Scrivi qui il tuo messaggio…";
+      }
+      msgInput.value = "";
+      history = [];
+      chatBox.innerHTML = `<p>Scegli tra Chat libera o Consigli sui 30 esercizi di SynapSense</p>`;
+    }
+    modeRadios.forEach(r => r.addEventListener("change", updateUI));
 
-      history.push(turn);
-      renderLine('user', content);
-      txt.value = '';
-      btn.disabled = true;
+    // 3) Invia messaggio
+    sendBtn.addEventListener("click", async () => {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const text = msgInput.value.trim();
+      if (!text) return alert("Inserisci un testo da inviare.");
 
+      // 3a) aggiorna UI e history utente
+      const you = document.createElement("p");
+      you.textContent = "Tu: " + text;
+      you.style.fontWeight = "600";
+      chatBox.append(you);
+      history.push({ role: "user", content: text });
+
+      // 3b) prepara payload
+      const payload = {
+        mode,
+        exerciseId: mode==="exercise" ? selExercise.value : null,
+        history
+      };
+
+      sendBtn.disabled = true;
+      // 3c) chiamata
       try {
-        const res = await fetch(WORKER, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ history })
+        const res = await fetch(WORKER + "/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
-        const { reply } = await res.json();
-        history.push({ role:'assistant', content: reply });
-        reply.split(/\r?\n{1,2}/).forEach(l=>{
-          if (l.trim()) renderLine('assistant', l.trim());
+        const { reply, error } = await res.json();
+        if (error) throw Error(error);
+
+        // 3d) aggiorna UI e history AI
+        reply.split(/\r?\n{2,}|\*\*/).forEach(par => {
+          const t = par.trim();
+          if (!t) return;
+          const p = document.createElement("p");
+          p.textContent = "AI: " + t.replace(/^\*/, "•");
+          chatBox.append(p);
         });
-      } catch {
-        renderLine('assistant','Errore di connessione. Riprova più tardi.');
+        history.push({ role: "assistant", content: reply });
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+      } catch(err) {
+        chatBox.appendChild(Object.assign(document.createElement("p"), {
+          textContent: "Errore di connessione. Riprova più tardi."
+        }));
       } finally {
-        btn.disabled = false;
+        sendBtn.disabled = false;
+        msgInput.value = "";     // ** svuota input dopo invio **
       }
     });
   </script>
+
 </body>
 </html>
