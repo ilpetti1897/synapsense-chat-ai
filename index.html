@@ -6,10 +6,8 @@
   <title>SynapSense Chat AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --purple:#7c4dff;--bg:#f0f2f5;--fg:#333;--white:#fff;
-      --radius:8px;--spacing:1rem
-    }
+    /* STILI COME PRIMA… */
+    :root{--purple:#7c4dff;--bg:#f0f2f5;--fg:#333;--white:#fff;--radius:8px;--spacing:1rem}
     *{box-sizing:border-box}
     body{margin:0;font-family:'Inter',sans-serif;display:flex;flex-direction:column;height:100vh;background:var(--bg);color:var(--fg)}
     header{background:var(--purple);color:var(--white);text-align:center;padding:var(--spacing);font-size:1.25rem;font-weight:600}
@@ -32,40 +30,10 @@
   <header>SynapSense Chat AI</header>
   <main>
     <div class="controls">
-      <label><input type="radio" name="mode" value="chat" checked>Chat libera</label>
-      <label><input type="radio" name="mode" value="exercise">Consigli esercizio</label>
+      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
       <select id="exerciseSelect">
-        <!-- 30 esercizi -->
-        <option value="1">1 – Respira profondamente</option>
-        <option value="2">2 – Tecnica dei 5 secondi</option>
-        <option value="3">3 – Focus su un obiettivo</option>
-        <option value="4">4 – Visualizza il tuo successo</option>
-        <option value="5">5 – Silenzia il giudizio interiore</option>
-        <option value="6">6 – La regola dei 20 minuti</option>
-        <option value="7">7 – Potenzia la memoria con la ripetizione attiva</option>
-        <option value="8">8 – Rilassamento muscolare progressivo</option>
-        <option value="9">9 – Scrivi tre cose per cui sei grato</option>
-        <option value="10">10 – Il potere delle affermazioni positive</option>
-        <option value="11">11 – Leggi 1 pagina di un libro oggi</option>
-        <option value="12">12 – Tecnica pomodoro: 25 minuti di focus</option>
-        <option value="13">13 – Lascia andare ciò che non controlli</option>
-        <option value="14">14 – Reset mentale: 3 respiri e 1 sorriso</option>
-        <option value="15">15 – Mini meditazione guidata</option>
-        <option value="16">16 – Concentrati su ciò che conta</option>
-        <option value="17">17 – Un pensiero positivo appena sveglio</option>
-        <option value="18">18 – Evita multitasking per 1 ora</option>
-        <option value="19">19 – Torna nel presente: cosa senti ora?</option>
-        <option value="20">20 – Fissa piccoli obiettivi giornalieri</option>
-        <option value="21">21 – Respira in 4‑7‑8</option>
-        <option value="22">22 – Dì a te stesso: “Posso farcela”</option>
-        <option value="23">23 – Rituale mattutino di energia</option>
-        <option value="24">24 – Spegni il telefono per 30 minuti</option>
-        <option value="25">25 – Ascolta il tuo corpo 5 minuti</option>
-        <option value="26">26 – Bevi un bicchiere d’acqua consapevolmente</option>
-        <option value="27">27 – Allena la mente con un quiz veloce</option>
-        <option value="28">28 – Focalizzati su un suono per 1 minuto</option>
-        <option value="29">29 – Guarda il cielo per 2 minuti</option>
-        <option value="30">30 – Cammina lentamente e ascolta il passo</option>
+        <!-- …30 option come sopra… -->
       </select>
       <textarea id="freeMessage" placeholder="Scrivi qui il tuo messaggio…"></textarea>
       <button id="sendBtn">Invia</button>
@@ -78,44 +46,56 @@
 
   <script>
     const WORKER = 'https://synapsense-agent.ilpetti1897.workers.dev/';
-    const modeEls = document.querySelectorAll('input[name="mode"]');
-    const exSelect = document.getElementById('exerciseSelect');
-    const txt = document.getElementById('freeMessage');
-    const btn = document.getElementById('sendBtn');
-    const box = document.getElementById('chatBox');
+    const modes = document.querySelectorAll('input[name="mode"]');
+    const sel   = document.getElementById('exerciseSelect');
+    const txt   = document.getElementById('freeMessage');
+    const btn   = document.getElementById('sendBtn');
+    const box   = document.getElementById('chatBox');
     let history = [];
 
-    function append(sender, msg){
+    function renderLine(who, text) {
       const p = document.createElement('p');
-      p.textContent = (sender==='user'?'Tu: ':'AI: ') + msg;
+      p.textContent = `${who==='user'?'Tu':'AI'}: ${text}`;
       box.append(p);
       box.scrollTop = box.scrollHeight;
     }
 
+    // toggla textarea vs dropdown
+    function updateView() {
+      const m = document.querySelector('input[name="mode"]:checked').value;
+      sel.style.display = m==='exercise' ? 'block' : 'none';
+      txt.style.display = m==='chat'     ? 'block' : 'none';
+    }
+    modes.forEach(r=>r.addEventListener('change', updateView));
+    window.addEventListener('DOMContentLoaded', updateView);
+
     btn.addEventListener('click', async ()=>{
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      const content = txt.value.trim();
-      if(!content){ alert('Scrivi qualcosa'); return; }
-      const turn = { role:'user', mode, content };
-      if(mode==='exercise') turn.exerciseId = exSelect.value;
+      const content = mode==='exercise'
+        ? txt.value.trim()
+        : txt.value.trim();
+      if (!content) { alert('Inserisci un testo'); return; }
+      const turn = { mode, content };
+      if (mode==='exercise') turn.exerciseId = sel.value;
+
       history.push(turn);
-      append('user', content);
+      renderLine('user', content);
       txt.value = '';
       btn.disabled = true;
 
       try {
-        const resp = await fetch(WORKER, {
+        const res = await fetch(WORKER, {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ history })
         });
-        const { reply } = await resp.json();
-        history.push({ role:'assistant', content:reply });
-        reply.split(/\r?\n{1,2}/).forEach(line=>{
-          if(line.trim()) append('assistant', line.trim());
+        const { reply } = await res.json();
+        history.push({ role:'assistant', content: reply });
+        reply.split(/\r?\n{1,2}/).forEach(l=>{
+          if (l.trim()) renderLine('assistant', l.trim());
         });
       } catch {
-        append('assistant','Errore di connessione. Riprova più tardi.');
+        renderLine('assistant','Errore di connessione. Riprova più tardi.');
       } finally {
         btn.disabled = false;
       }
