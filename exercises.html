@@ -103,23 +103,27 @@
   <footer>© 2025 SynapSense</footer>
 
   <script>
-    // 1) URL CSV del tuo Google Sheet:
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu/pub?gid=1406910342&single=true&output=csv';
+    // URL CSV generato da "Pubblica sul Web" di Google Sheets
+    const CSV_URL =
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu' +
+      '/pub?gid=1406910342&single=true&output=csv';
 
-    // 2) Fetch e parsing CSV minimale
     fetch(CSV_URL)
-      .then(r => {
-        if (!r.ok) throw new Error('Rete');
-        return r.text();
+      .then(res => {
+        if (!res.ok) throw new Error('Errore rete: ' + res.status);
+        return res.text();
       })
-      .then(text => {
-        const rows = text.trim().split('\n').map(r=>r.split(','));
-        // header → [ “id”, “titolo”, “descrizione”, “immagineUrl” ]
-        const [hdr, ...data] = rows;
-        renderCards(data.map(r=>{
-          const [id, titolo, descrizione, immagineUrl] = r;
+      .then(csv => {
+        const lines = csv.trim().split('\n');
+        const [, ...rows] = lines; // skip header
+        const items = rows.map(line => {
+          // separa colonne rispettando le virgolette
+          const cols = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
+                         .map(c => c.replace(/^"|"$/g, ''));
+          const [id, titolo, descrizione, immagineUrl] = cols;
           return { id, titolo, descrizione, immagineUrl };
-        }));
+        });
+        renderCards(items);
       })
       .catch(err => {
         document.getElementById('container').innerHTML =
@@ -127,28 +131,28 @@
         console.error(err);
       });
 
-    // 3) Render
     function renderCards(items) {
-      const root = document.getElementById('container');
-      root.innerHTML = '';
+      const container = document.getElementById('container');
+      container.innerHTML = '';
       if (!items.length) {
-        root.innerHTML = '<p class="error">Nessun esercizio trovato.</p>';
+        container.innerHTML = '<p class="error">Nessun esercizio trovato.</p>';
         return;
       }
       items.forEach(ex => {
-        // link a Glide (cambia con il tuo URL reale)
-        const glideUrl = `https://go.glideapps.com/app/KccSSZctcqllWov8sQaR/30-esercizi?exerciseId=${ex.id}`;
+        // TODO: sostituisci con il vero link Glide alla tua schermata esercizio
+        const glideUrl =
+          `https://go.glideapps.com/app/KccSSZctcqllWov8sQaR/30-esercizi?exerciseId=${ex.id}`;
         const a = document.createElement('a');
         a.className = 'card';
         a.href = glideUrl;
         a.target = '_blank';
         a.innerHTML = `
-          <img src="${ex.immagineUrl||'https://via.placeholder.com/300x300?text=Mind'}" alt="">
+          <img src="${ex.immagineUrl || 'https://via.placeholder.com/300?text=SynapSense'}" alt="">
           <div class="card-content">
             <h3 class="card-title">${ex.id} – ${ex.titolo}</h3>
             <p class="card-desc">${ex.descrizione}</p>
           </div>`;
-        root.append(a);
+        container.appendChild(a);
       });
     }
   </script>
