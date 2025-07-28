@@ -1,125 +1,88 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Benvenuto | SynapSense</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Benvenuto in SynapSense</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --purple: #7c4dff;
-      --purple-dark: #5a2dcc;
-      --white: #fff;
-      --gray-light: #f5f5f5;
-      --radius: 12px;
-      --spacing: 1rem;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin:0; padding:0 }
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--gray-light);
+      background: #f0f2f5;
       color: #333;
-      display: flex;
-      flex-direction: column;
       min-height: 100vh;
+      display:flex; flex-direction:column;
     }
     header {
-      background: var(--purple);
-      color: var(--white);
-      padding: var(--spacing);
+      background: #7c4dff;
+      color: #fff;
+      padding: 1.5rem;
       text-align: center;
       font-size: 1.5rem;
-      font-weight: 800;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-weight: 600;
     }
     main {
       flex: 1;
-      padding: var(--spacing);
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing);
+      padding: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align:center;
     }
-    .hero {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: var(--spacing);
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    .hero h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-    .hero p {
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #555;
+    .intro {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      line-height:1.4;
     }
     .buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
-    .btn {
+    .buttons a {
       display: block;
       text-decoration: none;
-      text-align: center;
-      padding: 1rem;
-      border-radius: var(--radius);
       font-weight: 600;
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.1s;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: background .2s, color .2s;
     }
-    .btn-primary {
-      background: var(--purple);
-      color: var(--white);
-    }
-    .btn-secondary {
-      background: var(--white);
-      color: var(--purple-dark);
-      border: 2px solid var(--purple);
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-    .btn:active {
-      transform: translateY(0);
-      opacity: 0.8;
-    }
+    .btn-ex { background: #7c4dff; color: #fff; }
+    .btn-ex:hover { background: #693ae0; }
+    .btn-chat { background: #fff; color: #7c4dff; border: 2px solid #7c4dff; }
+    .btn-chat:hover { background: #7c4dff; color: #fff; }
     footer {
-      text-align: center;
-      padding: var(--spacing);
-      font-size: 0.85rem;
-      color: #777;
+      text-align:center;
+      padding: 0.5rem;
+      font-size:0.85rem;
+      background:#e0e0e0;
     }
-    @media(max-width:480px){
-      header { font-size:1.25rem; }
-      .buttons { grid-template-columns: 1fr; }
+    @media (max-width:480px){
+      .buttons { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-  <header>Benvenuto in SynapSense</header>
+  <header>Benvenuto in SynapSense</header>
 
   <main>
-    <div class="hero">
+    <div class="intro">
       <h2>Mindfulness sempre con te</h2>
       <p>Scopri 30 esercizi pratici di mindfulness oppure parla liberamente con il tuo coach AI, in qualsiasi momento.</p>
     </div>
 
     <div class="buttons">
-      <a href="https://ilpetti1897.github.io/synapsense-cha-ai/esercises.html" class="btn btn-primary">
-        30 Esercizi
-      </a>
-      <a href="https://ilpetti1897.github.io/synapsense-chat-ai/" class="btn btn-secondary">
-        Chat AI
-      </a>
+      <a href="exercises.html" class="btn-ex">30 Esercizi</a>
+      <a href="chat.html" class="btn-chat">Chat AI</a>
     </div>
   </main>
 
-  <footer>© 2025 SynapSense — L’app per il tuo benessere mentale</footer>
+  <footer>© 2025 SynapSense</footer>
 
 </body>
 </html>
