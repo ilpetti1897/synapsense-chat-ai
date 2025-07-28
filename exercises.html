@@ -80,9 +80,12 @@
       max-height: 300px;
       object-fit: cover;
       border-radius: var(--radius);
+      background: #eee;
+      margin-bottom: var(--spacing);
     }
     .detail h2 {
       margin: var(--spacing) 0 0.5rem;
+      font-size: 1.2rem;
     }
     .detail p {
       line-height:1.5;
@@ -96,6 +99,7 @@
       border-radius: var(--radius);
       text-decoration: none;
       font-weight:600;
+      margin-right: 0.5rem;
     }
     footer {
       text-align: center;
@@ -121,11 +125,10 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    const CSV_URL = 
+    const CSV_URL =
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu' +
       '/pub?gid=1406910342&single=true&output=csv';
 
-    // leggi parametro ?id=
     const params = new URLSearchParams(location.search);
     const selId = params.get('id');
 
@@ -134,20 +137,14 @@
       .then(csv => {
         const [hdr, ...rows] = csv.trim().split('\n');
         const exercises = rows.map(line => {
-          const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g)
-                           .map(c=>c.replace(/^"|"$/g,''));
-          return {
-            id: cols[0],
-            titolo: cols[1],
-            descrizione: cols[2],
-            immagine: cols[3]
-          };
+          // semplice split csv
+          const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g).map(c=>c.replace(/^"|"$/g,''));
+          return { id: cols[0], titolo: cols[1], descrizione: cols[2], immagine: cols[3] };
         });
-        if (selId) showDetail(exercises);
-        else showGrid(exercises);
+        selId ? showDetail(exercises) : showGrid(exercises);
       })
       .catch(err => {
-        document.getElementById('main').innerHTML = 
+        document.getElementById('main').innerHTML =
           `<p class="error">Errore nel caricamento degli esercizi.</p>`;
         console.error(err);
       });
@@ -159,9 +156,10 @@
       list.forEach(ex => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.onclick = ()=> location.href = `exercises.html?id=${ex.id}`;
+        card.onclick = () => location.href = `exercises.html?id=${ex.id}`;
         card.innerHTML = `
-          <img src="${ex.immagine}" alt="${ex.titolo}">
+          <img src="${ex.immagine}" alt="${ex.titolo}"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/300?text=No+Image';">
           <div class="title">${ex.id} – ${ex.titolo}</div>
         `;
         grid.appendChild(card);
@@ -177,14 +175,14 @@
       }
       main.innerHTML = `
         <div class="detail">
-          <img src="${ex.immagine}" alt="${ex.titolo}">
+          <img src="${ex.immagine}" alt="${ex.titolo}"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/600x300?text=No+Image';">
           <h2>${ex.id} – ${ex.titolo}</h2>
           <p>${ex.descrizione}</p>
-          <a class="btn" href="index.html?exerciseId=${ex.id}">
+          <a class="btn" href="./index.html?exerciseId=${ex.id}">
             Apri in Chat dei Consigli
           </a>
-          &nbsp;&nbsp;
-          <a class="btn" href="exercises.html">
+          <a class="btn" href="./exercises.html">
             ← Torna alla lista
           </a>
         </div>`;
