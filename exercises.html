@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>I 30 Esercizi di SynapSense</title>
+  <title>I 30 Esercizi di SynapSenseS</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -13,11 +13,10 @@
       --white: #fff;
       --radius: 8px;
       --spacing: 1rem;
-      --card-gap: 0.75rem;
+      --gap: 0.75rem;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--fg);
@@ -29,132 +28,117 @@
       padding: var(--spacing);
       font-size: 1.25rem;
       font-weight: 600;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      position: sticky; top:0; z-index:10;
     }
     main {
       padding: var(--spacing);
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-      gap: var(--card-gap);
+      grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+      gap: var(--gap);
     }
     .card {
       background: var(--white);
       border-radius: var(--radius);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
       text-decoration: none;
       color: inherit;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
     }
     .card img {
       width: 100%;
-      object-fit: cover;
       aspect-ratio: 1/1;
+      object-fit: cover;
+      background: #eee;
     }
-    .card-content {
-      padding: 0.75rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .card-title {
+    .card .title {
+      padding: 0.5rem;
       font-weight: 600;
-      margin: 0 0 0.5rem;
-      flex-shrink: 0;
-    }
-    .card-desc {
+      font-size: 0.95rem;
+      text-align: center;
       flex: 1;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      margin: 0;
-      color: #555;
     }
     .error {
-      text-align: center;
       padding: 2rem;
+      text-align: center;
       color: #a00;
     }
     footer {
       text-align: center;
-      padding: 1rem 0;
+      padding: var(--spacing);
       font-size: 0.85rem;
       background: var(--white);
-      color: #777;
-      margin-top: var(--spacing);
+      color: #666;
     }
     @media (max-width: 480px) {
       header { font-size: 1.1rem; }
-      .grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); }
     }
   </style>
 </head>
 <body>
-  <header>I 30 Esercizi di SynapSense</header>
+
+  <header>I 30 Esercizi di SynapSenseS</header>
+
   <main>
-    <div id="container" class="grid">
-      <p>Caricamento esercizi…</p>
+    <div id="grid" class="grid">
+      <p>Caricamento…</p>
     </div>
   </main>
-  <footer>© 2025 SynapSense</footer>
+
+  <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // URL CSV generato da "Pubblica sul Web" di Google Sheets
-    const CSV_URL =
+    // Il CSV pubblicato dal tuo Google Sheet:
+    const CSV_URL = 
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu' +
       '/pub?gid=1406910342&single=true&output=csv';
 
     fetch(CSV_URL)
-      .then(res => {
-        if (!res.ok) throw new Error('Errore rete: ' + res.status);
-        return res.text();
+      .then(r => {
+        if(!r.ok) throw new Error('Rete: ' + r.status);
+        return r.text();
       })
       .then(csv => {
         const lines = csv.trim().split('\n');
-        const [, ...rows] = lines; // skip header
+        // Assumo: header: id,titolo,descrizione,immagineUrl
+        const [, ...rows] = lines;
         const items = rows.map(line => {
-          // separa colonne rispettando le virgolette
-          const cols = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
-                         .map(c => c.replace(/^"|"$/g, ''));
-          const [id, titolo, descrizione, immagineUrl] = cols;
-          return { id, titolo, descrizione, immagineUrl };
+          // parsing basilare CSV
+          const [id, titolo, , immagine] = line.split(',').map(f=>f.replace(/^"|"$/g,''));
+          return { id, titolo, immagine };
         });
-        renderCards(items);
+        render(items);
       })
       .catch(err => {
-        document.getElementById('container').innerHTML =
-          '<p class="error">Errore nel caricamento degli esercizi.</p>';
+        document.getElementById('grid').innerHTML =
+          `<p class="error">Errore nel caricamento degli esercizi.</p>`;
         console.error(err);
       });
 
-    function renderCards(items) {
-      const container = document.getElementById('container');
-      container.innerHTML = '';
-      if (!items.length) {
-        container.innerHTML = '<p class="error">Nessun esercizio trovato.</p>';
+    function render(items) {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      if(!items.length) {
+        grid.innerHTML = `<p class="error">Nessun esercizio trovato.</p>`;
         return;
       }
       items.forEach(ex => {
-        // TODO: sostituisci con il vero link Glide alla tua schermata esercizio
-        const glideUrl =
-          `https://go.glideapps.com/app/KccSSZctcqllWov8sQaR/30-esercizi?exerciseId=${ex.id}`;
         const a = document.createElement('a');
         a.className = 'card';
-        a.href = glideUrl;
-        a.target = '_blank';
+        // link a index.html con parametro exerciseId
+        a.href = `index.html?exerciseId=${ex.id}`;
         a.innerHTML = `
-          <img src="${ex.immagineUrl || 'https://via.placeholder.com/300?text=SynapSense'}" alt="">
-          <div class="card-content">
-            <h3 class="card-title">${ex.id} – ${ex.titolo}</h3>
-            <p class="card-desc">${ex.descrizione}</p>
-          </div>`;
-        container.appendChild(a);
+          <img src="${ex.immagine || 'https://via.placeholder.com/300?text=No+Img'}" alt="">
+          <div class="title">${ex.id} – ${ex.titolo}</div>
+        `;
+        grid.appendChild(a);
       });
     }
   </script>
+
 </body>
 </html>
