@@ -6,83 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>I 30 Esercizi di SynapSenseS</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ecf0f1;
-      margin: 0;
-      padding: 0;
+    body { margin:0; padding:0; font-family:Arial,sans-serif; background:url('images/${ex.image}') no-repeat center center fixed; background-size:cover; color:#fff; text-shadow:1px 1px 4px #000; }
+    .overlay { background:rgba(0,0,0,0.7); padding:2rem; min-height:100vh; }
+    h1 { margin:0 0 1rem; font-size:2rem; }
+    .description { background:#ffffff; padding:1rem; border-radius:8px; margin-top:1rem; }
+    /* Override body defaults for description text */
+    .description h2,
+    .description p,
+    .description li {
+      color:#000 !important;
+      text-shadow:none !important;
     }
-    header {
-      background-color: #8e44ad;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
-    }
-    .card {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-    }
-    .card:hover {
-      transform: scale(1.03);
-    }
-    .card img {
-      max-width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .card h3 {
-      margin-top: 0.8rem;
-      font-size: 1.1rem;
-    }
-    .loader {
-      padding: 2rem;
-      text-align: center;
-      font-style: italic;
-      color: #666;
-    }
-    .description {
-      background: #ffffff;
-      padding: 1rem;
-      margin-top: 1rem;
-      border-radius: 8px;
-      color: #000;
-      text-shadow: none;
-    }
-    .description h2 {
-      margin-top: 1rem;
-      color: #8e44ad;
-    }
-    .description ol,
-    .description ul {
-      margin-left: 1.5rem;
-    }
-    .note {
-      margin-top: 1rem;
-      font-style: italic;
-      color: #444;
-    }
-    a.button {
-      display: inline-block;
-      margin: 0.5rem 0;
-      background: #8e44ad;
-      color: #fff;
-      padding: 0.7rem 1.5rem;
-      border-radius: 8px;
-      text-decoration: none;
-    }
+    .description h2 { color:#8e44ad !important; }
+    .note { font-style:italic; margin-top:1rem; }
+    a.button { display:inline-block; margin:0.5rem 0; background:#8e44ad; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; }
   </style>
 </head>
 
