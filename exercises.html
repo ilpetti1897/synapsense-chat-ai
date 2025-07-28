@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>I 30 Esercizi di SynapSenseS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --purple: #7c4dff;
@@ -14,232 +13,141 @@
       --radius: 8px;
       --spacing: 1rem;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      padding-bottom: var(--spacing);
-    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: sans-serif; background: var(--bg); color: var(--fg); }
     header {
       background: var(--purple);
       color: var(--white);
       text-align: center;
       padding: var(--spacing);
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 600;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
-      gap: var(--spacing);
+      grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+      gap: 1rem;
       padding: var(--spacing);
     }
     .card {
       background: var(--white);
       border-radius: var(--radius);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
       text-align: center;
-      padding: var(--spacing);
-    }
-    .card img {
-      width: 100%;
-      height: 80px;
-      object-fit: cover;
-      border-radius: var(--radius) var(--radius) 0 0;
-    }
-    .card h3 {
-      margin: 0.5em 0 0.25em;
-      font-size: 0.95rem;
-    }
-    .detail {
-      max-width: 600px;
-      margin: var(--spacing) auto;
-      background: var(--white);
-      border-radius: var(--radius);
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: var(--spacing);
+      position: relative;
+      transition: transform .2s;
     }
-    .detail img {
-      width: 100%;
-      border-radius: var(--radius);
-    }
-    .detail h2 {
-      margin-top: var(--spacing);
-    }
-    .buttons {
-      margin-top: var(--spacing);
-      display: flex;
-      gap: var(--spacing);
-      flex-wrap: wrap;
-    }
-    .buttons a {
-      text-decoration: none;
-      padding: 0.75em 1.5em;
-      border-radius: var(--radius);
-      font-weight: 600;
-      text-align: center;
-      flex: 1;
-    }
-    .btn-primary {
+    .card:hover { transform: translateY(-4px); }
+    .card-number {
+      position: absolute;
+      top: -10px; left: -10px;
       background: var(--purple);
       color: var(--white);
+      width: 28px; height:28px;
+      border-radius:50%;
+      font-size: .9rem;
+      line-height:28px;
+      font-weight:600;
     }
-    .btn-outline {
-      border: 2px solid var(--purple);
-      color: var(--purple);
+    .card svg {
+      width: 36px; height:36px;
+      margin-bottom: .5rem;
+      fill: var(--purple);
     }
-    footer {
-      text-align: center;
-      padding: 0.5rem;
-      font-size: 0.85rem;
-      color: #666;
+    .card-title {
+      font-size: .95rem;
+      font-weight:600;
+      margin-bottom:.5rem;
     }
-    @media (max-width: 480px) {
-      .grid { grid-template-columns: repeat(auto-fill,minmax(100px,1fr)); }
+    a.card {
+      text-decoration:none;
+      color: inherit;
     }
+    main { padding-bottom:2rem; }
   </style>
 </head>
 <body>
 
-  <header>I 30 Esercizi di SynapSenseS</header>
+  <header>I 30 Esercizi di SynapSenseS</header>
 
-  <!-- Griglia principale -->
-  <div id="list" class="grid"></div>
-
-  <!-- Dettaglio esercizio -->
-  <div id="detail" class="detail" style="display:none;"></div>
-
-  <footer>© 2025 SynapSenseS</footer>
+  <main>
+    <div class="grid" id="grid">
+      <!-- Le 30 card verranno inserite via JS -->
+    </div>
+  </main>
 
   <script>
-    // Dati degli esercizi: id, titolo e descrizione dettagliata
+    // Dati esercizi (numero, titolo, descrizione estesa)
     const exercises = [
-      { id:1,  title:"Respira profondamente", 
-        desc:`Siediti comodamente in una posizione eretta ma rilassata. 
-              Chiudi gli occhi, inspira lentamente contando fino a 4, trattieni per 2, 
-              espira contando fino a 6. Ripeti per 5 cicli mantenendo l’attenzione sul flusso dell’aria.` },
-      { id:2,  title:"Tecnica dei 5 secondi", 
-        desc:`Quando senti un impulso (ansia, rabbia o distrazione), conta a ritroso da 5 a 1: 
-              5️⃣ 4️⃣ 3️⃣ 2️⃣ 1️⃣. Al “1”, agisci o lasciar andare il pensiero negativo.` },
-      { id:3,  title:"Focus su un obiettivo", 
-        desc:`Scegli un solo obiettivo su cui vuoi concentrare l’attenzione oggi. 
-              Scrivilo in alto su un foglio e dedica 2 minuti a visualizzarlo nei minimi dettagli.` },
-      { id:4,  title:"Visualizza il tuo successo", 
-        desc:`Chiudi gli occhi e immagina di aver raggiunto un traguardo: i colori, 
-              le sensazioni fisiche, le emozioni. Rimani in questa visualizzazione per 2 minuti.` },
-      { id:5,  title:"Silenzia il giudizio interiore", 
-        desc:`Per 3 minuti, osserva i tuoi pensieri come nuvole che passano nel cielo: 
-              non giudicarli né attaccarti a essi, lasciandoli andare senza analizzarli.` },
-      { id:6,  title:"La regola dei 20 minuti", 
-        desc:`Dedica 20 minuti a una singola attività (lettura, scrittura, camminata). 
-              Non interromperti, non controllare il telefono: rimani totalmente presente.` },
-      { id:7,  title:"Potenzia la memoria", 
-        desc:`Prendi 5 parole a caso e prova a memorizzarle in 30 secondi. 
-              Poi, richiama quante più parole possibile senza guardare. Ripeti 3 volte.` },
-      { id:8,  title:"Rilassamento muscolare", 
-        desc:`Distenditi, contrai per 5s ciascun gruppo muscolare (mani, braccia, spalle…), 
-              poi rilascia e senti la differenza tra tensione e rilassamento.` },
-      { id:9,  title:"Gratitudine scritta", 
-        desc:`Scrivi 3 cose per cui sei grato oggi, con brevi frasi. 
-              Rileggi e assapora ogni parola, lasciando emergere un senso di serenità.` },
-      { id:10, title:"Aff ermazioni positive", 
-        desc:`Ripeti ad alta voce 3 affermazioni potenzianti (es. “Sono calmo e centrato”). 
-              Senti il tono, il ritmo e lascia che il messaggio raggiunga il tuo corpo.` },
-      { id:11, title:"Leggi una pagina oggi", 
-        desc:`Scegli un libro che ti ispira. 
-              Leggi una singola pagina lentamente, lasciando che ogni frase risuoni in te.` },
-      { id:12, title:"Tecnica Pomodoro", 
-        desc:`Imposta un timer a 25 minuti e lavora solo su un compito. 
-              Quando scade, fai 5 minuti di pausa e ripeti il ciclo.` },
-      { id:13, title:"Lascia andare il superfluo", 
-        desc:`Fai un rapido inventario mentale delle tue preoccupazioni. 
-              Identifica ciò che non puoi controllare e immagina di lasciarlo andare come foglie al vento.` },
-      { id:14, title:"Reset mentale", 
-        desc:`Fermati, fai 3 respiri profondi e, al terzo, sorridi. 
-              Senti come cambia il tuo stato d’animo e riprendi con maggiore leggerezza.` },
-      { id:15, title:"Mini meditazione guidata", 
-        desc:`Metti un timer per 3 minuti. 
-              Chiudi gli occhi e segui solo il tuo respiro, riportando l’attenzione ogni volta che la mente vaga.` },
-      { id:16, title:"Sprint di chiarezza", 
-        desc:`Prendi un foglio e in 60s annota tutte le tue priorità del giorno. 
-              Non pensare: scrivi in modo veloce. Alla fine, rivedi e ordina.` },
-      { id:17, title:"Pensiero positivo al risveglio", 
-        desc:`Appena sveglio, pensa a tre cose positive che ti aspettano oggi. 
-              Mantieni questo focus mentre esci dal letto.` },
-      { id:18, title:"Evita multitasking", 
-        desc:`Per la prossima ora, concentrati su una sola attività. 
-              Spegni notifiche, chiudi schede inutili, rimani presente.` },
-      { id:19, title:"Torna nel presente", 
-        desc:`Interrompi quello che stai facendo e, per 1 minuto, nota cinque cose che vedi, 
-              quattro che senti, tre che tocchi, due che annusi e uno che assaggi.` },
-      { id:20, title:"Ascolto profondo", 
-        desc:`Scegli un suono (musica, natura, silenzio). 
-              Chiudi gli occhi e ascolta ogni sfumatura per 2 minuti, accogliendo senza giudizio.` },
-      { id:21, title:"Scrivi un’intenzione", 
-        desc:`Scrivi in una frase la tua intenzione per la giornata. 
-              Rileggila ogni volta che ti senti disperso.` },
-      { id:22, title:"Pausa digitale", 
-        desc:`Spegni smartphone e schermo per 30 minuti. 
-              Dedica quel tempo solo a te: cammina, leggi, medita.` },
-      { id:23, title:"Sorridi consapevolmente", 
-        desc:`Metti un timer che suona ogni ora. 
-              Quando suona, fermati e sorridi per 10s, portando attenzione al volto e alla postura.` },
-      { id:24, title:"Camminata lenta", 
-        desc:`Fai una passeggiata lenta di 5 minuti. 
-              Senti ogni passo, il contatto dei piedi con il terreno e l’aria sul volto.` },
-      { id:25, title:"Pausa occhi", 
-        desc:`Ogni 20 minuti, stacca lo sguardo dallo schermo per 20s. 
-              Fissa un punto lontano per rilassare i muscoli oculari.` },
-      { id:26, title:"Domanda potenziante", 
-        desc:`Formula una domanda che ti aiuti a trovare risorse (“Cosa posso imparare da questo momento?”). 
-              Scrivila e meditala per 1 minuto.` },
-      { id:27, title:"Stretching veloce", 
-        desc:`Alzati e fai 3 allungamenti semplici: collo, spalle, schiena. 
-              Mantieni ogni posizione per 15s respirando profondamente.` },
-      { id:28, title:"Osserva il respiro", 
-        desc:`Porta la mano sul petto e senti il movimento respiratorio. 
-              Osserva per 2 minuti il ritmo senza modificarlo.` },
-      { id:29, title:"Visualizza gratitudine", 
-        desc:`Pensa a una persona o un momento di cui sei grato e visualizzalo in ogni dettaglio per 1 minuto.` },
-      { id:30, title:"Celebra ogni piccolo traguardo", 
-        desc:`Ogni volta che completi un compito, fermati un istante e celebralo con un piccolo gesto (un sorriso, un applauso).` }
+      { id:1,  title:"Respira profondamente", descr:"Trova una posizione comoda, siediti con schiena dritta, chiudi gli occhi. Inspira contando fino a 4, trattieni 2 secondi, espira contando fino a 6. Ripeti 5 volte, osservando ogni sensazione." },
+      { id:2,  title:"Tecnica dei 5 secondi", descr:"Quando senti esitazione o ansia, conta a ritroso da 5 a 1 e poi agisci subito. Questo spezza il circuito mentale del dubbio e ti aiuta a prendere decisioni rapide." },
+      { id:3,  title:"Focus su un obiettivo", descr:"Scegli un’unica attività da portare a termine nei prossimi 10 minuti. Elimina distrazioni: silenzia notifiche, chiudi schede inutili. Concentrati solo su quella cosa finché non l’hai completata." },
+      { id:4,  title:"Visualizza il tuo successo", descr:"Chiudi gli occhi e immagina un traguardo raggiunto: i colori, i suoni, le emozioni. Mantieni la visuale per 2 minuti, poi scrivi su un foglio 3 dettagli di quella scena." },
+      { id:5,  title:"Silenzia il giudizio interiore", descr:"Quando emerge un pensiero critico (‘non sono abbastanza’), fermati, riconosci il pensiero e sostituiscilo con ‘è normale, sto imparando’. Ripeti 5 volte nel corso della giornata." },
+      { id:6,  title:"La regola dei 20 minuti", descr:"Imposta un timer di 20 minuti per dedicarti a un compito. Durante questi 20 minuti, non distrarti mai. Alla fine fai una breve pausa di 2 minuti, poi riprendi o passa al prossimo task." },
+      { id:7,  title:"Potenzia la memoria", descr:"Prendi un elenco di 5 parole, leggilo 10 secondi, poi scrivilo a memoria. Ripeti il gioco con liste di 7–10 parole. Aumenta gradualmente la lunga degli elenchi per stimolare la memoria attiva." },
+      { id:8,  title:"Rilassamento muscolare", descr:"Sdraiati o siediti: contraigli ogni gruppo muscolare (piedi, gambe, addome, spalle, braccia) per 5 secondi, poi rilassali per 10. Procedi sequenzialmente fino al collo e al viso." },
+      { id:9,  title:"Gratitudine scritta", descr:"Ogni sera scrivi 3 cose per cui sei grato oggi. Possono essere piccole o grandi: un sorriso ricevuto, un buon pasto, un’idea che hai avuto. Osserva il senso di benessere che ne deriva." },
+      { id:10, title:"Affermazioni positive", descr:"Scegli 3 frasi di auto-motivazione (‘Sono capace’, ‘Posso farcela’, ‘Ogni giorno miglioro’). Ripetile davanti allo specchio per 2 minuti, mantenendo contatto visivo con te stesso." },
+      { id:11, title:"Leggi una pagina oggi", descr:"Prendi un libro che ti ispira e leggi solo la prima pagina o un paragrafo breve. Non serve finirlo: l’obiettivo è allenare la concentrazione e stimolare la riflessione." },
+      { id:12, title:"Tecnica Pomodoro", descr:"Lavora per 25 minuti sul compito scelto, poi fai 5 minuti di pausa. Dopo 4 cicli, concediti una pausa maggiore (15–20 minuti). Questo schema migliora focus e produttività." },
+      { id:13, title:"Lascia andare il superfluo", descr:"Quando ti senti sopraffatto, fai un elenco veloce di tutto ciò che ti preoccupa. Poi elimina mentalmente o scrivi ‘lascia andare’ accanto a ciò che non puoi controllare." },
+      { id:14, title:"Reset mentale", descr:"Prendi 3 respiri profondi e, al terzo, sorridi. Ripeti 3 volte. Questa semplice routine interrompe schemi di stress e aiuta a riportarti al momento presente." },
+      { id:15, title:"Mini meditazione guidata", descr:"Metti un timer di 3 minuti, siediti comodo, chiudi gli occhi. Segui il respiro: inspira in 4 sec, espira in 4 sec. Quando la mente vaga, gentilemente riportala al respiro." },
+      { id:16, title:"Sprint di chiarezza", descr:"Prendi carta e penna: imposta un timer di 60 secondi e scrivi le 3 priorità assolute della giornata. Non pensare troppo: lascia fluire. Poi rileggi e scegli la prima da fare subito." },
+      { id:17, title:"Pensiero positivo al risveglio", descr:"Appena sveglio, prima di aprire gli occhi, ripeti mentalmente: ‘Oggi sarà un buon giorno’, ‘Sono grato per questo momento’. Mantieni il pensiero per 30 secondi." },
+      { id:18, title:"Evita multitasking", descr:"Per un’ora consecutiva, dedica la tua attenzione a un solo compito. Metti il telefono in modalità silenziosa e chiudi tutte le altre app/finestra non indispensabili." },
+      { id:19, title:"Torna nel presente", descr:"Ogni 2 ore, fermati, guarda intorno e identifica 5 oggetti o suoni nel tuo ambiente. Nota consistenze, colori, rumori distanti. Questo ti riporta al qui‑e‑ora." },
+      { id:20, title:"Ascolto profondo", descr:"Scegli un suono qualsiasi (il tuo respiro, un motore, il canto di un uccello). Chiudi gli occhi e ascolta per 2 minuti, senza giudicare, semplicemente osserva eventuali cambiamenti." },
+      { id:21, title:"Scrivi un’intenzione", descr:"Scrivi in una frase ‘Oggi intendo…’ seguita da un obiettivo chiaro (es.: ‘Oggi intendo comunicare con calma’). Metti il foglio sul desktop o sulla scrivania a vista." },
+      { id:22, title:"Pausa digitale", descr:"Spegni notifiche e social per 30 minuti. Usa questo tempo per una breve passeggiata, un po’ di stretching o semplicemente per respirare a occhi chiusi." },
+      { id:23, title:"Sorridi consapevolmente", descr:"Fermati e concediti un sorriso genuino, anche senza motivo. Mantienilo per 10 secondi e nota come cambia l’umore e la postura del corpo." },
+      { id:24, title:"Camminata lenta", descr:"Cammina per 5 minuti a passo molto lento, concentrandoti su ogni contatto del piede col suolo: tallone, pianta, dita. Osserva sensazioni in gambe e schiena." },
+      { id:25, title:"Pausa occhi", descr:"Ogni 20 minuti di lavoro al PC, distogli lo sguardo per 20 secondi guardando un punto lontano. Questo riduce l’affaticamento e migliora il focus." },
+      { id:26, title:"Domanda potenziante", descr:"Quando hai un dubbio, fermati e chiediti: ‘Cosa posso fare ora per migliorare?’. Scrivi la risposta e attua subito anche solo un piccolo passo." },
+      { id:27, title:"Stretching veloce", descr:"In piedi, allunga braccia sopra la testa, piega il busto a destra e sinistra per 5 volte. Poi circonda le spalle: 5 rotazioni in avanti, 5 indietro." },
+      { id:28, title:"Osserva il respiro", descr:"Posa una mano sull’addome e senti il movimento. Inspira profondamente contando 3 secondi, espira conteggiando 4. Continua per 1 minuto, osservando l’espansione e il rilassamento." },
+      { id:29, title:"Visualizza gratitudine", descr:"Chiudi gli occhi e pensa a qualcuno che ti ha aiutato. Rivivi il momento: cosa ha fatto, come ti sei sentito. Mantieni l’immagine per 1 minuto." },
+      { id:30, title:"Celebra ogni piccolo traguardo", descr:"Ogni volta che completi un micro‑obiettivo, fermati e fai un piccolo gesto di celebrazione (un battito di mani, un sorriso, un complimento a te stesso)." }
     ];
 
-    const grid = document.getElementById('list');
-    const detail = document.getElementById('detail');
-
-    // Genera la griglia
+    const grid = document.getElementById('grid');
     exercises.forEach(ex => {
-      const card = document.createElement('div');
+      const card = document.createElement('a');
+      card.href = `exercises.html?id=${ex.id}`;
       card.className = 'card';
       card.innerHTML = `
-        <img src="images/ex${ex.id}.jpg" alt="${ex.title}">
-        <h3>${ex.id} – ${ex.title}</h3>
+        <div class="card-number">${ex.id}</div>
+        <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"></path></svg>
+        <div class="card-title">${ex.title}</div>
       `;
-      card.onclick = () => showDetail(ex.id);
-      grid.append(card);
+      grid.appendChild(card);
     });
 
-    // Mostra la scheda dettagliata
-    function showDetail(id) {
-      const ex = exercises.find(e=>e.id===id);
-      detail.style.display = 'block';
-      detail.innerHTML = `
-        <img src="images/ex${ex.id}.jpg" alt="${ex.title}">
-        <h2>${ex.id} – ${ex.title}</h2>
-        <p>${ex.desc}</p>
-        <div class="buttons">
-          <a class="btn-primary" href="chat.html?exerciseId=${ex.id}">Apri in Chat</a>
-          <a class="btn-outline" href="#list" onclick="detail.style.display='none'">&larr; Torna alla lista</a>
-        </div>
+    // Se c'è id in query, mostro la scheda singola
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    if(id) {
+      const ex = exercises.find(e=>String(e.id)===id);
+      document.body.innerHTML = `
+        <header>${ex.id} – ${ex.title}</header>
+        <main style="padding:var(--spacing);">
+          <div style="max-width:600px;margin:0 auto;background:#fff;padding:1rem;border-radius:var(--radius);box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+            <img src="https://via.placeholder.com/600x200/${('00000'+(ex.id*333333).toString(16)).slice(-6)}/fff?text=${encodeURIComponent(ex.title)}"
+              alt="${ex.title}" style="width:100%;border-radius:var(--radius);margin-bottom:1rem;">
+            <h2>${ex.title}</h2>
+            <p style="line-height:1.6;margin-bottom:1rem;">${ex.descr}</p>
+            <a href="chat.html?exerciseId=${ex.id}" 
+               style="display:inline-block;padding:.75rem 1.5rem;background:var(--purple);color:#fff;border-radius:var(--radius);text-decoration:none;">
+               Apri in Chat
+            </a>
+            <p style="margin-top:1rem;"><a href="exercises.html" style="color:var(--purple);">← Torna alla lista</a></p>
+          </div>
+        </main>
       `;
-      detail.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 
 </body>
 </html>
-</html>
-
