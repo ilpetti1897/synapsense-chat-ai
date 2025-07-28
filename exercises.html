@@ -43,32 +43,24 @@
       background: var(--white);
       border-radius: var(--radius);
       overflow: hidden;
-      text-decoration: none;
-      color: inherit;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
       display: flex;
       flex-direction: column;
-      cursor: pointer;
     }
     .card img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      background: #eee;
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      background:#eee;
     }
     .card .title {
-      padding: 0.5rem;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-align: center;
-      flex: 1;
+      padding:0.5rem;
+      font-size:0.9rem;
+      font-weight:600;
+      text-align:center;
+      flex:1;
     }
-    .error {
-      padding: 2rem;
-      text-align: center;
-      color: #a00;
-    }
-    /* dettaglio */
     .detail {
       background: var(--white);
       border-radius: var(--radius);
@@ -76,41 +68,39 @@
       box-shadow: 0 1px 6px rgba(0,0,0,0.1);
     }
     .detail img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
+      width:100%;
+      max-height:300px;
+      object-fit:cover;
       border-radius: var(--radius);
       background: #eee;
       margin-bottom: var(--spacing);
     }
     .detail h2 {
       margin: var(--spacing) 0 0.5rem;
-      font-size: 1.2rem;
+      font-size:1.2rem;
     }
-    .detail p {
-      line-height:1.5;
-      margin-bottom: var(--spacing);
-    }
+    .detail p { line-height:1.5; margin-bottom: var(--spacing); }
     .btn {
       display: inline-block;
       padding: 0.75rem 1.5rem;
-      background: var(--purple);
-      color: var(--white);
       border-radius: var(--radius);
       text-decoration: none;
       font-weight:600;
-      margin-right: 0.5rem;
+      margin-right:0.5rem;
     }
+    .btn-primary { background: var(--purple); color: var(--white); }
+    .btn-outline { background: transparent; color: var(--purple); border:2px solid var(--purple); }
+    .error { padding:2rem; text-align:center; color:#a00; }
     footer {
-      text-align: center;
-      padding: var(--spacing);
-      font-size: 0.85rem;
+      text-align:center;
+      padding:var(--spacing);
       background: var(--white);
-      color: #666;
+      font-size:0.8rem;
+      color:#666;
     }
-    @media (max-width: 480px) {
-      header { font-size: 1.1rem; }
-      .grid { grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); }
+    @media(max-width:480px){
+      header{font-size:1.1rem;}
+      .grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
     }
   </style>
 </head>
@@ -125,20 +115,21 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    const CSV_URL =
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu' +
+    const CSV_URL = 
+      'https://docs.google.com/spreadsheets/d/e/' +
+      '2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu' +
       '/pub?gid=1406910342&single=true&output=csv';
 
     const params = new URLSearchParams(location.search);
     const selId = params.get('id');
 
     fetch(CSV_URL)
-      .then(r => { if(!r.ok) throw new Error(r.status); return r.text(); })
+      .then(r => r.ok ? r.text() : Promise.reject(r.status))
       .then(csv => {
         const [hdr, ...rows] = csv.trim().split('\n');
         const exercises = rows.map(line => {
-          // semplice split csv
-          const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g).map(c=>c.replace(/^"|"$/g,''));
+          const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g)
+                           .map(c=>c.replace(/^"|"$/g,''));
           return { id: cols[0], titolo: cols[1], descrizione: cols[2], immagine: cols[3] };
         });
         selId ? showDetail(exercises) : showGrid(exercises);
@@ -149,43 +140,44 @@
         console.error(err);
       });
 
-    function showGrid(list) {
+    function showGrid(list){
       const main = document.getElementById('main');
-      main.innerHTML = `<div class="grid" id="grid"></div>`;
-      const grid = document.getElementById('grid');
+      main.innerHTML = `<div class="grid"></div>`;
+      const grid = main.querySelector('.grid');
       list.forEach(ex => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.onclick = () => location.href = `exercises.html?id=${ex.id}`;
+        card.onclick = ()=> location.href = `exercises.html?id=${ex.id}`;
         card.innerHTML = `
           <img src="${ex.immagine}" alt="${ex.titolo}"
-               onerror="this.onerror=null;this.src='https://via.placeholder.com/300?text=No+Image';">
+               onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
           <div class="title">${ex.id} – ${ex.titolo}</div>
         `;
-        grid.appendChild(card);
+        grid.append(card);
       });
     }
 
-    function showDetail(list) {
-      const ex = list.find(e => e.id === selId);
+    function showDetail(list){
+      const ex = list.find(e=>e.id===selId);
       const main = document.getElementById('main');
-      if (!ex) {
+      if(!ex){
         main.innerHTML = `<p class="error">Esercizio non trovato.</p>`;
         return;
       }
       main.innerHTML = `
         <div class="detail">
           <img src="${ex.immagine}" alt="${ex.titolo}"
-               onerror="this.onerror=null;this.src='https://via.placeholder.com/600x300?text=No+Image';">
+               onerror="this.src='https://via.placeholder.com/600x300?text=No+Image'">
           <h2>${ex.id} – ${ex.titolo}</h2>
           <p>${ex.descrizione}</p>
-          <a class="btn" href="./index.html?exerciseId=${ex.id}">
+          <a href="index.html?exerciseId=${ex.id}" class="btn btn-primary">
             Apri in Chat dei Consigli
           </a>
-          <a class="btn" href="./exercises.html">
+          <a href="exercises.html" class="btn btn-outline">
             ← Torna alla lista
           </a>
-        </div>`;
+        </div>
+      `;
     }
   </script>
 
