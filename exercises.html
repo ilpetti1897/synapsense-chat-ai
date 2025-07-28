@@ -64,9 +64,10 @@
     .card .title {
       font-weight: 600;
       margin-bottom: 0.25rem;
+      font-size: 0.9rem;
     }
     .card .desc {
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       color: #666;
     }
     footer {
@@ -91,38 +92,38 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // Lista dei 30 esercizi
+    // Array degli esercizi aggiornato
     const exercises = [
-      { id:1,  title:"Respira profondamente", description:"Pratica consigliata: respira consapevole", image:"1.png" },
-      { id:2,  title:"Tecnica dei 5 secondi", description:"Salto mentale che sveglia l’attenzione", image:"2.png" },
-      { id:3,  title:"Focus su un obiettivo", description:"Concentra tutte le risorse su un solo obiettivo", image:"3.png" },
-      { id:4,  title:"Visualizza il tuo successo", description:"Immagina il traguardo dei tuoi sogni", image:"4.png" },
-      { id:5,  title:"Silenzia il giudizio interiore", description:"Osserva i pensieri senza etichettarli", image:"5.png" },
-      { id:6,  title:"La regola dei 20 minuti", description:"Dedica 20' a un’attività senza distrazioni", image:"6.png" },
-      { id:7,  title:"Ripetizione attiva", description:"Potenzia la memoria con flash-card", image:"7.png" },
-      { id:8,  title:"Rilassamento progressivo", description:"Contrai e rilascia i muscoli a uno a uno", image:"8.png" },
-      { id:9,  title:"Scrivi la gratitudine", description:"Annota 3 cose per cui sei grato", image:"9.png" },
-      { id:10, title:"Affermazioni positive", description:"Ripeti frasi di empowerment", image:"10.png" },
-      { id:11, title:"Leggi 1 pagina oggi", description:"Scegli un libro ispirante e leggi", image:"11.png" },
-      { id:12, title:"Tecnica Pomodoro", description:"25' focus + 5' pausa", image:"12.png" },
-      { id:13, title:"Lascia andare", description:"Accetta ciò che non controli", image:"13.png" },
-      { id:14, title:"Reset mentale", description:"3 respiri e 1 sorriso", image:"14.png" },
-      { id:15, title:"Mini meditazione guidata", description:"5' di meditazione audio", image:"15.png" },
-      { id:16, title:"Concentrati su ciò che conta", description:"Definisci le tue priorità", image:"16.png" },
-      { id:17, title:"Pensiero positivo mattutino", description:"Formula un’intenzione al risveglio", image:"17.png" },
-      { id:18, title:"No multitasking 1h", description:"Lavora su un solo compito", image:"18.png" },
-      { id:19, title:"Torna nel presente", description:"Focalizzati su ciò che senti ora", image:"19.png" },
-      { id:20, title:"Piccoli obiettivi", description:"Stabilisci micro‐tasks giornalieri", image:"20.png" },
-      { id:21, title:"Respira in 4‑7‑8", description:"Tecnica di rilassamento respiratorio", image:"21.png" },
-      { id:22, title:"Posso farcela", description:"Ripeti ad alta voce ‘Posso farcela’", image:"22.png" },
-      { id:23, title:"Rituale mattutino", description:"Routine energizzante all’alba", image:"23.png" },
-      { id:24, title:"Spegni il telefono", description:"30' offline per disintossicare", image:"24.png" },
-      { id:25, title:"Ascolta il corpo", description:"5' di body scan", image:"25.png" },
-      { id:26, title:"Bevi consapevole", description:"Un bicchiere d'acqua con tutta l’attenzione", image:"26.png" },
-      { id:27, title:"Quiz veloce", description:"Allena la mente con un quiz", image:"27.png" },
-      { id:28, title:"Focalizzati sul suono", description:"1' di ascolto attento", image:"28.png" },
-      { id:29, title:"Guarda il cielo", description:"2' di contemplazione del cielo", image:"29.png" },
-      { id:30, title:"Cammina lentamente", description:"Ascolta il passo", image:"30.png" },
+      { id:1,  title:"Respira profondamente",      description:"Respira consapevole",           image:"1.png" },
+      { id:2,  title:"Tecnica dei 5 secondi",       description:"Salto mentale rapido",          image:"2.png" },
+      { id:3,  title:"Focus su un obiettivo",       description:"Concentra tutte le risorse",    image:"3.png" },
+      { id:4,  title:"Visualizza il tuo successo",  description:"Immagina il traguardo",         image:"4.png" },
+      { id:5,  title:"Silenzia il giudizio interiore", description:"Osserva senza etichettare",  image:"5.png" },
+      { id:6,  title:"La regola dei 20 minuti",     description:"20' di attività focalizzata",    image:"6.png" },
+      { id:7,  title:"Potenzia la memoria",         description:"Ripetizione attiva",            image:"7.png" },
+      { id:8,  title:"Rilassamento muscolare",      description:"Contrai e rilascia i muscoli",   image:"8.png" },
+      { id:9,  title:"Gratitudine scritta",         description:"Scrivi 3 cose per cui sei grato", image:"9.png" },
+      { id:10, title:"Affermazioni positive",       description:"Frasi di empowerment",          image:"10.png" },
+      { id:11, title:"Leggi una pagina oggi",       description:"Apri un libro ispirante",       image:"11.png" },
+      { id:12, title:"Tecnica Pomodoro",            description:"25' focus + 5' pausa",          image:"12.png" },
+      { id:13, title:"Lascia andare il superfluo",  description:"Accetta e rilascia",            image:"13.png" },
+      { id:14, title:"Reset mentale",               description:"3 respiri & 1 sorriso",        image:"14.png" },
+      { id:15, title:"Mini meditazione guidata",    description:"5' di meditazione audio",       image:"15.png" },
+      { id:16, title:"Sprint di chiarezza",         description:"Brainstorm veloce",             image:"16.png" },
+      { id:17, title:"Pensiero positivo al risveglio", description:"Intenzione mattutina",       image:"17.png" },
+      { id:18, title:"Evita multitasking",          description:"Focalizzati su un compito",     image:"18.png" },
+      { id:19, title:"Torna nel presente",          description:"Senti qui & ora",               image:"19.png" },
+      { id:20, title:"Ascolto profondo",            description:"Ascolta con tutta l’attenzione", image:"20.png" },
+      { id:21, title:"Scrivi un’intenzione",         description:"Annota il tuo proposito",       image:"21.png" },
+      { id:22, title:"Pausa digitale",              description:"Disconnetti per 10'",           image:"22.png" },
+      { id:23, title:"Sorridi consapevolmente",     description:"Sorridi e senti il volto",      image:"23.png" },
+      { id:24, title:"Camminata lenta",             description:"Cammina ascoltando il passo",   image:"24.png" },
+      { id:25, title:"Pausa occhi",                 description:"Chiudi e riposa lo sguardo",   image:"25.png" },
+      { id:26, title:"Domanda potenziante",         description:"Chiediti ‘Cosa posso fare?’",  image:"26.png" },
+      { id:27, title:"Stretching veloce",           description:"Allunga corpo e mente",        image:"27.png" },
+      { id:28, title:"Osserva il respiro",          description:"Focalizzati sull’inspirazione", image:"28.png" },
+      { id:29, title:"Visualizza gratitudine",      description:"Immagina scene di gratitudine", image:"29.png" },
+      { id:30, title:"Celebra ogni piccolo traguardo", description:"Riconosci ogni vittoria",   image:"30.png" },
     ];
 
     const grid = document.getElementById('grid');
@@ -130,12 +131,12 @@
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
-        <img src="images/${ex.image}" alt="Esercizio ${ex.id}">
+        <img src="images/${ex.image}" alt="${ex.title}"
+             onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
         <div class="body">
           <div class="title">${ex.id} – ${ex.title}</div>
           <div class="desc">${ex.description}</div>
         </div>`;
-      // al click vado su chat.html?exerciseId=…
       card.addEventListener('click', () => {
         window.location.href = `chat.html?exerciseId=${ex.id}`;
       });
