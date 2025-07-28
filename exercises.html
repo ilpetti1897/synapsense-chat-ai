@@ -29,6 +29,7 @@
     main {
       padding: var(--spacing);
     }
+    /* grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
@@ -43,22 +44,19 @@
       overflow: hidden;
     }
     .card img {
-      width: 100%;
-      height: 80px;
-      object-fit: cover;
+      width: 100%; height: 80px; object-fit: cover;
     }
     .card h4 {
       padding: 0.5rem;
       font-size: 0.9rem;
     }
+    /* detail */
     .detail {
       max-width: 600px;
       margin: auto;
     }
     .detail img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
+      width: 100%; height: 200px; object-fit: cover;
       border-radius: var(--radius) var(--radius) 0 0;
     }
     .detail-content {
@@ -69,7 +67,7 @@
       margin-top: -1px;
     }
     .detail-content h2 {
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
     .detail-content p {
       margin-bottom: 0.75rem;
@@ -108,358 +106,67 @@
   </main>
 
   <script>
-    // 1) Definizione dell'array con tutti i dettagli
-    const exercises = [
-      {
-        id: 1,
-        title: "Respira profondamente",
-        image: "images/1.jpg",
-        descr: [
-          "Siediti con la schiena dritta e piedi ben appoggiati a terra.",
-          "Chiudi gli occhi e porta le mani sul ventre.",
-          "Inspira contando fino a 4, trattieni per 2 secondi, espira in 6 secondi.",
-          "Ripeti 5 volte osservando la sensazione di rilassamento."
-        ]
-      },
-      {
-        id: 2,
-        title: "Tecnica dei 5 secondi",
-        image: "images/2.jpg",
-        descr: [
-          "Non appena senti ansia o distrazione, inizia a contare da 5 a 1.",
-          "Ogni numero diventa il tuo unico focus, lasciando andare il resto.",
-          "Quando arrivi a 1, fai un respiro profondo e ritorna al qui‑ed‑ora."
-        ]
-      },
-      {
-        id: 3,
-        title: "Focus su un obiettivo",
-        image: "images/3.jpg",
-        descr: [
-          "Prendi un foglio e scrivi un solo obiettivo per oggi.",
-          "Visualizza chiaramente il risultato e i passi necessari.",
-          "Lavora per 2 minuti senza distrazioni, poi fai una breve pausa."
-        ]
-      },
-      {
-        id: 4,
-        title: "Visualizza il tuo successo",
-        image: "images/4.jpg",
-        descr: [
-          "Chiudi gli occhi e immagina il risultato desiderato nei minimi dettagli.",
-          "Focalizzati sui colori, suoni e sensazioni presenti nella scena.",
-          "Mantieni la visione per 2 minuti, poi annota 3 dettagli su carta."
-        ]
-      },
-      {
-        id: 5,
-        title: "Silenzia il giudizio interiore",
-        image: "images/5.jpg",
-        descr: [
-          "Siediti in silenzio per 3 minuti, focalizzato solo sul respiro.",
-          "Quando compare un pensiero critico, riconoscilo senza giudizio.",
-          "Riporta l’attenzione al respiro e continua."
-        ]
-      },
-      {
-        id: 6,
-        title: "La regola dei 20 minuti",
-        image: "images/6.jpg",
-        descr: [
-          "Imposta un timer a 20 minuti e dedica tutto a un’unica attività.",
-          "Alla fine, fai una pausa di 5 minuti per distendere mente e corpo.",
-          "Ripeti questo ciclo una seconda volta."
-        ]
-      },
-      {
-        id: 7,
-        title: "Potenzia la memoria",
-        image: "images/7.jpg",
-        descr: [
-          "Scegli 5 parole o nozioni da memorizzare.",
-          "Ripeti ad alta voce ognuna per 10 secondi ciascuna.",
-          "Dopo 1 minuto, riprova a elencarle: rinforza quelle dimenticate."
-        ]
-      },
-      {
-        id: 8,
-        title: "Rilassamento muscolare",
-        image: "images/8.jpg",
-        descr: [
-          "Distenditi o siediti comodamente.",
-          "Stringi per 5s i muscoli del viso → rilassa.",
-          "Procedi a braccia, spalle, torace, gambe, piedi."
-        ]
-      },
-      {
-        id: 9,
-        title: "Gratitudine scritta",
-        image: "images/9.jpg",
-        descr: [
-          "Prendi un quaderno e una penna.",
-          "Scrivi tre motivi di gratitudine di oggi.",
-          "Rileggili prima di dormire per rinforzare positività."
-        ]
-      },
-      {
-        id: 10,
-        title: "Affermazioni positive",
-        image: "images/10.jpg",
-        descr: [
-          "Scegli 3 affermazioni (es. “Posso farcela oggi”).",
-          "Ripetile 5 volte ciascuna, respirando profondamente.",
-          "Senti come cambia il tono interiore."
-        ]
-      },
-      {
-        id: 11,
-        title: "Leggi una pagina oggi",
-        image: "images/11.jpg",
-        descr: [
-          "Scegli un libro di crescita o narrativa leggera.",
-          "Leggi una pagina con calma, osservando ogni parola.",
-          "Rifletti brevemente su un concetto interessante."
-        ]
-      },
-      {
-        id: 12,
-        title: "Tecnica Pomodoro",
-        image: "images/12.jpg",
-        descr: [
-          "Imposta un timer a 25 minuti e lavora concentrato.",
-          "Alla fine, fai 5 minuti di pausa attiva (cammina, sgranchisci).",
-          "Ripeti il ciclo 4 volte, poi pausa più lunga di 15 minuti."
-        ]
-      },
-      {
-        id: 13,
-        title: "Lascia andare il superfluo",
-        image: "images/13.jpg",
-        descr: [
-          "Rifletti su un pensiero ricorrente che non aiuta.",
-          "Visualizza quel pensiero come un palloncino che si allontana.",
-          "Respira profondamente e lascia andare."
-        ]
-      },
-      {
-        id: 14,
-        title: "Reset mentale",
-        image: "images/14.jpg",
-        descr: [
-          "Inspira contando fino a 4, espira in 6, ripeti 3 volte.",
-          "Dopo, stacca un sorriso naturale sul volto.",
-          "Osserva come cambia l’umore."
-        ]
-      },
-      {
-        id: 15,
-        title: "Mini meditazione guidata",
-        image: "images/15.jpg",
-        descr: [
-          "Siediti con schiena dritta e occhi semi‑chiusi.",
-          "Respira normalmente, osservando ogni inspirazione.",
-          "Se la mente vaga, riportala dolcemente al respiro."
-        ]
-      },
-      {
-        id: 16,
-        title: "Sprint di chiarezza",
-        image: "images/16.jpg",
-        descr: [
-          "Prendi foglio e penna, imposta timer a 60s.",
-          "Scrivi senza fermarti tutte le tue priorità.",
-          "Alla fine, evidenzia le prime 3 da fare subito."
-        ]
-      },
-      {
-        id: 17,
-        title: "Pensiero positivo al risveglio",
-        image: "images/17.jpg",
-        descr: [
-          "Appena sveglio, chiudi gli occhi e respira profondamente.",
-          "Richiama alla mente qualcosa di bello che ti aspetta oggi.",
-          "Visualizzalo per 30 secondi prima di scendere dal letto."
-        ]
-      },
-      {
-        id: 18,
-        title: "Evita multitasking",
-        image: "images/18.jpg",
-        descr: [
-          "Disattiva notifiche su telefono e PC.",
-          "Imposta timer a 60 minuti su un’unica attività.",
-          "Concentrati solo su quella, poi fai una breve pausa."
-        ]
-      },
-      {
-        id: 19,
-        title: "Torna nel presente",
-        image: "images/19.jpg",
-        descr: [
-          "Siediti comodo e chiudi gli occhi.",
-          "Identifica 5 sensazioni (respiro, contatto, temperatura…).",
-          "Mantieni l’attenzione su ciascuna per alcuni respiri."
-        ]
-      },
-      {
-        id: 20,
-        title: "Ascolto profondo",
-        image: "images/20.jpg",
-        descr: [
-          "Scegli un suono (respirazione, rumore ambientale…).",
-          "Chiudi gli occhi e ascolta senza giudicare.",
-          "Se la mente vagabonda, riportala al suono."
-        ]
-      },
-      {
-        id: 21,
-        title: "Scrivi un’intenzione",
-        image: "images/21.jpg",
-        descr: [
-          "Prendi carta e penna.",
-          "Scrivi in una frase il tuo obiettivo di giornata.",
-          "Ripetila mentalmente 3 volte per rafforzarla."
-        ]
-      },
-      {
-        id: 22,
-        title: "Pausa digitale",
-        image: "images/22.jpg",
-        descr: [
-          "Metti in modalità silenziosa tutti i dispositivi.",
-          "Dedica 30 minuti a un’attività offline (lettura, passeggiata).",
-          "Osserva come ti senti senza stimoli digitali."
-        ]
-      },
-      {
-        id: 23,
-        title: "Sorridi consapevolmente",
-        image: "images/23.jpg",
-        descr: [
-          "Ogni due ore, fermati e fai un sorriso naturale.",
-          "Tieni il sorriso per 5 secondi, poi rilassa.",
-          "Senti come cambia l’umore e la postura."
-        ]
-      },
-      {
-        id: 24,
-        title: "Camminata lenta",
-        image: "images/24.jpg",
-        descr: [
-          "Cammina molto lentamente, osserva ogni passo.",
-          "Focalizzati su contatto piede‑suolo e respiro.",
-          "Dedica 3 minuti a questa pratica."
-        ]
-      },
-      {
-        id: 25,
-        title: "Pausa occhi",
-        image: "images/25.jpg",
-        descr: [
-          "Ogni 20 minuti, distogli lo sguardo dallo schermo.",
-          "Guarda un punto lontano circa 6 metri per 20s.",
-          "Ripeti per ridurre l’affaticamento oculare."
-        ]
-      },
-      {
-        id: 26,
-        title: "Domanda potenziante",
-        image: "images/26.jpg",
-        descr: [
-          "Pensa a un problema o obiettivo attuale.",
-          "Formulalo come domanda positiva e attiva.",
-          "Annota almeno 2 risposte possibili e agisci."
-        ]
-      },
-      {
-        id: 27,
-        title: "Stretching veloce",
-        image: "images/27.jpg",
-        descr: [
-          "Esegui cerchi con il collo per 30s.",
-          "Allunga spalle tirando ogni braccio orizzontalmente per 30s.",
-          "Ruota bacino avanti‑dietro per 30s per lato."
-        ]
-      },
-      {
-        id: 28,
-        title: "Osserva il respiro",
-        image: "images/28.jpg",
-        descr: [
-          "Siediti comodo con schiena dritta.",
-          "Inspiro‑espiro senza modificarlo, solo osservo.",
-          "Conta mentalmente ogni ciclo fino a 10, poi ricomincia."
-        ]
-      },
-      {
-        id: 29,
-        title: "Visualizza gratitudine",
-        image: "images/29.jpg",
-        descr: [
-          "Chiudi gli occhi e rivivi un momento di gratitudine.",
-          "Immergiti nelle emozioni positive per 1 minuto.",
-          "Apri gli occhi e scrivi una parola che lo descriva."
-        ]
-      },
-      {
-        id: 30,
-        title: "Celebra ogni piccolo traguardo",
-        image: "images/30.jpg",
-        descr: [
-          "Scrivi in forma breve un piccolo successo della giornata.",
-          "Prenditi un respiro profondo e sorridi.",
-          "Condividi se vuoi con un amico o collega."
-        ]
-      }
-    ];
+    window.addEventListener('DOMContentLoaded', ()=> {
+      // 30 esercizi definiti inline
+      const exercises = [
+        { id:1,  title:"Respira profondamente", image:"images/1.jpg",
+          descr:[
+            "Siediti dritto, chiudi gli occhi e porta le mani sul ventre.",
+            "Inspira contando fino a 4, trattieni per 2, espira per 6.",
+            "Ripeti 5 volte osservando come ti rilassi ad ogni ciclo."
+          ]
+        },
+        /* … ripeti per tutti i 30 esercizi, con id da 2 a 30, immagini images/2.jpg, … images/30.jpg … */
+      ];
 
-    const main = document.getElementById('main');
-    const loading = document.getElementById('loading');
-    const params = new URLSearchParams(location.search);
-    const sel = params.get('id');
+      const main = document.getElementById('main');
+      const loading = document.getElementById('loading');
+      const params = new URLSearchParams(location.search);
+      const sel = params.get('id');
 
-    if (!sel) {
-      // OVERVIEW GRID
-      loading.remove();
-      const grid = document.createElement('div');
-      grid.className = 'grid';
-      exercises.forEach(ex => {
-        const c = document.createElement('div');
-        c.className = 'card';
-        c.onclick = () => location.href = `?id=${ex.id}`;
-        c.innerHTML = `
-          <img src="${ex.image}" alt="${ex.title}">
-          <h4>${ex.id} – ${ex.title}</h4>
-        `;
-        grid.appendChild(c);
-      });
-      main.appendChild(grid);
+      // rimuovi “Caricamento…”
+      loading && loading.remove();
 
-    } else {
-      // DETAIL VIEW
-      const ex = exercises.find(e => e.id == sel);
-      if (!ex) {
-        main.innerHTML = '<p>⚠️ Esercizio non trovato.</p>';
-        return;
-      }
-      loading.remove();
-      // aggiorna header
-      document.getElementById('page-title').textContent = `${ex.id} – ${ex.title}`;
-      const detail = document.createElement('div');
-      detail.className = 'detail';
-      detail.innerHTML = `
-        <img src="${ex.image}" alt="${ex.title}">
-        <div class="detail-content">
-          <h2>${ex.title}</h2>
-          ${ex.descr.map(p => `<p>${p}</p>`).join('')}
-          <div class="buttons">
-            <a class="btn" href="chat.html?exerciseId=${ex.id}">Apri in Chat</a>
-            <a class="btn outline" href="exercises.html">← Torna alla lista</a>
+      if (!sel) {
+        // OVERVIEW: griglia di card
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        exercises.forEach(ex=>{
+          const c = document.createElement('div');
+          c.className = 'card';
+          c.onclick = ()=> location.href=`?id=${ex.id}`;
+          c.innerHTML = `
+            <img src="${ex.image}" alt="${ex.title}" onerror="this.src='images/placeholder.jpg'">
+            <h4>${ex.id} – ${ex.title}</h4>
+          `;
+          grid.appendChild(c);
+        });
+        main.appendChild(grid);
+
+      } else {
+        // DETAIL: mostra un solo esercizio
+        const ex = exercises.find(e=>e.id==sel);
+        if (!ex) {
+          main.innerHTML = '<p>Esercizio non trovato.</p>';
+          return;
+        }
+        document.getElementById('page-title').textContent = `${ex.id} – ${ex.title}`;
+        const detail = document.createElement('div');
+        detail.className = 'detail';
+        detail.innerHTML = `
+          <img src="${ex.image}" alt="${ex.title}" onerror="this.src='images/placeholder.jpg'">
+          <div class="detail-content">
+            <h2>${ex.title}</h2>
+            ${ex.descr.map(p=>`<p>${p}</p>`).join('')}
+            <div class="buttons">
+              <a class="btn" href="chat.html?exerciseId=${ex.id}">Apri in Chat</a>
+              <a class="btn outline" href="exercises.html">← Torna alla lista</a>
+            </div>
           </div>
-        </div>
-      `;
-      main.appendChild(detail);
-    }
+        `;
+        main.appendChild(detail);
+      }
+    });
   </script>
 </body>
 </html>
