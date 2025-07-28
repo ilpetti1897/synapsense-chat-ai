@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>I 30 Esercizi | SynapSense</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;padding:0;font-family:'Inter',sans-serif;background:#f0f2f5;}
+    header{background:#7c4dff;color:#fff;padding:1rem;text-align:center;font-size:1.5rem;}
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap:1rem;
+      max-width:960px;
+      margin:1rem auto;
+      padding:0 1rem;
+    }
+    .card {
+      background:#fff;
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      display:flex;
+      flex-direction:column;
+    }
+    .card img {
+      width:100%;
+      aspect-ratio: 4/3;
+      object-fit:cover;
+    }
+    .card-content {
+      padding:0.75rem;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+    }
+    .card-content h3 {
+      margin:0 0 0.5rem;
+      font-size:1rem;
+      font-weight:600;
+    }
+    .card-content p {
+      margin:0 0 1rem;
+      line-height:1.4;
+      flex:1;
+      font-size:0. nine;
+    }
+    .card-content a {
+      margin-top:auto;
+      text-decoration:none;
+      text-align:center;
+      padding:0.5em;
+      background:#7c4dff;
+      color:#fff;
+      border-radius:4px;
+      font-weight:600;
+    }
+    .loading {
+      text-align:center;
+      margin-top:2rem;
+      font-size:1.1rem;
+      color:#666;
+    }
+    @media (max-width:480px) {
+      header{font-size:1.3rem;}
+      .grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+  <header>I 30 Esercizi di SynapSense</header>
+  <div id="grid" class="grid"></div>
+  <div id="loading" class="loading">Caricamento esercizi…</div>
+
+  <!-- Papa Parse per leggere il CSV -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    // URL di esportazione CSV del tuo sheet (solo tab 30-esercizi)
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1OJUvADO04ATzWDMQqhNRObfujv7p-Zpe6rs9L9s2jaI/export?format=csv&gid=1406910342';
+
+    Papa.parse(CSV_URL, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const data = results.data
+          // filtra eventuali righe vuote
+          .filter(r=>r.id && r.titolo && r.immagine)
+          // mappa al formato corretto
+          .map(r=>({
+            id: r.id.trim(),
+            titolo: r.titolo.trim(),
+            descrizione: (r.descrizione||'').trim(),
+            immagine: r.immagine.trim()
+          }));
+        renderGrid(data);
+      },
+      error: function(err){
+        document.getElementById('loading').textContent = 'Errore nel caricamento degli esercizi.';
+        console.error(err);
+      }
+    });
+
+    function renderGrid(exercises) {
+      const grid = document.getElementById('grid');
+      document.getElementById('loading').style.display = 'none';
+
+      exercises.forEach(ex => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${ex.immagine}" alt="${ex.titolo}">
+          <div class="card-content">
+            <h3>${ex.id} – ${ex.titolo}</h3>
+            <p>${ex.descrizione}</p>
+            <a href="index.html?exerciseId=${encodeURIComponent(ex.id)}">Apri consigli</a>
+          </div>`;
+        grid.append(card);
+      });
+    }
+  </script>
+
+</body>
+</html>
