@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>I 30 Esercizi di SynapSenseS</title>
   <style>
     :root {
@@ -17,8 +17,7 @@
       font-family:sans-serif;
       background: var(--light);
       color: var(--dark);
-      min-height:100vh;
-      display:flex; flex-direction:column;
+      display:flex; flex-direction:column; min-height:100vh;
     }
     header {
       background: var(--purple);
@@ -28,10 +27,7 @@
       font-size:1.5rem;
       font-weight:600;
     }
-    main {
-      flex:1;
-      padding: var(--spacing);
-    }
+    main { flex:1; padding: var(--spacing); }
     .grid {
       display:grid;
       gap: var(--spacing);
@@ -45,47 +41,35 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       cursor: pointer;
       transition: transform .1s;
-      display:flex; flex-direction:column; align-items:center;
-      text-align:center;
+      display:flex; flex-direction:column; align-items:center; text-align:center;
     }
     .card:hover { transform: translateY(-4px); }
     .badge {
       position: absolute;
-      top: -10px; left: -10px;
+      top: -8px; left: -8px;
       background: var(--purple);
       color: white;
       width: 28px; height: 28px;
       border-radius: 50%;
       display:flex; align-items:center; justify-content:center;
-      font-size:0.85rem;
-      font-weight:600;
+      font-size:0.85rem; font-weight:600;
     }
     .icon {
-      width: 48px; height: 48px;
+      width: 40px; height: 40px;
       margin-bottom: 0.5rem;
       fill: var(--purple);
     }
-    .title {
-      font-size:0.95rem;
-      font-weight:600;
-      margin-bottom:0.25rem;
-    }
-    .grid .desc {
-      display:none;
-    }
+    .title { font-size:0.95rem; font-weight:600; }
     /* DETAIL */
     .detail {
-      max-width:480px;
-      margin:0 auto;
+      margin-top: var(--spacing);
       background:white;
       border-radius:var(--radius);
       padding:var(--spacing);
       box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      max-width:480px; margin-left:auto; margin-right:auto;
     }
-    .detail .badge {
-      position: static;
-      margin-bottom: var(--spacing);
-    }
+    .detail .badge { position: static; margin-bottom: var(--spacing); }
     .detail .icon { margin-bottom: var(--spacing); }
     .detail h2 { margin-bottom:0.5rem; }
     .detail p  { line-height:1.5; margin-bottom:var(--spacing); }
@@ -117,75 +101,95 @@
 </head>
 <body>
 
-  <header>I 30 Esercizi di SynapSenseS</header>
-  <main id="main">Caricamento…</main>
+  <header>I 30 Esercizi di SynapSenseS</header>
+
+  <main id="main">
+    <!-- Qui verrà iniettato il grid o il dettaglio -->
+  </main>
+
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    const data = [
-      {id:1,  title:"Respira profondamente",           desc:"Respira consapevole"         },
-      {id:2,  title:"Tecnica dei 5 secondi",           desc:"Salto mentale rapido"        },
-      {id:3,  title:"Focus su un obiettivo",           desc:"Concentra le risorse"        },
-      {id:4,  title:"Visualizza il tuo successo",      desc:"Immagina il traguardo"       },
-      {id:5,  title:"Silenzia il giudizio interiore",  desc:"Osserva senza etichetta"     },
-      {id:6,  title:"La regola dei 20 minuti",         desc:"20' di attività focalizzata" },
-      {id:7,  title:"Potenzia la memoria",             desc:"Ripetizione attiva"          },
-      {id:8,  title:"Rilassamento muscolare",          desc:"Contrai e rilascia muscoli"  },
-      {id:9,  title:"Gratitudine scritta",             desc:"Scrivi 3 cose per cui sei grato" },
-      {id:10, title:"Affermazioni positive",           desc:"Frasi di empowerment"        },
-      {id:11, title:"Leggi una pagina oggi",           desc:"Apri un libro ispirante"     },
-      {id:12, title:"Tecnica Pomodoro",                desc:"25' focus + 5' pausa"        },
-      {id:13, title:"Lascia andare il superfluo",      desc:"Accetta e rilascia"          },
-      {id:14, title:"Reset mentale",                   desc:"3 respiri & 1 sorriso"       },
-      {id:15, title:"Mini meditazione guidata",        desc:"5' di meditazione audio"     },
-      {id:16, title:"Sprint di chiarezza",             desc:"Brainstorm veloce"           },
-      {id:17, title:"Pensiero positivo al risveglio",  desc:"Intenzione mattutina"        },
-      {id:18, title:"Evita multitasking",              desc:"Focalizzati su un compito"   },
-      {id:19, title:"Torna nel presente",              desc:"Senti qui & ora"             },
-      {id:20, title:"Ascolto profondo",                desc:"Ascolta attentamente"        },
-      {id:21, title:"Scrivi un’intenzione",             desc:"Annota il tuo proposito"     },
-      {id:22, title:"Pausa digitale",                  desc:"Disconnetti per 10'"         },
-      {id:23, title:"Sorridi consapevolmente",         desc:"Sorridi e senti il volto"    },
-      {id:24, title:"Camminata lenta",                 desc:"Cammina ascoltando il passo" },
-      {id:25, title:"Pausa occhi",                     desc:"Chiudi e riposa lo sguardo"  },
-      {id:26, title:"Domanda potenziante",             desc:"Chiediti ‘Cosa posso fare?’" },
-      {id:27, title:"Stretching veloce",               desc:"Allunga corpo e mente"       },
-      {id:28, title:"Osserva il respiro",              desc:"Focalizzati sull’inspirazione"},
-      {id:29, title:"Visualizza gratitudine",          desc:"Immagina scene di gratitudine"},
-      {id:30, title:"Celebra ogni piccolo traguardo",  desc:"Riconosci ogni vittoria"    },
+    // 1) L’elenco completo dei 30 esercizi (id, titolo e breve descrizione)
+    const exercises = [
+      {id:1,  title:"Respira profondamente",           desc:"Respira consapevole per centrare la mente."},
+      {id:2,  title:"Tecnica dei 5 secondi",           desc:"Salta mentalmente in 5…4…3…2…1 per svegliarti al presente."},
+      {id:3,  title:"Focus su un obiettivo",           desc:"Scegli un solo obiettivo e concentrati su quello."},
+      {id:4,  title:"Visualizza il tuo successo",      desc:"Immagina di aver già raggiunto il tuo scopo."},
+      {id:5,  title:"Silenzia il giudizio interiore",  desc:"Osserva i pensieri senza etichettarli."},
+      {id:6,  title:"La regola dei 20 minuti",         desc:"Dedica 20 minuti ininterrotti a un’attività."},
+      {id:7,  title:"Potenzia la memoria",             desc:"Usa la ripetizione attiva per fissare le informazioni."},
+      {id:8,  title:"Rilassamento muscolare",          desc:"Contrai e rilascia i gruppi muscolari uno a uno."},
+      {id:9,  title:"Gratitudine scritta",             desc:"Annota tre cose per cui sei grato oggi."},
+      {id:10, title:"Affermazioni positive",           desc:"Ripeti frasi che rinforzano la tua autostima."},
+      {id:11, title:"Leggi una pagina oggi",           desc:"Apri un libro e leggi una sola pagina."},
+      {id:12, title:"Tecnica Pomodoro",                desc:"25 minuti di focus, 5 di pausa."},
+      {id:13, title:"Lascia andare il superfluo",      desc:"Accetta e rilascia ciò che non controlli."},
+      {id:14, title:"Reset mentale",                   desc:"Fai 3 respiri profondi e un sorriso."},
+      {id:15, title:"Mini meditazione guidata",        desc:"Segui un audio di 5 minuti per meditare."},
+      {id:16, title:"Sprint di chiarezza",             desc:"Brainstorm veloce: scrivi priorità in 60”."},
+      {id:17, title:"Pensiero positivo al risveglio",  desc:"Inizia la giornata con un’affermazione."},
+      {id:18, title:"Evita multitasking",              desc:"Focalizzati su una sola attività per un’ora."},
+      {id:19, title:"Torna nel presente",              desc:"Nota tre sensazioni fisiche nel qui&ora."},
+      {id:20, title:"Ascolto profondo",                desc:"Chiudi gli occhi e ascolta un solo suono."},
+      {id:21, title:"Scrivi un’intenzione",            desc:"Definisci un’intenzione chiara per oggi."},
+      {id:22, title:"Pausa digitale",                  desc:"Stacca dal telefono per 10 minuti."},
+      {id:23, title:"Sorridi consapevolmente",         desc:"Sorridi e osserva come cambia il corpo."},
+      {id:24, title:"Camminata lenta",                 desc:"Cammina come se ogni passo fosse nuovo."},
+      {id:25, title:"Pausa occhi",                     desc:"Chiudi e rilassa lo sguardo per 2’."},
+      {id:26, title:"Domanda potenziante",             desc:"Chiediti “Qual è il prossimo piccolo passo?”."},
+      {id:27, title:"Stretching veloce",               desc:"Fai 3 allungamenti rapidi per rilassarti."},
+      {id:28, title:"Osserva il respiro",              desc:"Segui ogni inspirazione ed espirazione."},
+      {id:29, title:"Visualizza gratitudine",          desc:"Ricorda mentalmente momenti di gratitudine."},
+      {id:30, title:"Celebra ogni piccolo traguardo",  desc:"Festeggia anche i progressi minori."}
     ];
 
-    const iconSVG = `<svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+    // 2) Un’icona SVG generica (lente) per tutte le card
+    const iconSVG = `
+      <svg class="icon" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
 
-    const selId = new URLSearchParams(location.search).get('id');
-    const main  = document.getElementById('main');
+    const main = document.getElementById('main');
+    // Controlla se in URL c’è ?id=…
+    const params = new URLSearchParams(location.search);
+    const selId  = params.get('id');
 
     if (selId) {
-      const ex = data.find(e=>e.id==selId);
-      if (!ex) return main.textContent = 'Esercizio non trovato.';
-      main.innerHTML = `
-        <div class="detail">
-          <div class="badge">${ex.id}</div>
-          ${iconSVG}
-          <h2>${ex.title}</h2>
-          <p>${ex.desc}</p>
-          <a href="chat.html?exerciseId=${ex.id}" class="btn btn-primary">Apri in Chat</a>
-          <a href="exercises.html" class="btn btn-outline">← Torna alla lista</a>
-        </div>`;
+      // 3) Dettaglio esercizio
+      const ex = exercises.find(e => String(e.id) === selId);
+      if (!ex) {
+        main.innerHTML = `<p>Esercizio non trovato.</p>`;
+      } else {
+        main.innerHTML = `
+          <div class="detail">
+            <div class="badge">${ex.id}</div>
+            ${iconSVG}
+            <h2>${ex.title}</h2>
+            <p>${ex.desc}</p>
+            <a href="chat.html?exerciseId=${ex.id}" class="btn">Apri in Chat</a>
+            <a href="exercises.html" class="btn-outline">← Torna alla lista</a>
+          </div>`;
+      }
     } else {
+      // 4) Lista a griglia
       const grid = document.createElement('div');
       grid.className = 'grid';
-      data.forEach(ex=>{
+      exercises.forEach(ex => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
           <div class="badge">${ex.id}</div>
           ${iconSVG}
           <div class="title">${ex.title}</div>`;
-        card.onclick = ()=> location.href = `exercises.html?id=${ex.id}`;
+        card.onclick = () => {
+          location.href = `exercises.html?id=${ex.id}`;
+        };
         grid.append(card);
       });
-      main.textContent = '';
+      main.innerHTML = '';
       main.append(grid);
     }
   </script>
