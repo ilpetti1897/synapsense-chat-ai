@@ -32,6 +32,7 @@
     }
     main {
       padding: var(--spacing);
+      min-height: calc(100vh - 120px);
     }
     .grid {
       display: grid;
@@ -47,6 +48,7 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
     .card img {
       width: 100%;
@@ -66,6 +68,35 @@
       text-align: center;
       color: #a00;
     }
+    /* dettaglio */
+    .detail {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: var(--spacing);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    }
+    .detail img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: var(--radius);
+    }
+    .detail h2 {
+      margin: var(--spacing) 0 0.5rem;
+    }
+    .detail p {
+      line-height:1.5;
+      margin-bottom: var(--spacing);
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: var(--purple);
+      color: var(--white);
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight:600;
+    }
     footer {
       text-align: center;
       padding: var(--spacing);
@@ -83,60 +114,80 @@
 
   <header>I 30 Esercizi di SynapSenseS</header>
 
-  <main>
-    <div id="grid" class="grid">
-      <p>Caricamento…</p>
-    </div>
+  <main id="main">
+    <p>Caricamento…</p>
   </main>
 
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // Il CSV pubblicato dal tuo Google Sheet:
     const CSV_URL = 
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu' +
       '/pub?gid=1406910342&single=true&output=csv';
 
+    // leggi parametro ?id=
+    const params = new URLSearchParams(location.search);
+    const selId = params.get('id');
+
     fetch(CSV_URL)
-      .then(r => {
-        if(!r.ok) throw new Error('Rete: ' + r.status);
-        return r.text();
-      })
+      .then(r => { if(!r.ok) throw new Error(r.status); return r.text(); })
       .then(csv => {
-        const lines = csv.trim().split('\n');
-        // Assumo: header: id,titolo,descrizione,immagineUrl
-        const [, ...rows] = lines;
-        const items = rows.map(line => {
-          // parsing basilare CSV
-          const [id, titolo, , immagine] = line.split(',').map(f=>f.replace(/^"|"$/g,''));
-          return { id, titolo, immagine };
+        const [hdr, ...rows] = csv.trim().split('\n');
+        const exercises = rows.map(line => {
+          const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g)
+                           .map(c=>c.replace(/^"|"$/g,''));
+          return {
+            id: cols[0],
+            titolo: cols[1],
+            descrizione: cols[2],
+            immagine: cols[3]
+          };
         });
-        render(items);
+        if (selId) showDetail(exercises);
+        else showGrid(exercises);
       })
       .catch(err => {
-        document.getElementById('grid').innerHTML =
+        document.getElementById('main').innerHTML = 
           `<p class="error">Errore nel caricamento degli esercizi.</p>`;
         console.error(err);
       });
 
-    function render(items) {
+    function showGrid(list) {
+      const main = document.getElementById('main');
+      main.innerHTML = `<div class="grid" id="grid"></div>`;
       const grid = document.getElementById('grid');
-      grid.innerHTML = '';
-      if(!items.length) {
-        grid.innerHTML = `<p class="error">Nessun esercizio trovato.</p>`;
-        return;
-      }
-      items.forEach(ex => {
-        const a = document.createElement('a');
-        a.className = 'card';
-        // link a index.html con parametro exerciseId
-        a.href = `index.html?exerciseId=${ex.id}`;
-        a.innerHTML = `
-          <img src="${ex.immagine || 'https://via.placeholder.com/300?text=No+Img'}" alt="">
+      list.forEach(ex => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = ()=> location.href = `exercises.html?id=${ex.id}`;
+        card.innerHTML = `
+          <img src="${ex.immagine}" alt="${ex.titolo}">
           <div class="title">${ex.id} – ${ex.titolo}</div>
         `;
-        grid.appendChild(a);
+        grid.appendChild(card);
       });
+    }
+
+    function showDetail(list) {
+      const ex = list.find(e => e.id === selId);
+      const main = document.getElementById('main');
+      if (!ex) {
+        main.innerHTML = `<p class="error">Esercizio non trovato.</p>`;
+        return;
+      }
+      main.innerHTML = `
+        <div class="detail">
+          <img src="${ex.immagine}" alt="${ex.titolo}">
+          <h2>${ex.id} – ${ex.titolo}</h2>
+          <p>${ex.descrizione}</p>
+          <a class="btn" href="index.html?exerciseId=${ex.id}">
+            Apri in Chat dei Consigli
+          </a>
+          &nbsp;&nbsp;
+          <a class="btn" href="exercises.html">
+            ← Torna alla lista
+          </a>
+        </div>`;
     }
   </script>
 
