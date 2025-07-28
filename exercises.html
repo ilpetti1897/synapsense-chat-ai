@@ -3,156 +3,154 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>I 30 Esercizi di SynapSense</title>
+  <title>I 30 Esercizi di SynapSense</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing:border-box; margin:0; padding:0 }
+    :root {
+      --purple: #7c4dff;
+      --bg: #f0f2f5;
+      --fg: #333;
+      --white: #fff;
+      --radius: 8px;
+      --spacing: 1rem;
+      --card-gap: 0.75rem;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family:'Inter',sans-serif;
-      background:#f0f2f5;
-      color:#333;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
     }
     header {
-      background:#7c4dff;
-      color:#fff;
-      padding:1rem;
-      text-align:center;
-      font-size:1.25rem;
-      font-weight:600;
+      background: var(--purple);
+      color: var(--white);
+      text-align: center;
+      padding: var(--spacing);
+      font-size: 1.25rem;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
     main {
-      max-width:800px;
-      margin:1rem auto;
-      padding:0 1rem;
+      padding: var(--spacing);
     }
     .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-      gap:1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: var(--card-gap);
     }
     .card {
-      background:#fff;
-      border-radius:8px;
-      overflow:hidden;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      display:flex;
-      flex-direction:column;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
     }
     .card img {
-      width:100%;
-      height:120px;
-      object-fit:cover;
+      width: 100%;
+      object-fit: cover;
+      aspect-ratio: 1/1;
     }
-    .content {
-      padding:0.75rem;
-      flex:1;
+    .card-content {
+      padding: 0.75rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
-    .content h3 {
-      margin-bottom:0.5rem;
-      font-size:1rem;
+    .card-title {
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      flex-shrink: 0;
     }
-    .content p {
-      font-size:0.875rem;
-      line-height:1.4;
-    }
-    .card a {
-      display:block;
-      text-decoration:none;
-      background:#7c4dff;
-      color:#fff;
-      text-align:center;
-      padding:0.5rem;
-      font-weight:600;
-      border-radius:0 0 8px 8px;
+    .card-desc {
+      flex: 1;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin: 0;
+      color: #555;
     }
     .error {
-      text-align:center;
-      margin-top:2rem;
-      color:#a00;
+      text-align: center;
+      padding: 2rem;
+      color: #a00;
     }
     footer {
-      text-align:center;
-      padding:1rem;
-      font-size:0.85rem;
-      background:#e0e0e0;
-      margin-top:2rem;
+      text-align: center;
+      padding: 1rem 0;
+      font-size: 0.85rem;
+      background: var(--white);
+      color: #777;
+      margin-top: var(--spacing);
     }
-    @media (max-width:480px) {
-      .grid {
-        grid-template-columns:1fr;
-      }
+    @media (max-width: 480px) {
+      header { font-size: 1.1rem; }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
-  <header>I 30 Esercizi di SynapSense</header>
-
+  <header>I 30 Esercizi di SynapSense</header>
   <main>
-    <div id="grid" class="grid"></div>
-    <div id="error" class="error" style="display:none">
-      Errore nel caricamento degli esercizi.
+    <div id="container" class="grid">
+      <p>Caricamento esercizi…</p>
     </div>
   </main>
-
   <footer>© 2025 SynapSense</footer>
 
-  <!-- PapaParse per leggere il CSV -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    // URL CSV pubblicato dal tuo Google Sheet (foglio con gli esercizi, gid=1406910342)
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1OJUvADO04ATzWDMQqhNRObfujv7p-Zpe6rs9L9s2jaI/export?format=csv&gid=1406910342';
+    // 1) URL CSV del tuo Google Sheet:
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZaj1QcTcUgoVX7yfRKNPGDr2D3r6VAC6m4EE5pFtceTOBOX4_MuQc6eOzx4cyNSK0oy645Km7oDLu/pub?gid=1406910342&single=true&output=csv';
 
-    Papa.parse(CSV_URL, {
-      download: true,
-      header: true,
-      complete: function(res) {
-        if (!res.data || !res.data.length) {
-          showError(); return;
-        }
-        renderGrid(res.data);
-      },
-      error: showError
-    });
+    // 2) Fetch e parsing CSV minimale
+    fetch(CSV_URL)
+      .then(r => {
+        if (!r.ok) throw new Error('Rete');
+        return r.text();
+      })
+      .then(text => {
+        const rows = text.trim().split('\n').map(r=>r.split(','));
+        // header → [ “id”, “titolo”, “descrizione”, “immagineUrl” ]
+        const [hdr, ...data] = rows;
+        renderCards(data.map(r=>{
+          const [id, titolo, descrizione, immagineUrl] = r;
+          return { id, titolo, descrizione, immagineUrl };
+        }));
+      })
+      .catch(err => {
+        document.getElementById('container').innerHTML =
+          '<p class="error">Errore nel caricamento degli esercizi.</p>';
+        console.error(err);
+      });
 
-    function showError() {
-      document.getElementById('grid').style.display = 'none';
-      document.getElementById('error').style.display = 'block';
-    }
-
-    function renderGrid(items) {
-      const container = document.getElementById('grid');
-      items.forEach(item => {
-        // Nel tuo sheet le colonne sono: id, titolo, descrizione, immagine (URL)
-        const id         = item.id?.trim();
-        const titolo     = item.titolo?.trim();
-        const descrizione= item.descrizione?.trim();
-        const immagine   = item.immagine?.trim();
-
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        if (immagine) {
-          const img = document.createElement('img');
-          img.src = immagine;
-          img.alt = titolo;
-          card.append(img);
-        }
-
-        const body = document.createElement('div');
-        body.className = 'content';
-        body.innerHTML = `<h3>${id} – ${titolo}</h3><p>${descrizione}</p>`;
-        card.append(body);
-
+    // 3) Render
+    function renderCards(items) {
+      const root = document.getElementById('container');
+      root.innerHTML = '';
+      if (!items.length) {
+        root.innerHTML = '<p class="error">Nessun esercizio trovato.</p>';
+        return;
+      }
+      items.forEach(ex => {
+        // link a Glide (cambia con il tuo URL reale)
+        const glideUrl = `https://go.glideapps.com/app/KccSSZctcqllWov8sQaR/30-esercizi?exerciseId=${ex.id}`;
         const a = document.createElement('a');
-        a.href = `chat.html?exerciseId=${encodeURIComponent(id)}`;
-        a.textContent = 'Chiedi consigli';
-        card.append(a);
-
-        container.append(card);
+        a.className = 'card';
+        a.href = glideUrl;
+        a.target = '_blank';
+        a.innerHTML = `
+          <img src="${ex.immagineUrl||'https://via.placeholder.com/300x300?text=Mind'}" alt="">
+          <div class="card-content">
+            <h3 class="card-title">${ex.id} – ${ex.titolo}</h3>
+            <p class="card-desc">${ex.descrizione}</p>
+          </div>`;
+        root.append(a);
       });
     }
   </script>
-
 </body>
 </html>
