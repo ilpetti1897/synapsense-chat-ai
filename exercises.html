@@ -12,136 +12,190 @@
       --bg:      #f0f2f5;
       --corner:  8px;
       --spacing: 1rem;
-      --card-w:  160px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:#333;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
     }
     header {
-      background: var(--purple);
-      color: var(--white);
-      padding: var(--spacing);
-      text-align: center;
-      font-size: 1.25rem;
-      font-weight: 600;
+      background:var(--purple);
+      color:var(--white);
+      padding:var(--spacing);
+      text-align:center;
+      font-size:1.25rem;
+      font-weight:600;
+      position:sticky; top:0;
     }
     main {
-      flex: 1;
-      padding: var(--spacing);
+      flex:1;
+      padding:var(--spacing);
     }
+    /* GRID */
     .grid {
-      display: grid;
-      gap: var(--spacing);
-      grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
-      justify-items: center;
+      display:grid;
+      gap:var(--spacing);
+      grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+      justify-items:center;
     }
     .card {
-      background: var(--white);
-      border-radius: var(--corner);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-      width: var(--card-w);
-      cursor: pointer;
-      transition: transform 0.1s;
-      text-align: center;
+      background:var(--white);
+      border-radius:var(--corner);
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      overflow:hidden;
+      width:140px;
+      cursor:pointer;
+      transition:transform .1s;
+      text-align:center;
     }
-    .card:hover { transform: translateY(-4px); }
+    .card:hover { transform:translateY(-4px); }
     .card img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      background: #eee;
-    }
-    .card .body {
-      padding: 0.5rem;
+      width:100%;
+      height:100px;
+      object-fit:cover;
+      background:#eee;
     }
     .card .title {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      font-size: 0.9rem;
+      padding:.5rem;
+      font-weight:600;
+      font-size:.9rem;
     }
-    .card .desc {
-      font-size: 0.8rem;
-      color: #666;
+    /* DETAIL */
+    .detail {
+      background:var(--white);
+      border-radius:var(--corner);
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      padding:var(--spacing);
+      max-width:480px;
+      margin:0 auto;
+    }
+    .detail img {
+      width:100%;
+      border-radius:var(--corner);
+      object-fit:cover;
+      background:#eee;
+      max-height:300px;
+    }
+    .detail h2 {
+      margin:var(--spacing) 0 .5rem;
+      font-size:1.25rem;
+    }
+    .detail p {
+      line-height:1.5;
+      margin-bottom:var(--spacing);
+    }
+    .btn {
+      display:inline-block;
+      padding:.75rem 1.5rem;
+      border-radius:var(--corner);
+      text-decoration:none;
+      font-weight:600;
+      margin-right:.5rem;
+    }
+    .btn-primary {
+      background:var(--purple);
+      color:var(--white);
+    }
+    .btn-outline {
+      background:transparent;
+      color:var(--purple);
+      border:2px solid var(--purple);
     }
     footer {
-      text-align: center;
-      padding: 0.5rem;
-      background: #e0e0e0;
-      font-size: 0.85rem;
+      text-align:center;
+      padding:var(--spacing);
+      background:#e0e0e0;
+      font-size:.85rem;
     }
-    @media (max-width: 480px) {
-      :root { --card-w: 45vw; }
+    @media(max-width:480px){
+      .grid { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); }
     }
   </style>
 </head>
 <body>
 
-  <header>I 30 Esercizi di SynapSenseS</header>
+  <header>I 30 Esercizi di SynapSenseS</header>
 
-  <main>
-    <div class="grid" id="grid"></div>
-  </main>
+  <main id="main">Caricamento…</main>
 
-  <footer>© 2025 SynapSenseS</footer>
+  <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // Array degli esercizi aggiornato
+    // Dati statici degli esercizi
     const exercises = [
-      { id:1,  title:"Respira profondamente",      description:"Respira consapevole",           image:"1.png" },
-      { id:2,  title:"Tecnica dei 5 secondi",       description:"Salto mentale rapido",          image:"2.png" },
-      { id:3,  title:"Focus su un obiettivo",       description:"Concentra tutte le risorse",    image:"3.png" },
-      { id:4,  title:"Visualizza il tuo successo",  description:"Immagina il traguardo",         image:"4.png" },
-      { id:5,  title:"Silenzia il giudizio interiore", description:"Osserva senza etichettare",  image:"5.png" },
-      { id:6,  title:"La regola dei 20 minuti",     description:"20' di attività focalizzata",    image:"6.png" },
-      { id:7,  title:"Potenzia la memoria",         description:"Ripetizione attiva",            image:"7.png" },
-      { id:8,  title:"Rilassamento muscolare",      description:"Contrai e rilascia i muscoli",   image:"8.png" },
-      { id:9,  title:"Gratitudine scritta",         description:"Scrivi 3 cose per cui sei grato", image:"9.png" },
-      { id:10, title:"Affermazioni positive",       description:"Frasi di empowerment",          image:"10.png" },
-      { id:11, title:"Leggi una pagina oggi",       description:"Apri un libro ispirante",       image:"11.png" },
-      { id:12, title:"Tecnica Pomodoro",            description:"25' focus + 5' pausa",          image:"12.png" },
-      { id:13, title:"Lascia andare il superfluo",  description:"Accetta e rilascia",            image:"13.png" },
-      { id:14, title:"Reset mentale",               description:"3 respiri & 1 sorriso",        image:"14.png" },
-      { id:15, title:"Mini meditazione guidata",    description:"5' di meditazione audio",       image:"15.png" },
-      { id:16, title:"Sprint di chiarezza",         description:"Brainstorm veloce",             image:"16.png" },
-      { id:17, title:"Pensiero positivo al risveglio", description:"Intenzione mattutina",       image:"17.png" },
-      { id:18, title:"Evita multitasking",          description:"Focalizzati su un compito",     image:"18.png" },
-      { id:19, title:"Torna nel presente",          description:"Senti qui & ora",               image:"19.png" },
-      { id:20, title:"Ascolto profondo",            description:"Ascolta con tutta l’attenzione", image:"20.png" },
-      { id:21, title:"Scrivi un’intenzione",         description:"Annota il tuo proposito",       image:"21.png" },
-      { id:22, title:"Pausa digitale",              description:"Disconnetti per 10'",           image:"22.png" },
-      { id:23, title:"Sorridi consapevolmente",     description:"Sorridi e senti il volto",      image:"23.png" },
-      { id:24, title:"Camminata lenta",             description:"Cammina ascoltando il passo",   image:"24.png" },
-      { id:25, title:"Pausa occhi",                 description:"Chiudi e riposa lo sguardo",   image:"25.png" },
-      { id:26, title:"Domanda potenziante",         description:"Chiediti ‘Cosa posso fare?’",  image:"26.png" },
-      { id:27, title:"Stretching veloce",           description:"Allunga corpo e mente",        image:"27.png" },
-      { id:28, title:"Osserva il respiro",          description:"Focalizzati sull’inspirazione", image:"28.png" },
-      { id:29, title:"Visualizza gratitudine",      description:"Immagina scene di gratitudine", image:"29.png" },
-      { id:30, title:"Celebra ogni piccolo traguardo", description:"Riconosci ogni vittoria",   image:"30.png" },
+      { id:1,  title:"Respira profondamente",           desc:"Respira consapevole",              img:"1.png" },
+      { id:2,  title:"Tecnica dei 5 secondi",           desc:"Salto mentale rapido",             img:"2.png" },
+      { id:3,  title:"Focus su un obiettivo",           desc:"Concentra tutte le risorse",       img:"3.png" },
+      { id:4,  title:"Visualizza il tuo successo",      desc:"Immagina il traguardo",            img:"4.png" },
+      { id:5,  title:"Silenzia il giudizio interiore",  desc:"Osserva senza etichettare",        img:"5.png" },
+      { id:6,  title:"La regola dei 20 minuti",         desc:"20' di attività focalizzata",       img:"6.png" },
+      { id:7,  title:"Potenzia la memoria",             desc:"Ripetizione attiva",               img:"7.png" },
+      { id:8,  title:"Rilassamento muscolare",          desc:"Contrai e rilascia i muscoli",      img:"8.png" },
+      { id:9,  title:"Gratitudine scritta",             desc:"Scrivi 3 cose per cui sei grato",   img:"9.png" },
+      { id:10, title:"Affermazioni positive",           desc:"Frasi di empowerment",             img:"10.png" },
+      { id:11, title:"Leggi una pagina oggi",           desc:"Apri un libro ispirante",          img:"11.png" },
+      { id:12, title:"Tecnica Pomodoro",                desc:"25' focus + 5' pausa",             img:"12.png" },
+      { id:13, title:"Lascia andare il superfluo",      desc:"Accetta e rilascia",               img:"13.png" },
+      { id:14, title:"Reset mentale",                   desc:"3 respiri & 1 sorriso",           img:"14.png" },
+      { id:15, title:"Mini meditazione guidata",        desc:"5' di meditazione audio",          img:"15.png" },
+      { id:16, title:"Sprint di chiarezza",             desc:"Brainstorm veloce",                img:"16.png" },
+      { id:17, title:"Pensiero positivo al risveglio",  desc:"Intenzione mattutina",             img:"17.png" },
+      { id:18, title:"Evita multitasking",              desc:"Focalizzati su un compito",        img:"18.png" },
+      { id:19, title:"Torna nel presente",              desc:"Senti qui & ora",                  img:"19.png" },
+      { id:20, title:"Ascolto profondo",                desc:"Ascolta con tutta l’attenzione",   img:"20.png" },
+      { id:21, title:"Scrivi un’intenzione",             desc:"Annota il tuo proposito",          img:"21.png" },
+      { id:22, title:"Pausa digitale",                  desc:"Disconnetti per 10'",              img:"22.png" },
+      { id:23, title:"Sorridi consapevolmente",         desc:"Sorridi e senti il volto",         img:"23.png" },
+      { id:24, title:"Camminata lenta",                 desc:"Cammina ascoltando il passo",      img:"24.png" },
+      { id:25, title:"Pausa occhi",                     desc:"Chiudi e riposa lo sguardo",      img:"25.png" },
+      { id:26, title:"Domanda potenziante",             desc:"Chiediti ‘Cosa posso fare?’",    img:"26.png" },
+      { id:27, title:"Stretching veloce",               desc:"Allunga corpo e mente",           img:"27.png" },
+      { id:28, title:"Osserva il respiro",              desc:"Focalizzati sull’inspirazione",    img:"28.png" },
+      { id:29, title:"Visualizza gratitudine",          desc:"Immagina scene di gratitudine",    img:"29.png" },
+      { id:30, title:"Celebra ogni piccolo traguardo",  desc:"Riconosci ogni vittoria",          img:"30.png" },
     ];
 
-    const grid = document.getElementById('grid');
-    exercises.forEach(ex => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="images/${ex.image}" alt="${ex.title}"
-             onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-        <div class="body">
-          <div class="title">${ex.id} – ${ex.title}</div>
-          <div class="desc">${ex.description}</div>
-        </div>`;
-      card.addEventListener('click', () => {
-        window.location.href = `chat.html?exerciseId=${ex.id}`;
+    // Legge ?id=…
+    const params = new URLSearchParams(location.search);
+    const sel = params.get('id');
+
+    const main = document.getElementById('main');
+
+    if (sel) {
+      // DETTAGLIO
+      const ex = exercises.find(e=>e.id.toString()===sel);
+      if (!ex) {
+        main.innerHTML = '<p>❌ Esercizio non trovato.</p>';
+      } else {
+        main.innerHTML = `
+          <div class="detail">
+            <img src="images/${ex.img}" alt="${ex.title}">
+            <h2>${ex.id} – ${ex.title}</h2>
+            <p>${ex.desc}</p>
+            <a href="chat.html?exerciseId=${ex.id}" class="btn btn-primary">Apri in Chat</a>
+            <a href="exercises.html" class="btn btn-outline">← Torna alla lista</a>
+          </div>`;
+      }
+    } else {
+      // GRIGLIA
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      exercises.forEach(ex => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="images/${ex.img}" alt="${ex.title}">
+          <div class="title">${ex.id} – ${ex.title}</div>`;
+        card.onclick = ()=> location.href = `exercises.html?id=${ex.id}`;
+        grid.append(card);
       });
-      grid.appendChild(card);
-    });
+      main.innerHTML = '';
+      main.append(grid);
+    }
   </script>
 
 </body>
