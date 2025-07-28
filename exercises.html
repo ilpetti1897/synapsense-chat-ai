@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +12,7 @@
       margin: 0;
       padding: 0;
     }
+
     header {
       background-color: #8e44ad;
       color: white;
@@ -18,12 +20,14 @@
       text-align: center;
       font-size: 1.5rem;
     }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem;
       padding: 1rem;
     }
+
     .card {
       background-color: white;
       border-radius: 10px;
@@ -33,18 +37,22 @@
       cursor: pointer;
       transition: transform 0.2s ease-in-out;
     }
+
     .card:hover {
       transform: scale(1.03);
     }
+
     .card img {
       max-width: 100%;
       height: 180px;
       object-fit: cover;
       border-radius: 8px;
     }
+
     .card h3 {
       margin-top: 0.8rem;
     }
+
     .loader {
       padding: 2rem;
       text-align: center;
@@ -53,99 +61,100 @@
     }
   </style>
 </head>
+
 <body>
   <header>I 30 Esercizi di SynapSenseS</header>
   <div id="loader" class="loader">Caricamento…</div>
   <div id="grid" class="grid" style="display: none;"></div>
+
   <script>
     const exercises = [
-      { id: 1, title: "Respira profondo", image: "1.jpeg", description: "Esercizio professionale: respira profondo. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 2, title: "Tecnica dei 5 secondi", image: "2.jpeg", description: "Esercizio professionale: tecnica dei 5 secondi. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 3, title: "Focus su un obiettivo", image: "3.jpeg", description: "Esercizio professionale: focus su un obiettivo. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 4, title: "Visualizza il tuo successo", image: "4.jpeg", description: "Esercizio professionale: visualizza il tuo successo. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 5, title: "Silenzia il giudizio interiore", image: "5.jpeg", description: "Esercizio professionale: silenzia il giudizio interiore. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 6, title: "La regola dei 20 minuti", image: "6.jpeg", description: "Esercizio professionale: la regola dei 20 minuti. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 7, title: "Potenzia la memoria", image: "7.jpeg", description: "Esercizio professionale: potenzia la memoria. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 8, title: "Rilassamento muscolare progressivo", image: "8.jpeg", description: "Esercizio professionale: rilassamento muscolare progressivo. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 9, title: "Gratitudine scritta", image: "9.jpeg", description: "Esercizio professionale: gratitudine scritta. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 10, title: "Il potere delle affermazioni positive", image: "10.jpeg", description: "Esercizio professionale: il potere delle affermazioni positive. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 11, title: "Leggi una pagina oggi", image: "11.jpeg", description: "Esercizio professionale: leggi una pagina oggi. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 12, title: "Tecnica pomodoro: 25 minuti di focus", image: "12.jpeg", description: "Esercizio professionale: tecnica pomodoro: 25 minuti di focus. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 13, title: "Lascia andare il superfluo", image: "13.jpeg", description: "Esercizio professionale: lascia andare il superfluo. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 14, title: "Reset mentale: 3 respiri e 1 sorriso", image: "14.jpeg", description: "Esercizio professionale: reset mentale: 3 respiri e 1 sorriso. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 15, title: "Mini meditazione guidata", image: "15.jpeg", description: "Esercizio professionale: mini meditazione guidata. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 16, title: "Sprint di chiarezza", image: "16.jpeg", description: "Esercizio professionale: sprint di chiarezza. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 17, title: "Pensiero positivo al risveglio", image: "17.jpeg", description: "Esercizio professionale: pensiero positivo al risveglio. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 18, title: "Evita multitasking", image: "18.jpeg", description: "Esercizio professionale: evita multitasking. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 19, title: "Torna nel presente: cosa senti ora?", image: "19.jpeg", description: "Esercizio professionale: torna nel presente: cosa senti ora?. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 20, title: "Ascolto profondo", image: "20.jpeg", description: "Esercizio professionale: ascolto profondo. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 21, title: "Scrivi un'intenzione", image: "21.jpeg", description: "Esercizio professionale: scrivi un'intenzione. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 22, title: "Pausa digitale", image: "22.jpeg", description: "Esercizio professionale: pausa digitale. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 23, title: "Sorridi consapevolmente", image: "23.jpeg", description: "Esercizio professionale: sorridi consapevolmente. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 24, title: "Camminata lenta", image: "24.jpeg", description: "Esercizio professionale: camminata lenta. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 25, title: "Pausa occhi", image: "25.jpeg", description: "Esercizio professionale: pausa occhi. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 26, title: "Domanda potenziante", image: "26.jpeg", description: "Esercizio professionale: domanda potenziante. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 27, title: "Stretching veloce", image: "27.jpeg", description: "Esercizio professionale: stretching veloce. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 28, title: "Osserva il respiro", image: "28.jpeg", description: "Esercizio professionale: osserva il respiro. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 29, title: "Visualizza gratitudine", image: "29.jpeg", description: "Esercizio professionale: visualizza gratitudine. Esegui seguendo concentrazione, intenzione e presenza." },
-      { id: 30, title: "Celebra ogni piccolo traguardo", image: "30.jpeg", description: "Esercizio professionale: celebra ogni piccolo traguardo. Esegui seguendo concentrazione, intenzione e presenza." }
+      { id: 1, title: "Respira profondo", image: "1.jpeg", description: "Esegui 5 respiri profondi, inspirando dal naso ed espirando lentamente dalla bocca. Concentrati sull’aria che entra ed esce." },
+      { id: 2, title: "Tecnica dei 5 secondi", image: "2.jpeg", description: "Conta fino a 5 e agisci subito. Utile contro la procrastinazione e l’ansia." },
+      { id: 3, title: "Focus su un obiettivo", image: "3.jpeg", description: "Scrivi un obiettivo e concentrati per 2 minuti solo su quello, visualizzando il risultato." },
+      { id: 4, title: "Visualizza il tuo successo", image: "4.jpeg", description: "Chiudi gli occhi e immagina vividamente di aver già raggiunto il tuo obiettivo. Immergiti nei dettagli sensoriali." },
+      { id: 5, title: "Silenzia il giudizio interiore", image: "5.jpeg", description: "Nota ogni pensiero critico che emerge e sostituiscilo con un'affermazione incoraggiante." },
+      { id: 6, title: "La regola dei 20 minuti", image: "6.jpeg", description: "Dedica 20 minuti consecutivi a una sola attività importante senza distrazioni." },
+      { id: 7, title: "Potenzia la memoria", image: "7.jpeg", description: "Ripeti mentalmente una lista di 5 parole o numeri e cercane di ricordare l'ordine dopo un minuto." },
+      { id: 8, title: "Rilassamento muscolare progressivo", image: "8.jpeg", description: "Contrai e rilascia gruppi muscolari partendo dai piedi fino alla testa, uno alla volta." },
+      { id: 9, title: "Gratitudine scritta", image: "9.jpeg", description: "Scrivi 3 cose per cui sei grato oggi. Anche le più piccole contano." },
+      { id: 10, title: "Il potere delle affermazioni positive", image: "10.jpeg", description: "Ripeti per 1 minuto una frase positiva su te stesso. Sentila vera dentro di te." },
+      { id: 11, title: "Leggi una pagina oggi", image: "11.jpeg", description: "Apri un libro e leggi almeno una pagina con attenzione e curiosità." },
+      { id: 12, title: "Tecnica pomodoro: 25 minuti di focus", image: "12.jpeg", description: "Imposta un timer di 25 minuti e concentrati su una sola attività, senza interruzioni." },
+      { id: 13, title: "Lascia andare il superfluo", image: "13.jpeg", description: "Elimina o archivia qualcosa che non ti serve più: oggetti, pensieri o impegni." },
+      { id: 14, title: "Reset mentale: 3 respiri e 1 sorriso", image: "14.jpeg", description: "Fermati. Fai 3 respiri profondi e sorridi. Rilassati completamente nel momento presente." },
+      { id: 15, title: "Mini meditazione guidata", image: "15.jpeg", description: "Ascolta una breve meditazione di 3-5 minuti. Segui la voce e rilassa la mente." },
+      { id: 16, title: "Sprint di chiarezza", image: "16.jpeg", description: "Scrivi tutto ciò che hai in testa per 2 minuti, senza censura. Poi rileggi con calma." },
+      { id: 17, title: "Pensiero positivo al risveglio", image: "17.jpeg", description: "Appena sveglio, formula un pensiero positivo e ripetilo mentalmente 3 volte." },
+      { id: 18, title: "Evita multitasking", image: "18.jpeg", description: "Per 1 ora fai una sola cosa alla volta. Nota come ti senti più produttivo e presente." },
+      { id: 19, title: "Torna nel presente: cosa senti ora?", image: "19.jpeg", description: "Chiudi gli occhi per 30 secondi e descrivi mentalmente le sensazioni fisiche del corpo." },
+      { id: 20, title: "Ascolto profondo", image: "20.jpeg", description: "Ascolta qualcuno senza interrompere. Riformula con parole tue ciò che ha detto." },
+      { id: 21, title: "Scrivi un'intenzione", image: "21.jpeg", description: "Scrivi una frase che rappresenta la tua intenzione per oggi. Rendila chiara e positiva." },
+      { id: 22, title: "Pausa digitale", image: "22.jpeg", description: "Spegni il telefono o i social per almeno 15 minuti. Notati e ascolta te stesso." },
+      { id: 23, title: "Sorridi consapevolmente", image: "23.jpeg", description: "Sorridi per 1 minuto anche senza motivo. Nota come cambia il tuo stato d’animo." },
+      { id: 24, title: "Camminata lenta", image: "24.jpeg", description: "Cammina lentamente per 5 minuti. Focalizzati sui passi e sul contatto con il suolo." },
+      { id: 25, title: "Pausa occhi", image: "25.jpeg", description: "Guarda lontano per 20 secondi ogni 20 minuti, per rilassare la vista." },
+      { id: 26, title: "Domanda potenziante", image: "26.jpeg", description: "Poniti una domanda utile come: 'Cosa posso fare ora per migliorare questa situazione?'" },
+      { id: 27, title: "Stretching veloce", image: "27.jpeg", description: "Fai 2 minuti di stretching leggero, muovendo collo, braccia, schiena e gambe." },
+      { id: 28, title: "Osserva il respiro", image: "28.jpeg", description: "Per 1 minuto osserva il tuo respiro senza modificarlo. Solo nota il ritmo naturale." },
+      { id: 29, title: "Visualizza gratitudine", image: "29.jpeg", description: "Chiudi gli occhi e immagina qualcosa per cui sei grato, come se la stessi vivendo ora." },
+      { id: 30, title: "Celebra ogni piccolo traguardo", image: "30.jpeg", description: "Riconosci un piccolo successo recente. Festeggialo con un gesto simbolico o un sorriso." }
     ];
 
     const grid = document.getElementById("grid");
     const loader = document.getElementById("loader");
 
     function openExercisePage(ex) {
-      const page = `
-        <!DOCTYPE html>
-        <html lang="it">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${ex.id} – ${ex.title}</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 0;
-              font-family: Arial, sans-serif;
-              background: url('images/${ex.image}') no-repeat center center fixed;
-              background-size: cover;
-              color: white;
-              text-shadow: 1px 1px 4px #000;
-            }
-            .overlay {
-              background: rgba(0, 0, 0, 0.6);
-              padding: 2rem;
-              min-height: 100vh;
-            }
-            h1 {
-              font-size: 2rem;
-              margin-bottom: 1rem;
-            }
-            p {
-              font-size: 1.2rem;
-            }
-            a {
-              display: inline-block;
-              margin-top: 2rem;
-              background: #8e44ad;
-              color: white;
-              padding: 0.7rem 1.5rem;
-              border-radius: 8px;
-              text-decoration: none;
-              font-weight: bold;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="overlay">
-            <h1>${ex.id} – ${ex.title}</h1>
-            <p>${ex.description}</p>
-            <a href='chat.html?exercise=${ex.id}' target='_blank'>Apri la chat AI per questo esercizio</a>
-            <br><br>
-            <a href="#" onclick="window.close();">← Torna agli esercizi</a>
-          </div>
-        </body>
-        </html>`;
+      const page = `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${ex.id} – ${ex.title}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('images/${ex.image}') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-shadow: 1px 1px 4px #000;
+    }
+    .overlay {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+    }
+    a {
+      display: inline-block;
+      margin-top: 2rem;
+      background: #8e44ad;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>${ex.id} – ${ex.title}</h1>
+    <p>${ex.description}</p>
+    <a href="chat.html?exercise=${ex.id}" target="_blank">Apri la chat AI per questo esercizio</a>
+    <br><br>
+    <a href="exercises.html">← Torna agli esercizi</a>
+  </div>
+</body>
+</html>`;
       const newWindow = window.open();
       newWindow.document.write(page);
     }
@@ -156,15 +165,16 @@
       exercises.forEach(ex => {
         const card = document.createElement("div");
         card.className = "card";
-        card.innerHTML = `
-          <img src="images/${ex.image}" alt="${ex.title}" />
-          <h3>${ex.id} – <strong>${ex.title}</strong></h3>
-        `;
+        card.innerHTML = `<img src="images/${ex.image}" alt="${ex.title}" />
+          <h3>${ex.id} – <strong>${ex.title}</strong></h3>`;
         card.onclick = () => openExercisePage(ex);
         grid.appendChild(card);
       });
     }
+
     renderGrid();
   </script>
 </body>
+
 </html>
+
