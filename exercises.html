@@ -123,47 +123,46 @@
     const loader = document.getElementById("loader");
 
     function openExercisePage(ex) {
-      const content = document.createElement('div');
-      content.innerHTML = `
-        <!DOCTYPE html>
-        <html lang="it">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${ex.id} – ${ex.title}</title>
-          <style>
-            body { margin:0; padding:0; font-family:Arial,sans-serif; background:url('images/${ex.image}') no-repeat center center fixed; background-size:cover; color:#fff; text-shadow:1px 1px 4px #000; }
-            .overlay { background:rgba(0,0,0,0.7); padding:2rem; min-height:100vh; }
-            h1 { margin:0 0 1rem; font-size:2rem; }
-            .description { background:rgba(255,255,255,0.9); color:#333; padding:1rem; border-radius:8px; margin-top:1rem; }
-            .description h2 { color:#8e44ad; margin-top:1rem; }
-            .description ol, .description ul { margin-left:1.5rem; }
-            .note { font-style:italic; margin-top:1rem; }
-            a.button { display:inline-block; margin:0.5rem 0; background:#8e44ad; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; }
-          </style>
-        </head>
-        <body>
-          <div class="overlay">
-            <h1>${ex.id} – ${ex.title}</h1>
-            <div class="description">
-              <h2>Obiettivo</h2>
-              <p>${ex.objective}</p>
-              <h2>Procedura passo‑passo</h2>
-              <ol>
-                ${ex.steps.map(step => `<li>${step}</li>`).join('')} 
-              </ol>
-              <h2>Suggerimenti</h2>
-              <ul>
-                ${ex.tips.map(tip => `<li>${tip}</li>`).join('')} 
-              </ul>
-              <p class="note">In caso di dubbi, <a href="chat.html?exercise=${ex.id}">apri la chat AI</a>.</p>
-            </div>
-            <a class="button" href="exercises.html">← Torna agli esercizi</a>
-          </div>
-        </body>
-        </html>\`;
+      const page = `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${ex.id} – ${ex.title}</title>
+  <style>
+    body { margin:0; padding:0; font-family:Arial,sans-serif; background:url('images/${ex.image}') no-repeat center center fixed; background-size:cover; color:#fff; text-shadow:1px 1px 4px #000; }
+    .overlay { background:rgba(0,0,0,0.7); padding:2rem; min-height:100vh; }
+    h1 { margin:0 0 1rem; font-size:2rem; }
+    .description { background:rgba(255,255,255,0.9); color:#333; padding:1rem; border-radius:8px; margin-top:1rem; }
+    .description h2 { color:#8e44ad; margin-top:1rem; }
+    .description ol, .description ul { margin-left:1.5rem; }
+    .note { font-style:italic; margin-top:1rem; }
+    a.button { display:inline-block; margin:0.5rem 0; background:#8e44ad; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>${ex.id} – ${ex.title}</h1>
+    <div class="description">
+      <h2>Obiettivo</h2>
+      <p>${ex.objective}</p>
+      <h2>Procedura passo‑passo</h2>
+      <ol>
+        ${ex.steps.map(step => `<li>${step}</li>`).join('')}
+      </ol>
+      <h2>Suggerimenti</h2>
+      <ul>
+        ${ex.tips.map(tip => `<li>${tip}</li>`).join('')}
+      </ul>
+      <p class="note">In caso di dubbi, <a href="chat.html?exercise=${ex.id}">apri la chat AI</a>.</p>
+    </div>
+    <a class="button" href="exercises.html">← Torna agli esercizi</a>
+  </div>
+</body>
+</html>`;
       const win = window.open();
-      win.document.write(content.innerHTML);
+      win.document.open();
+      win.document.write(page);
       win.document.close();
     }
 
