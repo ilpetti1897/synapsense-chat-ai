@@ -1,356 +1,408 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>I 30 Esercizi di SynapSenseS</title>
   <style>
-    body { margin:0; padding:0; font-family:Arial,sans-serif; background:url('images/${ex.image}') no-repeat center center fixed; background-size:cover; color:#fff; text-shadow:1px 1px 4px #000; }
-    .overlay { background:rgba(0,0,0,0.7); padding:2rem; min-height:100vh; }
-    h1 { margin:0 0 1rem; font-size:2rem; }
-    .description { background:#ffffff; padding:1rem; border-radius:8px; margin-top:1rem; }
-    /* Override body defaults for description text */
-    .description h2,
-    .description p,
-    .description li {
-      color:#000 !important;
-      text-shadow:none !important;
-    }
-    .description h2 { color:#8e44ad !important; }
-    .note { font-style:italic; margin-top:1rem; }
-    a.button { display:inline-block; margin:0.5rem 0; background:#8e44ad; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; }
+    /* STILI PRINCIPALI */
+    body { margin:0; padding:0; font-family:Arial,sans-serif; background-color:#ecf0f1; }
+    header { background-color:#8e44ad; color:#fff; padding:1rem; text-align:center; font-size:1.5rem; }
+    /* GRIGLIA CARDS */
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; padding:1rem; }
+    .card { background:#fff; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1); padding:1rem; text-align:center; cursor:pointer; transition:transform .2s ease-in-out; }
+    .card:hover { transform:scale(1.03); }
+    .card img { width:100%; height:180px; object-fit:cover; border-radius:8px; }
+    .card h3 { margin-top:.8rem; font-size:1.1rem; }
+    .loader { padding:2rem; text-align:center; font-style:italic; color:#666; }
+    a.button { display:inline-block; margin:1rem 0; background:#8e44ad; color:#fff; padding:.7rem 1.5rem; border-radius:8px; text-decoration:none; }
   </style>
 </head>
-
 <body>
   <header>I 30 Esercizi di SynapSenseS</header>
   <div id="loader" class="loader">Caricamento…</div>
-  <div id="grid" class="grid" style="display: none;"></div>
+  <div id="grid" class="grid"></div>
 
   <script>
     const exercises = [
-      { id: 1, title: "Respira profondo", image: "1.jpeg", objective: "Calmare mente e corpo riducendo lo stress.", steps: [
+      { id:1, title:"Respira profondo", image:"1.jpeg",
+        objective:"Calmare mente e corpo riducendo lo stress.",
+        steps:[
           "Trova una posizione comoda, seduto o sdraiato.",
           "Chiudi gli occhi e inspira lentamente dal naso per 4 secondi.",
           "Trattieni il respiro per 2 secondi.",
           "Espira dalla bocca per 6 secondi.",
           "Ripeti per 5 cicli concentrandoti sulle sensazioni fisiche."
         ],
-        tips: [
+        tips:[
           "Metti una mano sul petto e una sull’addome per seguire il respiro.",
           "Esegui l’esercizio in un luogo tranquillo e privo di distrazioni."
         ]
       },
-      { id: 2, title: "Tecnica dei 5 secondi", image: "2.jpeg", objective: "Superare l’inerzia e iniziare subito compiti rimandati.", steps: [
-          "Contare mentalmente da 5 a 1 appena avverti il desiderio di procrastinare.",
+      { id:2, title:"Tecnica dei 5 secondi", image:"2.jpeg",
+        objective:"Superare l’inerzia e iniziare subito compiti rimandati.",
+        steps:[
+          "Conta mentalmente da 5 a 1 appena avverti il desiderio di procrastinare.",
           "Al termine del conteggio, avvia immediatamente l’azione.",
           "Mantieni l’azione per almeno 20 secondi per consolidare l’abitudine."
         ],
-        tips: [
-          "Utilizza questa tecnica appena sveglio per alzarti con decisione.",
-          "Annota i progressi e le sensazioni dopo l’esercizio."
+        tips:[
+          "Prova la tecnica appena sveglio per alzarti dal letto con decisione.",
+          "Annota i progressi e le sensazioni dopo ogni utilizzo."
         ]
       },
-      { id: 3, title: "Focus su un obiettivo", image: "3.jpeg", objective: "Aumentare chiarezza mentale e motivazione verso uno scopo.", steps: [
+      { id:3, title:"Focus su un obiettivo", image:"3.jpeg",
+        objective:"Aumentare chiarezza mentale e motivazione verso uno scopo.",
+        steps:[
           "Scrivi un obiettivo specifico e misurabile su un foglio.",
           "Imposta un timer per 2 minuti.",
           "Chiudi gli occhi e visualizza i passi necessari per raggiungerlo.",
-          "Resta concentrato sulle immagini e sensazioni associate."
+          "Resta concentrato su immagini e sensazioni del successo."
         ],
-        tips: [
+        tips:[
           "Usa simboli o colori per rendere l’obiettivo più vivido.",
-          "Ripeti la visualizzazione ogni mattina prima di iniziare la giornata."
+          "Ripeti la visualizzazione ogni mattina."
         ]
       },
-      { id: 4, title: "Visualizza il tuo successo", image: "4.jpeg", objective: "Rafforzare la fiducia e la determinazione attraverso l’immaginazione.", steps: [
-          "Siediti comodamente e chiudi gli occhi.",
-          "Immagina vividamente di aver già raggiunto un traguardo importante.",
-          "Inserisci dettagli sensoriali: suoni, colori, emozioni.",
-          "Mantieni la visualizzazione per almeno 1 minuto."
+      { id:4, title:"Visualizza il tuo successo", image:"4.jpeg",
+        objective:"Rafforzare fiducia e determinazione con l’immaginazione.",
+        steps:[
+          "Siediti comodamente, chiudi gli occhi e rilassa il corpo.",
+          "Immagina vividamente di aver raggiunto un traguardo significativo.",
+          "Visualizza dettagli sensoriali: suoni, colori, emozioni.",
+          "Mantieni la scena per almeno 1 minuto."
         ],
-        tips: [
-          "Registra a voce la tua visualizzazione per riascoltarla.",
-          "Aggiungi musica motivante in sottofondo."
+        tips:[
+          "Registra la sessione per poterla riascoltare.",
+          "Aggiungi musica motivante di sottofondo."
         ]
       },
-      { id: 5, title: "Silenzia il giudizio interiore", image: "5.jpeg", objective: "Sostituire pensieri critici con affermazioni positive.", steps: [
-          "Appena nasce un pensiero negativo, annotalo su un taccuino.",
-          "Trasformalo in un’affermazione incoraggiante.",
+      { id:5, title:"Silenzia il giudizio interiore", image:"5.jpeg",
+        objective:"Sostituire pensieri negativi con affermazioni positive.",
+        steps:[
+          "Annota ogni pensiero critico appena emerge.",
+          "Trasforma il pensiero in un’affermazione positiva.",
           "Ripeti l’affermazione ad alta voce 3 volte.",
-          "Rileggi periodicamente il tuo taccuino."
+          "Rileggi il tuo journal regolarmente."
         ],
-        tips: [
-          "Usa journaling serale per raccogliere pensieri critici della giornata.",
+        tips:[
+          "Usa journaling serale per raccogliere i pensieri negativi.",
           "Associa ogni affermazione a un’immagine rilassante."
         ]
       },
-      { id: 6, title: "La regola dei 20 minuti", image: "6.jpeg", objective: "Superare la resistenza iniziale avviando attività difficili.", steps: [
-          "Seleziona un’attività che stai rimandando.",
+      { id:6, title:"La regola dei 20 minuti", image:"6.jpeg",
+        objective:"Superare la resistenza iniziale avviando attività difficili.",
+        steps:[
+          "Scegli un compito che stai rimandando.",
           "Imposta un timer per 20 minuti.",
-          "Lavoraci senza interruzioni finché suona il timer.",
+          "Lavora ininterrottamente fino allo scadere del timer.",
           "Valuta se continuare o fermarti soddisfatto."
         ],
-        tips: [
-          "Prepara solo gli strumenti necessari prima di iniziare.",
-          "Riduci distrazioni: silenzia notifiche e ordina lo spazio di lavoro."
+        tips:[
+          "Prepara solo ciò che serve per il compito.",
+          "Elimina distrazioni: silenzia notifiche e chiudi schede inutili."
         ]
       },
-      { id: 7, title: "Potenzia la memoria", image: "7.jpeg", objective: "Allenare la memoria di lavoro e migliorare concentrazione.", steps: [
+      { id:7, title:"Potenzia la memoria", image:"7.jpeg",
+        objective:"Allenare la memoria di lavoro e migliorare concentrazione.",
+        steps:[
           "Scrivi 5 parole o numeri su un foglio.",
-          "Osservali per 30 secondi, poi coprili.",
+          "Studiali per 30 secondi, poi coprili.",
           "Dopo 1 minuto, prova a riscriverli nell’ordine corretto.",
           "Aumenta gradualmente la lista fino a 7 elementi."
         ],
-        tips: [
-          "Pronuncia mentalmente ogni elemento per rafforzare la memorizzazione.",
-          "Crea associazioni visive o racconti per ogni parola."
+        tips:[
+          "Pronuncia mentalmente ogni elemento.",
+          "Crea associazioni visive o racconti per facilitare il ricordo."
         ]
       },
-      { id: 8, title: "Rilassamento muscolare progressivo", image: "8.jpeg", objective: "Ridurre la tensione fisica attraverso il rilassamento sistematico dei muscoli.", steps: [
+      { id:8, title:"Rilassamento muscolare progressivo", image:"8.jpeg",
+        objective:"Ridurre tensioni fisiche e mentali con contrazione e rilascio muscolare.",
+        steps:[
           "Sdraiati o siediti con schiena dritta.",
-          "Contrai il gruppo muscolare dei piedi per 5 secondi e rilascia.",
-          "Procedi con gambe, addome, braccia, spalle, collo e volto.",
-          "Mantieni ogni rilascio per almeno 10 secondi."
+          "Contrai un gruppo muscolare (piedi) per 5s, poi rilascia per 10s.",
+          "Procedi verso gambe, addome, braccia, spalle, collo e volto.",
+          "Mantieni ciascun rilascio per almeno 10s."
         ],
-        tips: [
+        tips:[
           "Respira lentamente durante l’esercizio.",
           "Esegui in un ambiente silenzioso per massima concentrazione."
         ]
       },
-      { id: 9, title: "Gratitudine scritta", image: "9.jpeg", objective: "Aumentare il benessere emotivo concentrandosi su aspetti positivi.", steps: [
-          "Alla sera, scrivi 3 cose di cui sei grato.",
+      { id:9, title:"Gratitudine scritta", image:"9.jpeg",
+        objective:"Incrementare il benessere focalizzandosi su aspetti positivi.",
+        steps:[
+          "Alla sera, scrivi 3 cose per cui sei grato.",
           "Descrivi perché ogni elemento è significativo.",
-          "Rileggi le note prima di dormire per rinforzare il senso di gratitudine."
+          "Rileggi le note prima di addormentarti."
         ],
-        tips: [
-          "Includi piccoli dettagli quotidiani.",
-          "Usa un quaderno dedicato per vedere i tuoi progressi."
+        tips:[
+          "Includi anche piccoli dettagli della giornata.",
+          "Tieni un quaderno dedicato per tracciare i progressi."
         ]
       },
-      { id: 10, title: "Il potere delle affermazioni positive", image: "10.jpeg", objective: "Rafforzare autostima e mindset attraverso frasi motivanti.", steps: [
-          "Scegli un’affermazione che ti ispiri (es. 'Merito il meglio').",
-          "Ripetila ad alta voce davanti a uno specchio per 2 minuti.",
-          "Guarda te stesso negli occhi durante la ripetizione."
+      { id:10, title:"Il potere delle affermazioni positive", image:"10.jpeg",
+        objective:"Rafforzare autostima e mindset proattivo.",
+        steps:[
+          "Scegli un’affermazione che ti ispiri (es. “Merito il meglio”).",
+          "Ripetila ad alta voce per 2 minuti davanti a uno specchio.",
+          "Guardati negli occhi durante la ripetizione."
         ],
-        tips: [
-          "Registra la tua voce per ascoltarla in momenti di dubbio.",
+        tips:[
+          "Registra la tua voce per riascoltarla quando serve.",
           "Abbina l’affermazione a un gesto simbolico (es. pugno alzato)."
         ]
       },
-      { id: 11, title: "Leggi una pagina oggi", image: "11.jpeg", objective: "Stimolare concentrazione e creatività attraverso la lettura." , steps: [
+      { id:11, title:"Leggi una pagina oggi", image:"11.jpeg",
+        objective:"Stimolare concentrazione e creatività attraverso la lettura.",
+        steps:[
           "Prendi un libro cartaceo e leggi una pagina con calma.",
           "Sottolinea una frase significativa.",
-          "Appunta una riflessione su ciò che hai letto."
+          "Appunta una breve riflessione sul significato."
         ],
-        tips: [
-          "Scegli generi diversi per ampliare orizzonti.",
+        tips:[
+          "Varia i generi letterari per ampliare orizzonti.",
           "Leggi in un luogo confortevole e ben illuminato."
         ]
       },
-      { id: 12, title: "Tecnica Pomodoro: 25 minuti di focus", image: "12.jpeg", objective: "Aumentare produttività e gestione del tempo in sessioni brevi." , steps: [
+      { id:12, title:"Tecnica Pomodoro: 25 minuti di focus", image:"12.jpeg",
+        objective:"Migliorare produttività e gestione del tempo in sessioni brevi.",
+        steps:[
           "Imposta un timer di 25 minuti.",
-          "Lavora su un solo compito fino allo scadere.",
+          "Focalizzati su un solo compito senza distrazioni.",
           "Prenditi 5 minuti di pausa attiva.",
           "Dopo 4 cicli, fai una pausa più lunga di 15–30 minuti."
         ],
-        tips: [
+        tips:[
           "Annota le interruzioni per ridurle nei cicli successivi.",
           "Usa app o timer fisici per mantenere il ritmo."
         ]
       },
-      { id: 13, title: "Lascia andare il superfluo", image: "13.jpeg", objective: "Liberare spazio mentale e fisico eliminando ciò che non serve." , steps: [
+      { id:13, title:"Lascia andare il superfluo", image:"13.jpeg",
+        objective:"Liberare spazio mentale e fisico eliminando ciò che non serve.",
+        steps:[
           "Identifica un oggetto, abitudine o pensiero superfluo.",
           "Decidi di liberartene fisicamente o mentalmente.",
           "Festeggia il rilascio con un gesto simbolico."
         ],
-        tips: [
+        tips:[
           "Inizia da piccoli oggetti per abituarti al distacco.",
           "Scrivi i benefici del lasciare andare."
         ]
       },
-      { id: 14, title: "Reset mentale: 3 respiri e 1 sorriso", image: "14.jpeg", objective: "Ridurre stress e ricaricare energia in pochi secondi.", steps: [
-          "Ferma ciò che stai facendo.",
-          "Fai 3 respiri profondi concentrandoti sul respiro.",
+      { id:14, title:"Reset mentale: 3 respiri e 1 sorriso", image:"14.jpeg",
+        objective:"Ridurre lo stress e ricaricare energia in pochi secondi.",
+        steps:[
+          "Ferma l’attività in corso e chiudi gli occhi.",
+          "Fai 3 respiri profondi concentrandoti sull’addome.",
           "Sorridi spontaneamente per almeno 5 secondi."
         ],
-        tips: [
-          "Usa una sveglia visiva o sonora per ricordarti il reset.",
-          "Collega questo gesto a un’azione piacevole (es. bere un sorso d’acqua)."
+        tips:[
+          "Usa un promemoria visivo o sonoro per ricordarti il reset.",
+          "Abbina il gesto a un’azione piacevole (es. bere un sorso d’acqua)."
         ]
       },
-      { id: 15, title: "Mini meditazione guidata", image: "15.jpeg", objective: "Calmare la mente e aumentare presenza attraverso meditazione breve.", steps: [
+      { id:15, title:"Mini meditazione guidata", image:"15.jpeg",
+        objective:"Calmare la mente e aumentare la presenza attraverso una breve meditazione.",
+        steps:[
           "Apri un’app o un video di meditazione di 3–5 minuti.",
-          "Siediti con schiena dritta e indossa cuffie.",
+          "Siediti con schiena dritta, indossa cuffie.",
           "Segui la voce guida concentrandoti sul respiro."
         ],
-        tips: [
-          "Preferisci momenti di tranquillità per massima efficacia.",
+        tips:[
+          "Scegli un momento di tranquillità per massima efficacia.",
           "Annota sensazioni ed eventuali distrazioni dopo la sessione."
         ]
       },
-      { id: 16, title: "Sprint di chiarezza", image: "16.jpeg", objective: "Ordinare i pensieri liberandosi dal sovraccarico mentale.", steps: [
+      { id:16, title:"Sprint di chiarezza", image:"16.jpeg",
+        objective:"Ordinare i pensieri liberandosi del sovraccarico mentale.",
+        steps:[
           "Prendi carta e penna.",
-          "Scrivi senza fermarti per 2 minuti tutto ciò che ti passa per la mente.",
-          "Rileggi e identifica i temi principali."
+          "Scrivi ininterrottamente per 2 minuti tutto ciò che pensi.",
+          "Rileggi e identifica temi ricorrenti."
         ],
-        tips: [
-          "Non filtrare: scrivi anche idee strampalate.",
-          "Ripeti una volta a settimana per monitorare l’evoluzione."
+        tips:[
+          "Non filtrare le idee, scrivi tutto.",
+          "Ripeti settimanalmente per monitorare l’evoluzione."
         ]
       },
-      { id: 17, title: "Pensiero positivo al risveglio", image: "17.jpeg", objective: "Impostare uno stato d’animo propositivo fin dal mattino.", steps: [
+      { id:17, title:"Pensiero positivo al risveglio", image:"17.jpeg",
+        objective:"Impostare uno stato d’animo propositivo fin dal mattino.",
+        steps:[
           "Prima di alzarti, pensa a un evento positivo in programma.",
           "Ripeti mentalmente un’affermazione di gratitudine 3 volte.",
           "Alzati con calma portando con te il pensiero positivo."
         ],
-        tips: [
-          "Tieni un post-it affiancato al letto con l’affermazione.",
-          "Collega il pensiero a un gesto ripetuto (es. stiramento)."
+        tips:[
+          "Tieni un post-it accanto al letto con l’affermazione.",
+          "Collega il pensiero a un gesto di stretch."
         ]
       },
-      { id: 18, title: "Evita multitasking", image: "18.jpeg", objective: "Maggiore efficienza concentrandosi su un unico compito.", steps: [
+      { id:18, title:"Evita multitasking", image:"18.jpeg",
+        objective:"Aumentare efficienza concentrandosi su un solo compito.",
+        steps:[
           "Seleziona un’attività prioritaria.",
           "Disattiva notifiche e chiudi schede non essenziali.",
-          "Lavora per 60 minuti senza cambi di focus.",
-          "Valuta risultati e sensazioni dopo l’ora."
+          "Lavora per 60 minuti senza cambiare focus.",
+          "Valuta produttività e benessere al termine."
         ],
-        tips: [
-          "Fai pause brevi tra un blocco e l’altro.",
+        tips:[
+          "Fai pause brevi tra i blocchi di lavoro.",
           "Usa il timer per mantenere chiarezza temporale."
         ]
       },
-      { id: 19, title: "Torna nel presente: cosa senti ora?", image: "19.jpeg", objective: "Ricollegarsi al momento presente attraverso le sensazioni corporee.", steps: [
+      { id:19, title:"Torna nel presente: cosa senti ora?", image:"19.jpeg",
+        objective:"Ricollegarsi al momento presente attraverso le sensazioni corporee.",
+        steps:[
           "Chiudi gli occhi per 30 secondi.",
-          "Osserva le sensazioni fisiche: contatto dei piedi, respiro, eventuali tensioni.",
-          "Prendi nota mentale o scritta di ciò che percepisci."
+          "Concentra l’attenzione su piedi, respiro, eventuali tensioni.",
+          "Prendi nota di ciò che percepisci."
         ],
-        tips: [
+        tips:[
           "Ripeti durante la giornata per interrompere pensieri automatici.",
-          "Abbina a un suono (es. un campanello) per marcare il momento." 
+          "Associa il momento a un suono (es. campanello)."
         ]
       },
-      { id: 20, title: "Ascolto profondo", image: "20.jpeg", objective: "Migliorare empatia e qualità della comunicazione.", steps: [
-          "Durante una conversazione, mantieni contatto visivo.",
-          "Ascolta senza interrompere, concentrandoti sul significato.",
+      { id:20, title:"Ascolto profondo", image:"20.jpeg",
+        objective:"Migliorare empatia e qualità della comunicazione.",
+        steps:[
+          "Durante una conversazione, mantieni il contatto visivo.",
+          "Ascolta senza interrompere concentrandoti sul significato.",
           "Riformula con parole tue ciò che hai capito."
         ],
-        tips: [
+        tips:[
           "Evita di pensare alla risposta mentre l’altro parla.",
           "Annota parole chiave per riflettere in seguito."
         ]
       },
-      { id: 21, title: "Scrivi un'intenzione", image: "21.jpeg", objective: "Definire un focus chiaro per la giornata.", steps: [
-          "Scrivi una frase positiva e concreta (es. 'Affronto le sfide con calma').",
-          "Tieni l’intenzione visibile su uno sfondo o post-it.",
-          "Rileggila nelle pause per mantenerla attiva."
+      { id:21, title:"Scrivi un'intenzione", image:"21.jpeg",
+        objective:"Definire un focus chiaro per la giornata.",
+        steps:[
+          "Scrivi una frase positiva e concreta (es. “Affronto le sfide con calma”).",
+          "Tieni l’intenzione visibile su un post-it o sullo schermo.",
+          "Rileggila durante le pause."
         ],
-        tips: [
+        tips:[
           "Usa un colore vivace per catturare l’attenzione.",
-          "Collega l’intenzione a un piccolo gesto quotidiano."
+          "Collega l’intenzione a un gesto quotidiano."
         ]
       },
-      { id: 22, title: "Pausa digitale", image: "22.jpeg", objective: "Ridurre sovraccarico informativo staccando dagli schermi.", steps: [
-          "Spegnere smartphone e notifiche per 15 minuti.",
-          "Camminare o osservare l’ambiente senza distrazioni digitali.",
-          "Respirare profondamente e assaporare il momento presente."
+      { id:22, title:"Pausa digitale", image:"22.jpeg",
+        objective:"Ridurre sovraccarico informativo staccando dagli schermi.",
+        steps:[
+          "Spegni smartphone e notifiche per 15 minuti.",
+          "Cammina o osserva l’ambiente senza distrazioni digitali.",
+          "Respira profondamente e assapora il momento."
         ],
-        tips: [
+        tips:[
           "Programma la pausa dopo sessioni di lavoro intenso.",
-          "Usa un timer per non superare i 15 minuti."
+          "Usa un timer silenzioso per non eccedere."
         ]
       },
-      { id: 23, title: "Sorridi consapevolmente", image: "23.jpeg", objective: "Stimolare il benessere emotivo attraverso il sorriso.", steps: [
-          "Siediti con schiena dritta.",
-          "Rilassa viso e mascella.",
-          "Sorridi per almeno 60 secondi anche se inizialmente forzato.",
-          "Osserva come cambia il tuo stato d’animo."
+      { id:23, title:"Sorridi consapevolmente", image:"23.jpeg",
+        objective:"Stimolare il benessere emotivo attraverso il sorriso.",
+        steps:[
+          "Siediti con schiena dritta e rilassa il viso.",
+          "Sorridi per almeno 60 secondi, anche se forzato.",
+          "Osserva come cambia il tuo umore."
         ],
-        tips: [
-          "Combina con musica allegra per amplificare l’effetto.",
-          "Ripeti l’esercizio in momenti di tensione."
+        tips:[
+          "Abbina il sorriso a musica allegra per amplificare l’effetto.",
+          "Ripeti nei momenti di tensione."
         ]
       },
-      { id: 24, title: "Camminata lenta", image: "24.jpeg", objective: "Favorire presenza mentale e calma attraverso il movimento.", steps: [
+      { id:24, title:"Camminata lenta", image:"24.jpeg",
+        objective:"Favorire presenza mentale e calma attraverso il movimento.",
+        steps:[
           "Cammina lentamente per 5 minuti.",
-          "Concentrati sul contatto dei piedi con il suolo.",
-          "Osserva l’ambiente e respira profondamente."
+          "Concentrati su ogni passo e sul respiro.",
+          "Osserva l’ambiente circostante con consapevolezza."
         ],
-        tips: [
-          "Scegli un percorso tranquillo e verde.",
-          "Usa scarpe comode per evitare distrazioni fisiche."
+        tips:[
+          "Scegli un percorso tranquillo.",
+          "Indossa scarpe comode."
         ]
       },
-      { id: 25, title: "Pausa occhi", image: "25.jpeg", objective: "Ridurre affaticamento visivo con brevi pause regolari.", steps: [
-          "Ogni 20 minuti al computer, distogli lo sguardo a 6 metri di distanza per 20 secondi.",
-          "Oppure chiudi gli occhi per alcuni secondi.",
-          "Ripeti ogni 20 minuti per alleviare la tensione oculare."
+      { id:25, title:"Pausa occhi", image:"25.jpeg",
+        objective:"Prevenire affaticamento visivo con brevi pause regolari.",
+        steps:[
+          "Ogni 20 minuti al computer, guarda un punto lontano per 20 secondi.",
+          "Oppure chiudi gli occhi per qualche secondo."
         ],
-        tips: [
-          "Inclina leggermente la testa all’indietro per rilassare i muscoli oculari.",
-          "Incorporara come promemoria nel tuo pomodoro."
+        tips:[
+          "Inclina leggermente la testa all’indietro.",
+          "Integra la pausa nel tuo ciclo Pomodoro."
         ]
       },
-      { id: 26, title: "Domanda potenziante", image: "26.jpeg", objective: "Sbloccare la creatività ponendosi domande costruttive.", steps: [
-          "Quando ti senti bloccato, scrivi la domanda: 'Qual è il piccolo passo che posso fare ora?'.", 
+      { id:26, title:"Domanda potenziante", image:"26.jpeg",
+        objective:"Sbloccare la creatività ponendosi domande costruttive.",
+        steps:[
+          "Quando ti senti bloccato, poni la domanda: “Qual è il piccolo passo che posso fare ora?”.",
           "Scrivi almeno 3 possibili risposte.",
-          "Scegli la risposta più immediata e mettila in pratica."
+          "Scegli la risposta che ti ispira di più e falla."
         ],
-        tips: [
-          "Mantieni un quaderno dedicato alle domande potenzianti.",
-          "Rivedi le risposte dopo qualche ora per valutare progressi."
+        tips:[
+          "Tieni un quaderno dedicato alle domande potenzianti.",
+          "Rivedi le risposte dopo qualche ora per valutare i progressi."
         ]
       },
-      { id: 27, title: "Stretching veloce", image: "27.jpeg", objective: "Sciogliere tensioni muscolari con pochi minuti di movimento.", steps: [
+      { id:27, title:"Stretching veloce", image:"27.jpeg",
+        objective:"Sciogliere tensioni muscolari con pochi minuti di movimento.",
+        steps:[
           "Alzati e solleva le braccia verso l’alto.",
-          "Piega il busto a destra e sinistra lentamente.",
+          "Piega lentamente il busto a destra e sinistra.",
           "Ruota spalle e collo con movimenti circolari.",
           "Mantieni ogni posizione per 10 secondi."
         ],
-        tips: [
-          "Esegui allo stand-up meeting per migliorare concentrazione.",
+        tips:[
+          "Esegui durante lo stand‑up meeting per migliorare concentrazione.",
           "Respira profondamente durante ogni allungamento."
         ]
       },
-      { id: 28, title: "Osserva il respiro", image: "28.jpeg", objective: "Accrescere consapevolezza del corpo concentrandosi sul respiro.", steps: [
-          "Siediti in silenzio per 1 minuto." ,
+      { id:28, title:"Osserva il respiro", image:"28.jpeg",
+        objective:"Accrescere consapevolezza del corpo concentrandosi sul respiro.",
+        steps:[
+          "Siediti in silenzio per 1 minuto.",
           "Osserva il tuo respiro senza modificarlo.",
-          "Nota ritmo e profondità, lasciando andare i pensieri.",
+          "Nota ritmo e profondità.",
           "Concludi con 3 respiri profondi."
         ],
-        tips: [
-          "Metti un timer silenzioso per 1 minuto.",
-          "Abbina l’esercizio a un mantra breve per rilassare mente." 
+        tips:[
+          "Usa un timer silenzioso per 1 minuto.",
+          "Abbina l’esercizio a un mantra breve."
         ]
       },
-      { id: 29, title: "Visualizza gratitudine", image: "29.jpeg", objective: "Rafforzare emozioni positive evocando ricordi gratificanti.", steps: [
-          "Chiudi gli occhi.",
-          "Pensa a una persona o evento per cui sei grato.",
-          "Visualizza i dettagli con tutti i sensi.",
-          "Mantieni la scena per 1 minuto."
+      { id:29, title:"Visualizza gratitudine", image:"29.jpeg",
+        objective:"EvoCare emozioni positive evocando ricordi gratificanti.",
+        steps:[
+          "Chiudi gli occhi e pensa a una persona o momento per cui sei grato.",
+          "Visualizza i dettagli sensoriali.",
+          "Mantieni la scena per almeno 1 minuto."
         ],
-        tips: [
-          "Scrivi l’esperienza gratificante subito dopo.",
-          "Ripeti prima di dormire per migliore qualità del sonno." 
+        tips:[
+          "Scrivi subito dopo l’esperienza gratificante.",
+          "Ripeti prima di dormire per migliorare sonno."
         ]
       },
-      { id: 30, title: "Celebra ogni piccolo traguardo", image: "30.jpeg", objective: "Rafforzare motivazione e autostima riconoscendo i progressi.", steps: [
+      { id:30, title:"Celebra ogni piccolo traguardo", image:"30.jpeg",
+        objective:"Rafforzare motivazione e autostima riconoscendo progressi.", 
+        steps:[
           "Identifica un piccolo successo recente.",
-          "Scrivilo su carta o digitale.",
-          "Festeggia con un gesto simbolico: applauso, sorriso, abbraccio a te stesso."
+          "Scrivilo e festeggialo con un gesto simbolico (es. applauso)."
         ],
-        tips: [
+        tips:[
           "Condividi il traguardo con una persona di fiducia.",
-          "Raccogli i successi in un diario dei traguardi."
+          "Tieni un diario dei tuoi successi."
         ]
       }
     ];
 
-    const grid = document.getElementById("grid");
-    const loader = document.getElementById("loader");
+    const grid = document.getElementById("grid"),
+          loader = document.getElementById("loader");
 
     function openExercisePage(ex) {
-      const page = `<!DOCTYPE html>
+      const detail = `
+<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
@@ -359,12 +411,12 @@
   <style>
     body { margin:0; padding:0; font-family:Arial,sans-serif; background:url('images/${ex.image}') no-repeat center center fixed; background-size:cover; color:#fff; text-shadow:1px 1px 4px #000; }
     .overlay { background:rgba(0,0,0,0.7); padding:2rem; min-height:100vh; }
-    h1 { margin:0 0 1rem; font-size:2rem; }
-    .description { background:#ffffff; padding:1rem; border-radius:8px; margin-top:1rem; }
+    h1 { margin:0 0 1rem; font-size:2rem; color:#fff; }
+    .description { background:#fff; padding:1rem; border-radius:8px; margin-top:1rem; }
+    .description h2, .description p, .description li { color:#000; text-shadow:none; }
     .description h2 { color:#8e44ad; margin-top:1rem; }
     .description ol, .description ul { margin-left:1.5rem; }
-    .note { font-style:italic; margin-top:1rem; }
-    a.button { display:inline-block; margin:0.5rem 0; background:#8e44ad; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; }
+    a.button { display:inline-block; margin:1rem 0; background:#8e44ad; color:#fff; padding:0.7rem 1.5rem; border-radius:8px; text-decoration:none; }
   </style>
 </head>
 <body>
@@ -374,19 +426,16 @@
       <h2>Obiettivo</h2>
       <p>${ex.objective}</p>
       <h2>Procedura passo-passo</h2>
-      <ol>${ex.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+      <ol>${ex.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
       <h2>Suggerimenti</h2>
-      <ul>${ex.tips.map(t => `<li>${t}</li>`).join('')}</ul>
-      <p class="note">In caso di dubbi, <a href="chat.html?exercise=${ex.id}">apri la chat AI</a>.</p>
+      <ul>${ex.tips.map(t=>`<li>${t}</li>`).join("")}</ul>
+      <p style="font-style:italic;margin-top:1rem;">In caso di dubbi, <a href="chat.html?exercise=${ex.id}">apri la chat AI</a>.</p>
     </div>
     <a class="button" href="exercises.html">← Torna agli esercizi</a>
   </div>
 </body>
 </html>`;
-      const win = window.open();
-      win.document.open();
-      win.document.write(page);
-      win.document.close();
+      const w = window.open(); w.document.open(); w.document.write(detail); w.document.close();
     }
 
     function renderGrid() {
