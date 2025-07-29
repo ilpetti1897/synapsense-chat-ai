@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -492,13 +492,8 @@
   </div>
 </body>
 </html>`;
-      // apro nuova finestra
-      const w = window.open();
-      w.document.open();
-      w.document.write(detail);
-      w.document.close();
-      // chiudo la finestra della griglia
-      window.close();
+      // sovrascrivo tutta la pagina col dettaglio
+      document.documentElement.innerHTML = detail;
     }
 
     function renderGrid() {
