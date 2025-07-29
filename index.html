@@ -13,7 +13,7 @@
       --corner:  12px;
       --spacing: 1rem;
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
@@ -71,27 +71,6 @@
     }
     .hero-content h1 { font-size: 1.8rem; margin-bottom: .5rem; }
     .hero-content p { font-size: 1rem; margin-bottom: 1rem; }
-    .section {
-      max-width: 480px;
-      margin: 2rem auto;
-      background: var(--white);
-      padding: var(--spacing);
-      border-radius: var(--corner);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .section h2 {
-      font-size: 1.4rem;
-      margin-bottom: .75rem;
-      color: var(--purple);
-    }
-    .section ul {
-      list-style: disc inside;
-      color: #555;
-    }
-    .section ul li {
-      margin-bottom: .5rem;
-      font-size: .95rem;
-    }
     .buttons {
       display: flex;
       flex-wrap: wrap;
@@ -129,6 +108,7 @@
 </head>
 <body>
   <header>Benvenuto in SynapSenseS</header>
+
   <main>
     <div class="intro">
       <h2>Mindfulness sempre con te</h2>
@@ -142,29 +122,13 @@
       </div>
     </section>
 
-    <section class="section">
-      <!-- Pulsante dedicato Training Autogeno -->
-      <div style="text-align:center; margin-bottom:1rem;">
-        <a href="chat.html?topic=autogeno" class="btn-primary" style="max-width: 240px; display:inline-block;">Training Autogeno</a>
-      </div>
-      <h2>Introduzione al Training Autogeno</h2>
-      <p>Il training autogeno è una pratica di rilassamento basata su formule mentali che inducono sensazioni di calma e benessere in diverse parti del corpo. Ecco i sei esercizi fondamentali, adattati per un uso quotidiano:</p>
-      <ul>
-        <li><strong>Pesantezza:</strong> immagina le braccia e le gambe come pesanti e rilassate, ripetendo mentalmente "le mie braccia sono pesanti".</li>
-        <li><strong>Calore:</strong> visualizza una sensazione di tepore che si diffonde attraverso il corpo, aiutando i vasi sanguigni a distendersi.</li>
-        <li><strong>Cuore:</strong> concentrati sul ritmo del battito cardiaco, ripetendo "il mio cuore batte calmo e regolare".</li>
-        <li><strong>Respiro:</strong> osserva il flusso naturale del respiro, riconoscendo una piacevole leggerezza e regolarità.</li>
-        <li><strong>Plesso solare:</strong> visualizza un calore profondo nell’area dello stomaco, favorendo la sensazione di stabilità e energia.</li>
-        <li><strong>Fronte fresca:</strong> immagina un senso di freschezza sulla fronte, per stimolare lucidità mentale e gratificazione.</li>
-      </ul>
-      <p>Scegli un luogo tranquillo, indossa abiti comodi e pratica questi esercizi in sequenza, dedicando almeno 5 minuti a ciascuno. Ripeti regolarmente per mantenere uno stato di rilassamento costante.</p>
-    </section>
-
     <div class="buttons">
       <a href="exercises.html" class="btn-primary">30 Esercizi</a>
       <a href="chat.html" class="btn-outline">Chat AI</a>
+      <a href="training.html" class="btn-outline">Training Autogeno</a>
     </div>
   </main>
+
   <footer>© 2025 SynapSenseS</footer>
 </body>
 </html>
