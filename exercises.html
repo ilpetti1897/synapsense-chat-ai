@@ -7,21 +7,79 @@
   <style>
     /* STILI PRINCIPALI */
     body { margin:0; padding:0; font-family:Arial,sans-serif; background-color:#ecf0f1; }
-    header { background-color:#8e44ad; color:#fff; padding:1rem; text-align:center; font-size:1.5rem; }
+    header {
+      background-color:#8e44ad;
+      color:#fff;
+      padding:1rem;
+      text-align:center;
+      font-size:1.5rem;
+      position: relative;
+    }
+    /* PULSANTE HOME */
+    a.home-button {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4caf50;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    a.home-button:hover {
+      background: #389e38;
+    }
     /* GRIGLIA CARDS */
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; padding:1rem; }
-    .card { background:#fff; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1); padding:1rem; text-align:center; cursor:pointer; transition:transform .2s ease-in-out; }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1rem;
+      padding:1rem;
+    }
+    .card {
+      background:#fff;
+      border-radius:10px;
+      box-shadow:0 4px 6px rgba(0,0,0,0.1);
+      padding:1rem;
+      text-align:center;
+      cursor:pointer;
+      transition:transform .2s ease-in-out;
+    }
     .card:hover { transform:scale(1.03); }
-    .card img { width:100%; height:180px; object-fit:cover; border-radius:8px; }
+    .card img {
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:8px;
+    }
     .card h3 { margin-top:.8rem; font-size:1.1rem; }
-    .loader { padding:2rem; text-align:center; font-style:italic; color:#666; }
-    a.button { display:inline-block; margin:1rem 0; background:#8e44ad; color:#fff; padding:.7rem 1.5rem; border-radius:8px; text-decoration:none; }
+    .loader {
+      padding:2rem;
+      text-align:center;
+      font-style:italic;
+      color:#666;
+    }
+    a.button {
+      display:inline-block;
+      margin:1rem 0;
+      background:#8e44ad;
+      color:#fff;
+      padding:.7rem 1.5rem;
+      border-radius:8px;
+      text-decoration:none;
+    }
   </style>
 </head>
 <body>
-  <header>I 30 Esercizi di SynapSenseS</header>
+  <header>
+    I 30 Esercizi di SynapSenseS
+    <a href="index.html" class="home-button">← Torna alla Home</a>
+  </header>
+
   <div id="loader" class="loader">Caricamento…</div>
-  <div id="grid" class="grid"></div>
+  <div id="grid" class="grid" style="display:none;"></div>
 
   <script>
     const exercises = [
@@ -373,7 +431,7 @@
         ]
       },
       { id:29, title:"Visualizza gratitudine", image:"29.jpeg",
-        objective:"EvoCare emozioni positive evocando ricordi gratificanti.",
+        objective:"Evoke emozioni positive evocando ricordi gratificanti.",
         steps:[
           "Chiudi gli occhi e pensa a una persona o momento per cui sei grato.",
           "Visualizza i dettagli sensoriali.",
@@ -385,7 +443,7 @@
         ]
       },
       { id:30, title:"Celebra ogni piccolo traguardo", image:"30.jpeg",
-        objective:"Rafforzare motivazione e autostima riconoscendo progressi.", 
+        objective:"Rafforzare motivazione e autostima riconoscendo progressi.",
         steps:[
           "Identifica un piccolo successo recente.",
           "Scrivilo e festeggialo con un gesto simbolico (es. applauso)."
@@ -397,7 +455,7 @@
       }
     ];
 
-    const grid = document.getElementById("grid"),
+    const grid   = document.getElementById("grid"),
           loader = document.getElementById("loader");
 
     function openExercisePage(ex) {
@@ -405,8 +463,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${ex.id} – ${ex.title}</title>
   <style>
     body { margin:0; padding:0; font-family:Arial,sans-serif; background:url('images/${ex.image}') no-repeat center center fixed; background-size:cover; color:#fff; text-shadow:1px 1px 4px #000; }
@@ -435,21 +492,27 @@
   </div>
 </body>
 </html>`;
-      const w = window.open(); w.document.open(); w.document.write(detail); w.document.close();
+      const w = window.open();
+      w.document.open();
+      w.document.write(detail);
+      w.document.close();
     }
 
     function renderGrid() {
       loader.style.display = "none";
-      grid.style.display = "grid";
+      grid.style.display   = "grid";
       exercises.forEach(ex => {
         const card = document.createElement("div");
         card.className = "card";
-        card.innerHTML = `<img src="images/${ex.image}" alt="${ex.title}"><h3>${ex.id} – <strong>${ex.title}</strong></h3>`;
+        card.innerHTML =
+          `<img src="images/${ex.image}" alt="${ex.title}">
+           <h3>${ex.id} – <strong>${ex.title}</strong></h3>`;
         card.onclick = () => openExercisePage(ex);
         grid.appendChild(card);
       });
     }
 
+    // Al caricamento, mostra la griglia
     renderGrid();
   </script>
 </body>
