@@ -402,9 +402,7 @@
         tips:[
           "Tieni un quaderno dedicato alle domande potenzianti.",
           "Rivedi le risposte dopo qualche ora per valutare i progressi."
-        ]
-      },
-      { id:27, title:"Stretching veloce", image:"27.jpeg",
+        ]},      { id:27, title:"Stretching veloce", image:"27.jpeg",
         objective:"Sciogliere tensioni muscolari con pochi minuti di movimento.",
         steps:[
           "Alzati e solleva le braccia verso l’alto.",
@@ -488,7 +486,7 @@
       <ul>${ex.tips.map(t=>`<li>${t}</li>`).join("")}</ul>
       <p style="font-style:italic;margin-top:1rem;">In caso di dubbi, <a href="chat.html?exercise=${ex.id}">apri la chat AI</a>.</p>
     </div>
-    <a class="button" href="exercises.html">← Torna agli esercizi</a>
+    <a class="button" href="index.html">← Torna alla Home</a>
   </div>
 </body>
 </html>`;
@@ -496,6 +494,7 @@
       w.document.open();
       w.document.write(detail);
       w.document.close();
+      window.close(); // chiude automaticamente la scheda griglia
     }
 
     function renderGrid() {
