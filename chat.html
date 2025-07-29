@@ -36,17 +36,6 @@
       flex: 1;
       overflow: auto;
       padding: var(--spacing);
-      position: relative;
-      background: url('images/welcome page.png') center/cover no-repeat fixed;
-    }
-    /* overlay for readability */
-    .overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(255,255,255,0.9);
-      padding: var(--spacing);
-      display: flex;
-      flex-direction: column;
     }
     .controls {
       display: flex;
@@ -95,7 +84,10 @@
       flex: 1;
       overflow-y: auto;
     }
-    .chat-box p { margin: 0 0 1em; line-height: 1.6; }
+    .chat-box p {
+      margin: 0 0 1em;
+      line-height: 1.6;
+    }
     footer {
       text-align: center;
       padding: 0.5rem;
@@ -110,38 +102,54 @@
   </style>
 </head>
 <body>
+
   <header>SynapSenseS Chat AI</header>
+
   <main>
-    <div class="overlay">
-      <div class="controls">
-        <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
-        <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
-        <label><input type="radio" name="mode" value="autogeno"> Consigli Training Autogeno</label>
-        <select id="exerciseSelect" style="display:none"></select>
-        <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
-        <button id="sendBtn">Invia</button>
-      </div>
-      <div class="chat-box" id="chatBox">
-        <p>Scegli tra Chat libera, Consigli sui 30 esercizi o Training Autogeno</p>
-      </div>
+    <div class="controls">
+      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
+      <label><input type="radio" name="mode" value="autogeno"> Consigli Training Autogeno</label>
+
+      <!-- dropdown dei 30 esercizi -->
+      <select id="exerciseSelect" style="display:none"></select>
+      <!-- dropdown dei 6 passi del training autogeno -->
+      <select id="autogenoSelect" style="display:none">
+        <option value="1">1 – Pesantezza</option>
+        <option value="2">2 – Calore</option>
+        <option value="3">3 – Battito cardiaco</option>
+        <option value="4">4 – Respiro</option>
+        <option value="5">5 – Plesso solare</option>
+        <option value="6">6 – Fronte fresca</option>
+      </select>
+
+      <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
+      <button id="sendBtn">Invia</button>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <p>Scegli tra Chat libera, Consigli sui 30 esercizi o Training Autogeno</p>
     </div>
   </main>
-  <footer>© 2025 SynapSenseS</footer>
-  <script>
-    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev';
-    const modeRadios = [...document.querySelectorAll('input[name="mode"]')];
-    const exSelect   = document.getElementById('exerciseSelect');
-    const messageInput = document.getElementById('messageInput');
-    const sendBtn    = document.getElementById('sendBtn');
-    const chatBox    = document.getElementById('chatBox');
-    let history      = [];
 
-    // carica esercizi
+  <footer>© 2025 SynapSenseS</footer>
+
+  <script>
+    const WORKER_URL   = 'https://synapsense-agent.ilpetti1897.workers.dev';
+    const modeRadios   = [...document.querySelectorAll('input[name="mode"]')];
+    const exSelect     = document.getElementById('exerciseSelect');
+    const autoSelect   = document.getElementById('autogenoSelect');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn      = document.getElementById('sendBtn');
+    const chatBox      = document.getElementById('chatBox');
+    let history        = [];
+
+    // Popola la select dei 30 esercizi
     fetch(WORKER_URL + '/exercises')
       .then(r => r.json())
       .then(exs => {
-        exSelect.innerHTML = exs.map(e => 
-          `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
+        exSelect.innerHTML = exs.map(e =>
+          `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
         ).join('');
       });
 
@@ -153,20 +161,26 @@
 
     function updateMode() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
+      // mostra/nasconde dropdown e cambia placeholder
       if (mode === 'exercise') {
-        exSelect.style.display = 'block';
-        messageInput.placeholder = "Scrivi qui il tuo dubbio sull’esercizio…";
+        exSelect.style.display    = 'block';
+        autoSelect.style.display  = 'none';
+        messageInput.placeholder  = "Scrivi qui il tuo dubbio sull’esercizio…";
       } else if (mode === 'autogeno') {
-        exSelect.style.display = 'none';
-        messageInput.placeholder = "Scrivi qui il tuo dubbio sul Training Autogeno…";
+        exSelect.style.display    = 'none';
+        autoSelect.style.display  = 'block';
+        messageInput.placeholder  = "Scrivi qui il tuo dubbio sul Training Autogeno…";
       } else {
-        exSelect.style.display = 'none';
-        messageInput.placeholder = "Scrivi qui il tuo messaggio…";
+        exSelect.style.display    = 'none';
+        autoSelect.style.display  = 'none';
+        messageInput.placeholder  = "Scrivi qui il tuo messaggio…";
       }
       resetChat();
     }
+
     modeRadios.forEach(r => r.addEventListener('change', updateMode));
     exSelect.addEventListener('change', resetChat);
+    autoSelect.addEventListener('change', resetChat);
     window.addEventListener('DOMContentLoaded', updateMode);
 
     sendBtn.addEventListener('click', async () => {
@@ -174,19 +188,20 @@
       const text = messageInput.value.trim();
       if (!text) return alert('Inserisci un testo da inviare.');
 
-      // mostra domanda
+      // mostro la domanda
       const youP = document.createElement('p');
       youP.innerHTML = `<strong>Tu:</strong> ${text}`;
       chatBox.append(youP);
       history.push({ role: 'user', content: text });
 
-      // invia a worker
+      // preparo payload
       const payload = {
         mode,
         exerciseId: mode === 'exercise' ? exSelect.value : null,
-        topic: mode === 'autogeno' ? 'autogeno' : null,
+        autogenoId: mode === 'autogeno' ? autoSelect.value : null,
         history
       };
+
       sendBtn.disabled = true;
       try {
         const res = await fetch(WORKER_URL + '/chat', {
@@ -197,6 +212,7 @@
         const { reply, error } = await res.json();
         if (error) throw new Error(error);
 
+        // stampo la risposta
         reply.split(/\r?\n{2,}|\*\*/).forEach(par => {
           const t = par.trim();
           if (!t) return;
