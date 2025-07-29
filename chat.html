@@ -8,9 +8,9 @@
   <style>
     :root {
       --chat-green: #4caf50;
-      --bg: #f0f2f5;
-      --fg: #333;
+      --bg-gradient: linear-gradient(135deg, #e0f7fa 0%, #fffde7 100%);
       --white: #fff;
+      --fg: #333;
       --radius: 8px;
       --spacing: 1rem;
     }
@@ -20,8 +20,8 @@
       font-family: 'Inter', sans-serif;
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      background: var(--bg);
+      min-height: 100vh;
+      background: var(--bg-gradient);
       color: var(--fg);
     }
     header {
@@ -44,14 +44,15 @@
       padding: 0.5rem 1rem;
       border: 2px solid var(--white);
       border-radius: var(--radius);
-      transition: background .2s;
+      transition: background 0.2s;
     }
     header a.home-btn:hover {
       background: rgba(255,255,255,0.2);
     }
     main {
       flex: 1;
-      overflow: auto;
+      display: flex;
+      flex-direction: column;
       padding: var(--spacing);
     }
     .controls {
@@ -75,10 +76,7 @@
       border-radius: var(--radius);
       background: var(--white);
     }
-    textarea {
-      resize: vertical;
-      min-height: 4rem;
-    }
+    textarea { resize: vertical; min-height: 4rem; }
     button {
       background: var(--chat-green);
       color: var(--white);
@@ -89,15 +87,13 @@
       padding: 0.75rem 1.5rem;
       margin-left: auto;
     }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
+    button:disabled { opacity: 0.6; cursor: default; }
     .chat-box {
-      background: var(--white);
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(6px);
       border-radius: var(--radius);
       padding: var(--spacing);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       flex: 1;
       overflow-y: auto;
     }
@@ -180,7 +176,7 @@
     function updateMode() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
       exSelect.style.display   = mode === 'exercise' ? 'block' : 'none';
-      autoSelect.style.display = mode === 'autogeno' ? 'block' : 'none';
+      autoSelect.style.display = mode === 'autogeno'   ? 'block' : 'none';
       if (mode === 'exercise') {
         messageInput.placeholder = "Scrivi qui il tuo dubbio sull’esercizio…";
       } else if (mode === 'autogeno') {
@@ -203,11 +199,8 @@
       const topic        = mode === 'autogeno'   ? 'autogeno'   : null;
       const autogenoStep = mode === 'autogeno'   ? autoSelect.value : null;
 
-      if (!text) {
-        return alert('Inserisci un testo da inviare.');
-      }
+      if (!text) return alert('Inserisci un testo da inviare.');
 
-      // Messaggio utente
       const youP = document.createElement('p');
       youP.innerHTML = `<strong>Tu:</strong> ${text}`;
       chatBox.append(youP);
@@ -224,8 +217,7 @@
         if (error) throw new Error(error);
 
         reply.split(/\r?\n{2,}|\*\*/).forEach(par => {
-          const t = par.trim();
-          if (!t) return;
+          const t = par.trim(); if (!t) return;
           const p = document.createElement('p');
           p.innerHTML = `<strong>AI:</strong> ${t.replace(/^\*/, '•')}`;
           chatBox.append(p);
@@ -233,7 +225,6 @@
 
         history.push({ role: 'assistant', content: reply });
         chatBox.scrollTop = chatBox.scrollHeight;
-
       } catch {
         chatBox.innerHTML += '<p>Errore di connessione. Riprova più tardi.</p>';
       } finally {
