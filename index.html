@@ -10,6 +10,8 @@
       --purple: #7c4dff;
       --white:  #fff;
       --bg:      #f0f2f5;
+      --chat:    #4caf50;
+      --train:   #ff9800;
       --corner:  12px;
       --spacing: 1rem;
     }
@@ -89,10 +91,27 @@
       font-weight: 600;
       transition: background .2s, color .2s;
     }
-    .btn-primary { background: var(--purple); color: var(--white); }
-    .btn-primary:hover { background: #693bcc; }
-    .btn-outline { background: transparent; color: var(--purple); border: 2px solid var(--purple); }
-    .btn-outline:hover { background: var(--purple); color: var(--white); }
+    .btn-primary {
+      background: var(--purple);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: #693bcc;
+    }
+    .btn-chat {
+      background: var(--chat);
+      color: var(--white);
+    }
+    .btn-chat:hover {
+      background: #388e3c;
+    }
+    .btn-training {
+      background: var(--train);
+      color: var(--white);
+    }
+    .btn-training:hover {
+      background: #f57c00;
+    }
     footer {
       text-align: center;
       padding: .5rem;
@@ -111,8 +130,8 @@
 
   <main>
     <div class="intro">
-      <h2>Mindfulness, Training Autogeno e oltre, sempre con te</h2>
-      <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e futura espansione con nuove tecniche, oppure parla liberamente con il tuo coach AI in qualsiasi momento.</p>
+      <h2>Mindfulness sempre con te</h2>
+      <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e in futuro altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
     </div>
 
     <section class="hero">
@@ -124,11 +143,12 @@
 
     <div class="buttons">
       <a href="exercises.html" class="btn-primary">30 Esercizi</a>
-      <a href="chat.html"        class="btn-outline">Chat AI</a>
-      <a href="training.html"    class="btn-outline">Training Autogeno</a>
+      <a href="chat.html" class="btn-chat">Chat AI</a>
+      <a href="training.html" class="btn-training">Training Autogeno</a>
     </div>
   </main>
 
   <footer>© 2025 SynapSenseS</footer>
 </body>
 </html>
+
