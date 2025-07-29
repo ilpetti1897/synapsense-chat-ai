@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --purple: #7c4dff;
+      --chat-green: #4caf50;
       --bg: #f0f2f5;
       --fg: #333;
       --white: #fff;
@@ -16,50 +16,88 @@
     }
     * { box-sizing: border-box; }
     body {
-      margin: 0; font-family:'Inter',sans-serif;
-      display:flex; flex-direction:column;
-      height:100vh; background:var(--bg); color:var(--fg);
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
     }
     header {
-      background:var(--purple); color:var(--white);
-      text-align:center; padding:var(--spacing);
-      font-size:1.25rem; font-weight:600;
+      background: var(--chat-green);
+      color: var(--white);
+      text-align: center;
+      padding: var(--spacing);
+      font-size: 1.25rem;
+      font-weight: 600;
     }
     main {
-      flex:1; overflow:auto; padding:var(--spacing);
+      flex: 1;
+      overflow: auto;
+      padding: var(--spacing);
     }
     .controls {
-      display:flex; flex-wrap:wrap; gap:var(--spacing);
-      align-items:center; margin-bottom:var(--spacing);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing);
+      align-items: center;
+      margin-bottom: var(--spacing);
     }
-    .controls label { display:flex; align-items:center; gap:0.25rem; font-weight:600; }
+    .controls label {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 600;
+    }
     select, textarea {
-      flex:1; font-size:1rem; padding:0.5rem var(--spacing);
-      border:1px solid #ccc; border-radius:var(--radius);
-      background:var(--white);
+      flex: 1;
+      font-size: 1rem;
+      padding: 0.5rem var(--spacing);
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      background: var(--white);
     }
-    textarea { resize:vertical; min-height:4rem; }
+    textarea {
+      resize: vertical;
+      min-height: 4rem;
+    }
     button {
-      background:var(--purple); color:var(--white);
-      border:none; border-radius:var(--radius);
-      cursor:pointer; font-weight:600; padding:0.75rem 1.5rem;
-      margin-left:auto;
+      background: var(--chat-green);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      margin-left: auto;
     }
-    button:disabled { opacity:0.6; cursor:default; }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
     .chat-box {
-      background:var(--white); border-radius:var(--radius);
-      padding:var(--spacing); box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      flex:1; overflow-y:auto;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: var(--spacing);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      flex: 1;
+      overflow-y: auto;
     }
-    .chat-box p { margin:0 0 1em; line-height:1.6; }
+    .chat-box p {
+      margin: 0 0 1em;
+      line-height: 1.6;
+    }
     footer {
-      text-align:center; padding:0.5rem; background:#e0e0e0;
-      font-size:0.85rem;
+      text-align: center;
+      padding: 0.5rem;
+      background: #e0e0e0;
+      font-size: 0.85rem;
     }
     @media(max-width:480px){
-      .controls { flex-direction:column; }
-      button { width:100%; margin-left:0; }
-      header { font-size:1.1rem; }
+      .controls { flex-direction: column; }
+      button { width: 100%; margin-left: 0; }
+      header { font-size: 1.1rem; }
     }
   </style>
 </head>
