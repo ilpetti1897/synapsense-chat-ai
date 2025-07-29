@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SynapSenseS Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #7c4dff;
+      --white:  #fff;
+      --bg:      #f0f2f5;
+      --corner:  12px;
+      --spacing: 1rem;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--purple);
+      color: var(--white);
+      text-align: center;
+      padding: var(--spacing);
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+    }
+    .intro {
+      background: var(--white);
+      padding: var(--spacing);
+      border-radius: var(--corner);
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 480px;
+      margin: var(--spacing) auto;
+    }
+    .intro h2 { margin-bottom: .5rem; font-size: 1.25rem; }
+    .hero {
+      position: relative;
+      background: url('images/welcome page.png') no-repeat center center;
+      background-size: cover;
+      height: 50vh;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: var(--spacing) auto;
+      max-width: 480px;
+      border-radius: var(--corner);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+    }
+    .hero-content {
+      position: relative;
+      text-align: center;
+      color: #fff;
+      padding: 0 1rem;
+    }
+    .hero-content h1 { font-size: 1.8rem; margin-bottom: .5rem; }
+    .hero-content p { font-size: 1rem; margin-bottom: 1rem; }
+    .section {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: var(--white);
+      padding: var(--spacing);
+      border-radius: var(--corner);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .section h2 {
+      font-size: 1.4rem;
+      margin-bottom: .75rem;
+      color: var(--purple);
+    }
+    .section ul {
+      list-style: disc inside;
+      color: #555;
+    }
+    .section ul li {
+      margin-bottom: .5rem;
+      font-size: .95rem;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing);
+      justify-content: center;
+      padding: 0 var(--spacing) var(--spacing);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .buttons a {
+      flex: 1;
+      text-decoration: none;
+      text-align: center;
+      padding: var(--spacing);
+      border-radius: var(--corner);
+      font-weight: 600;
+      transition: background .2s, color .2s;
+    }
+    .btn-primary { background: var(--purple); color: var(--white); }
+    .btn-primary:hover { background: #693bcc; }
+    .btn-outline { background: transparent; color: var(--purple); border: 2px solid var(--purple); }
+    .btn-outline:hover { background: var(--purple); color: var(--white); }
+    footer {
+      text-align: center;
+      padding: .5rem;
+      font-size: .85rem;
+      background: #e0e0e0;
+    }
+    @media (max-width: 480px) {
+      .hero-content h1 { font-size: 1.5rem; }
+      .hero-content p { font-size: .9rem; }
+      .buttons { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>Benvenuto in SynapSenseS</header>
+  <main>
+    <div class="intro">
+      <h2>Mindfulness sempre con te</h2>
+      <p>Scopri 30 esercizi pratici di mindfulness oppure parla liberamente con il tuo coach AI, in qualsiasi momento.</p>
+    </div>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>30 giorni per ritrovare il tuo equilibrio interiore</h1>
+        <p>Un viaggio che inizia oggi e resta con te per sempre.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <!-- Pulsante dedicato Training Autogeno -->
+      <div style="text-align:center; margin-bottom:1rem;">
+        <a href="chat.html?topic=autogeno" class="btn-primary" style="max-width: 240px; display:inline-block;">Training Autogeno</a>
+      </div>
+      <h2>Introduzione al Training Autogeno</h2>
+      <p>Il training autogeno è una pratica di rilassamento basata su formule mentali che inducono sensazioni di calma e benessere in diverse parti del corpo. Ecco i sei esercizi fondamentali, adattati per un uso quotidiano:</p>
+      <ul>
+        <li><strong>Pesantezza:</strong> immagina le braccia e le gambe come pesanti e rilassate, ripetendo mentalmente "le mie braccia sono pesanti".</li>
+        <li><strong>Calore:</strong> visualizza una sensazione di tepore che si diffonde attraverso il corpo, aiutando i vasi sanguigni a distendersi.</li>
+        <li><strong>Cuore:</strong> concentrati sul ritmo del battito cardiaco, ripetendo "il mio cuore batte calmo e regolare".</li>
+        <li><strong>Respiro:</strong> osserva il flusso naturale del respiro, riconoscendo una piacevole leggerezza e regolarità.</li>
+        <li><strong>Plesso solare:</strong> visualizza un calore profondo nell’area dello stomaco, favorendo la sensazione di stabilità e energia.</li>
+        <li><strong>Fronte fresca:</strong> immagina un senso di freschezza sulla fronte, per stimolare lucidità mentale e gratificazione.</li>
+      </ul>
+      <p>Scegli un luogo tranquillo, indossa abiti comodi e pratica questi esercizi in sequenza, dedicando almeno 5 minuti a ciascuno. Ripeti regolarmente per mantenere uno stato di rilassamento costante.</p>
+    </section>
+
+    <div class="buttons">
+      <a href="exercises.html" class="btn-primary">30 Esercizi</a>
+      <a href="chat.html" class="btn-outline">Chat AI</a>
+    </div>
+  </main>
+  <footer>© 2025 SynapSenseS</footer>
+</body>
+</html>
