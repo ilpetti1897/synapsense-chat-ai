@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SynapSenseS Chat AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --purple: #7c4dff;
+      --bg: #f0f2f5;
+      --fg: #333;
+      --white: #fff;
+      --radius: 8px;
+      --spacing: 1rem;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family:'Inter',sans-serif;
+      display:flex; flex-direction:column;
+      height:100vh; background:var(--bg); color:var(--fg);
+    }
+    header {
+      background:var(--purple); color:var(--white);
+      text-align:center; padding:var(--spacing);
+      font-size:1.25rem; font-weight:600;
+    }
+    main {
+      flex:1; overflow:auto; padding:var(--spacing);
+    }
+    .controls {
+      display:flex; flex-wrap:wrap; gap:var(--spacing);
+      align-items:center; margin-bottom:var(--spacing);
+    }
+    .controls label { display:flex; align-items:center; gap:0.25rem; font-weight:600; }
+    select, textarea {
+      flex:1; font-size:1rem; padding:0.5rem var(--spacing);
+      border:1px solid #ccc; border-radius:var(--radius);
+      background:var(--white);
+    }
+    textarea { resize:vertical; min-height:4rem; }
+    button {
+      background:var(--purple); color:var(--white);
+      border:none; border-radius:var(--radius);
+      cursor:pointer; font-weight:600; padding:0.75rem 1.5rem;
+      margin-left:auto;
+    }
+    button:disabled { opacity:0.6; cursor:default; }
+    .chat-box {
+      background:var(--white); border-radius:var(--radius);
+      padding:var(--spacing); box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      flex:1; overflow-y:auto;
+    }
+    .chat-box p { margin:0 0 1em; line-height:1.6; }
+    footer {
+      text-align:center; padding:0.5rem; background:#e0e0e0;
+      font-size:0.85rem;
+    }
+    @media(max-width:480px){
+      .controls { flex-direction:column; }
+      button { width:100%; margin-left:0; }
+      header { font-size:1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>SynapSenseS Chat AI</header>
+
+  <main>
+    <div class="controls">
+      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
+      <label><input type="radio" name="mode" value="autogeno"> Consigli Training Autogeno</label>
+      <select id="exerciseSelect" style="display:none"></select>
+      <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
+      <button id="sendBtn">Invia</button>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <p>Scegli tra Chat libera, Consigli sui 30 esercizi o Training Autogeno</p>
+    </div>
+  </main>
+
+  <footer>© 2025 SynapSenseS</footer>
+
+  <script>
+    const WORKER_URL    = 'https://synapsense-agent.ilpetti1897.workers.dev';
+    const modeRadios    = [...document.querySelectorAll('input[name="mode"]')];
+    const exSelect      = document.getElementById('exerciseSelect');
+    const messageInput  = document.getElementById('messageInput');
+    const sendBtn       = document.getElementById('sendBtn');
+    const chatBox       = document.getElementById('chatBox');
+    let history         = [];
+
+    // Popola la select con gli esercizi
+    fetch(WORKER_URL + '/exercises')
+      .then(r => r.json())
+      .then(exs => {
+        exSelect.innerHTML = exs.map(e =>
+          `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
+        ).join('');
+      });
+
+    function resetChat() {
+      history = [];
+      chatBox.innerHTML = '<p>Scegli tra Chat libera, Consigli sui 30 esercizi o Training Autogeno</p>';
+      messageInput.value = '';
+    }
+
+    function updateMode() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      if (mode === 'exercise') {
+        exSelect.style.display    = 'block';
+        messageInput.placeholder  = "Scrivi qui il tuo dubbio sull’esercizio…";
+      } else if (mode === 'autogeno') {
+        exSelect.style.display    = 'none';
+        messageInput.placeholder  = "Scrivi qui il tuo dubbio sul Training Autogeno…";
+      } else {
+        exSelect.style.display    = 'none';
+        messageInput.placeholder  = "Scrivi qui il tuo messaggio…";
+      }
+      resetChat();
+    }
+
+    modeRadios.forEach(r => r.addEventListener('change', updateMode));
+    exSelect.addEventListener('change', resetChat);
+    window.addEventListener('DOMContentLoaded', updateMode);
+
+    sendBtn.addEventListener('click', async () => {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const text = messageInput.value.trim();
+      if (!text) return alert('Inserisci un testo da inviare.');
+
+      const youP = document.createElement('p');
+      youP.innerHTML = `<strong>Tu:</strong> ${text}`;
+      chatBox.append(youP);
+      history.push({ role: 'user', content: text });
+
+      const payload = {
+        mode,
+        exerciseId: mode === 'exercise' ? exSelect.value : null,
+        topic: mode === 'autogeno' ? 'autogeno' : null,
+        history
+      };
+
+      sendBtn.disabled = true;
+
+      try {
+        const res = await fetch(WORKER_URL + '/chat', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const { reply, error } = await res.json();
+        if (error) throw new Error(error);
+
+        reply.split(/\r?\n{2,}|\*\*/).forEach(par => {
+          const t = par.trim(); if (!t) return;
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>AI:</strong> ${t.replace(/^\*/, '•')}`;
+          chatBox.append(p);
+        });
+
+        history.push({ role: 'assistant', content: reply });
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+      } catch {
+        chatBox.innerHTML += '<p>Errore di connessione. Riprova più tardi.</p>';
+      } finally {
+        sendBtn.disabled = false;
+        messageInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
