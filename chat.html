@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>SynapSenseS Chat AI</title>
+  <title>SynapSenseS Chat AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -33,71 +33,97 @@
       font-weight: 600;
     }
     main {
-      flex: 1; overflow: auto; padding: var(--spacing);
+      flex: 1;
+      overflow: auto;
+      padding: var(--spacing);
     }
     .controls {
-      display: flex; flex-wrap: wrap; gap: var(--spacing);
-      align-items: center; margin-bottom: var(--spacing);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing);
+      align-items: center;
+      margin-bottom: var(--spacing);
     }
     .controls label {
-      display: flex; align-items: center; gap: .25rem; font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 600;
     }
     select, textarea {
-      flex: 1; font-size: 1rem; padding: .5rem var(--spacing);
-      border: 1px solid #ccc; border-radius: var(--radius);
+      flex: 1;
+      font-size: 1rem;
+      padding: 0.5rem var(--spacing);
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
       background: var(--white);
     }
-    textarea { resize: vertical; min-height:4rem; }
+    textarea {
+      resize: vertical;
+      min-height: 4rem;
+    }
     button {
-      background: var(--chat-green); color: var(--white);
-      border: none; border-radius: var(--radius);
-      cursor: pointer; font-weight:600; padding:.75rem 1.5rem;
-      margin-left:auto;
+      background: var(--chat-green);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      margin-left: auto;
     }
-    button:disabled { opacity:.6; cursor:default; }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
     .chat-box {
-      background: var(--white); border-radius: var(--radius);
-      padding: var(--spacing); box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      flex:1; overflow-y:auto;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: var(--spacing);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      flex: 1;
+      overflow-y: auto;
     }
-    .chat-box p { margin:0 0 1em; line-height:1.6; }
-    footer { text-align:center; padding:.5rem; background:#e0e0e0; font-size:.85rem; }
+    .chat-box p {
+      margin: 0 0 1em;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: 0.5rem;
+      background: #e0e0e0;
+      font-size: 0.85rem;
+    }
     @media(max-width:480px){
-      .controls { flex-direction:column; }
-      button { width:100%; margin-left:0; }
-      header { font-size:1.1rem; }
+      .controls { flex-direction: column; }
+      button { width: 100%; margin-left: 0; }
+      header { font-size: 1.1rem; }
     }
   </style>
 </head>
 <body>
 
-  <header>SynapSenseS Chat AI</header>
+  <header>SynapSenseS Chat AI</header>
 
   <main>
     <div class="controls">
-      <label>
-        <input type="radio" name="mode" value="chat" checked>
-        Chat libera
-      </label>
-      <label>
-        <input type="radio" name="mode" value="exercise">
-        Consigli esercizio
-      </label>
-      <label>
-        <input type="radio" name="mode" value="autogeno">
-        Consigli Training Autogeno
-      </label>
+      <label><input type="radio" name="mode" value="chat" checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli esercizio</label>
+      <label><input type="radio" name="mode" value="autogeno"> Consigli Training Autogeno</label>
 
       <!-- dropdown per i 30 esercizi -->
-      <select id="exerciseSelect" style="display:none"></select>
-      <!-- dropdown per i 6 passi autogeni -->
-      <select id="autoSelect" style="display:none">
-        <option value="1">1 – Pesantezza</option>
-        <option value="2">2 – Calore</option>
-        <option value="3">3 – Battito cardiaco</option>
-        <option value="4">4 – Respiro</option>
-        <option value="5">5 – Plesso solare</option>
-        <option value="6">6 – Fronte fresca</option>
+      <select id="exerciseSelect" style="display:none">
+        <!-- opzioni caricate via JS da /exercises -->
+      </select>
+
+      <!-- dropdown per i 6 passi di Autogeno -->
+      <select id="autogenoSelect" style="display:none">
+        <option value="1">1 – Pesantezza</option>
+        <option value="2">2 – Calore</option>
+        <option value="3">3 – Battito cardiaco</option>
+        <option value="4">4 – Respiro</option>
+        <option value="5">5 – Plesso solare</option>
+        <option value="6">6 – Fronte fresca</option>
       </select>
 
       <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
@@ -115,13 +141,13 @@
     const WORKER_URL   = 'https://synapsense-agent.ilpetti1897.workers.dev';
     const modeRadios   = [...document.querySelectorAll('input[name="mode"]')];
     const exSelect     = document.getElementById('exerciseSelect');
-    const autoSelect   = document.getElementById('autoSelect');
-    const messageInput = document.getElementById('messageInput');
+    const autoSelect   = document.getElementById('autogenoSelect');
+    const msgInput     = document.getElementById('messageInput');
     const sendBtn      = document.getElementById('sendBtn');
     const chatBox      = document.getElementById('chatBox');
     let history        = [];
 
-    // 1) popola i 30 esercizi
+    // 1) Popola la select degli esercizi
     fetch(WORKER_URL + '/exercises')
       .then(r => r.json())
       .then(exs => {
@@ -130,26 +156,25 @@
         ).join('');
       });
 
+    // Reset chat
     function resetChat() {
       history = [];
       chatBox.innerHTML = '<p>Scegli tra Chat libera, Consigli sui 30 esercizi o Training Autogeno</p>';
-      messageInput.value = '';
+      msgInput.value = '';
     }
 
+    // Switch fra le modalità
     function updateMode() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      // nascondi tutto
-      exSelect.style.display   = 'none';
-      autoSelect.style.display = 'none';
+      exSelect.style.display   = mode === 'exercise' ? 'block' : 'none';
+      autoSelect.style.display = mode === 'autogeno' ? 'block' : 'none';
 
       if (mode === 'exercise') {
-        exSelect.style.display = 'block';
-        messageInput.placeholder = 'Scrivi qui il tuo dubbio sull’esercizio…';
+        msgInput.placeholder = "Scrivi qui il tuo dubbio sull’esercizio…";
       } else if (mode === 'autogeno') {
-        autoSelect.style.display = 'block';
-        messageInput.placeholder = 'Scrivi qui il tuo dubbio sul Training Autogeno…';
+        msgInput.placeholder = "Scrivi qui il tuo dubbio sul Training Autogeno…";
       } else {
-        messageInput.placeholder = 'Scrivi qui il tuo messaggio…';
+        msgInput.placeholder = "Scrivi qui il tuo messaggio…";
       }
       resetChat();
     }
@@ -159,40 +184,43 @@
     autoSelect.addEventListener('change', resetChat);
     window.addEventListener('DOMContentLoaded', updateMode);
 
+    // Invia la richiesta
     sendBtn.addEventListener('click', async () => {
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      const text = messageInput.value.trim();
+      const mode        = document.querySelector('input[name="mode"]:checked').value;
+      const text        = msgInput.value.trim();
+      const exerciseId  = mode === 'exercise' ? exSelect.value : null;
+      const topic       = mode === 'autogeno'   ? 'autogeno'   : null;
+      const autogenoStep= mode === 'autogeno'   ? autoSelect.value : null;
+
       if (!text) return alert('Inserisci un testo da inviare.');
 
-      // aggiungo utente in chat
+      // Aggiungo la domanda dell'utente in chat
       const youP = document.createElement('p');
       youP.innerHTML = `<strong>Tu:</strong> ${text}`;
       chatBox.append(youP);
 
-      // aggiorno history
       history.push({ role: 'user', content: text });
-
-      // preparo payload
-      const payload = {
-        mode,
-        exerciseId: mode === 'exercise' ? exSelect.value : null,
-        topic: mode === 'autogeno' ? 'autogeno' : null,
-        history
-      };
 
       sendBtn.disabled = true;
 
+      // Chiamo il worker
       try {
         const res = await fetch(WORKER_URL + '/chat', {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            mode,
+            exerciseId,
+            topic,
+            autogenoStep,
+            history
+          })
         });
         const { reply, error } = await res.json();
         if (error) throw new Error(error);
 
-        // mostro risposta AI
-        reply.split(/\r?\n{2,}/).forEach(par => {
+        // Stampo la risposta AI
+        reply.split(/\r?\n{2,}|\*\*/).forEach(par => {
           const t = par.trim();
           if (!t) return;
           const p = document.createElement('p');
@@ -202,11 +230,12 @@
 
         history.push({ role: 'assistant', content: reply });
         chatBox.scrollTop = chatBox.scrollHeight;
+
       } catch {
         chatBox.innerHTML += '<p>Errore di connessione. Riprova più tardi.</p>';
       } finally {
         sendBtn.disabled = false;
-        messageInput.value = '';
+        msgInput.value = '';
       }
     });
   </script>
