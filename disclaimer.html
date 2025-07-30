@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disclaimer – SynapSenseS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #7c4dff;
+      --white:  #fff;
+      --bg:      #f0f2f5;
+      --corner:  12px;
+      --spacing: 1rem;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--purple);
+      color: var(--white);
+      text-align: center;
+      padding: var(--spacing);
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+      padding: var(--spacing);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--white);
+      padding: var(--spacing);
+      border-radius: var(--corner);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      line-height: 1.6;
+    }
+    .card h1 {
+      margin-bottom: .5rem;
+      font-size: 1.75rem;
+      color: #444;
+    }
+    .card p {
+      margin-bottom: .75rem;
+    }
+    footer {
+      text-align: center;
+      padding: .5rem;
+      font-size: .85rem;
+      background: #e0e0e0;
+    }
+    a.button {
+      display: inline-block;
+      margin-top: var(--spacing);
+      padding: .75rem 1.5rem;
+      background: var(--purple);
+      color: var(--white);
+      border-radius: var(--corner);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    a.button:hover {
+      background: #693bcc;
+    }
+  </style>
+</head>
+<body>
+  <header>Disclaimer</header>
 
+  <main>
+    <div class="card">
+      <h1>Informazioni importanti</h1>
+      <p>
+        Questa app è basata sull'intelligenza artificiale e non si pone l'obiettivo di 
+        sostituirsi a un essere umano, tanto meno a un professionista della salute. 
+        Ciò che riceverai dall'applicazione sono semplici consigli per il rilassamento 
+        e il benessere mentale.
+      </p>
+      <p>
+        Ogni riferimento a fatti o persone reali è puramente casuale e frutto del ragionamento 
+        del modello di intelligenza artificiale, che è stato addestrato su un vasto corpus di dati 
+        testuali disponibili pubblicamente – tra cui libri, articoli scientifici, risorse web e 
+        documenti con licenza aperta – nel pieno rispetto delle licenze e delle policy di utilizzo.
+      </p>
+      <p>
+        Non consultare mai le indicazioni fornite per diagnosi mediche o trattamenti. 
+        In caso di dubbi sulla tua salute mentale o fisica, rivolgiti sempre a un professionista.
+      </p>
+      <a href="index.html" class="button">← Torna alla Home</a>
+    </div>
+  </main>
+
+  <footer>© 2025 SynapSenseS</footer>
+</body>
+</html>
