@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -14,6 +14,7 @@
       --train:   #ff9800;
       --corner:  12px;
       --spacing: 1rem;
+      --grey:    #616161;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -77,22 +78,24 @@
       background: var(--purple);
       color: var(--white);
     }
-    .btn-primary:hover {
-      background: #693bcc;
-    }
+    .btn-primary:hover { background: #693bcc; }
     .btn-chat {
       background: var(--chat);
       color: var(--white);
     }
-    .btn-chat:hover {
-      background: #388e3c;
-    }
+    .btn-chat:hover { background: #388e3c; }
     .btn-training {
       background: var(--train);
       color: var(--white);
     }
-    .btn-training:hover {
-      background: #f57c00;
+    .btn-training:hover { background: #f57c00; }
+    /* Nuovo stile per Disclaimer */
+    .btn-disclaimer {
+      background: var(--grey);
+      color: var(--white);
+    }
+    .btn-disclaimer:hover {
+      background: #424242;
     }
     footer {
       text-align: center;
@@ -121,6 +124,7 @@
       <a href="exercises.html" class="btn-primary">30 Esercizi</a>
       <a href="chat.html" class="btn-chat">Chat AI</a>
       <a href="training.html" class="btn-training">Training Autogeno</a>
+      <a href="Disclaimer.html" class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
