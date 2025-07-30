@@ -15,6 +15,7 @@
       --grey:     #616161;
       --corner:   12px;
       --spacing:  1rem;
+      --intro-max-width: 480px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -33,7 +34,7 @@
       font-size: 1.5rem;
       font-weight: 600;
     }
-    main { flex: 1; }
+    main { flex: 1; overflow: auto; }
 
     .intro {
       background: var(--white);
@@ -41,22 +42,24 @@
       border-radius: var(--corner);
       text-align: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 480px;
-      margin: var(--spacing) auto;
+      max-width: var(--intro-max-width);
+      margin: var(--spacing) auto 0;
     }
     .intro h2 { margin-bottom: .5rem; font-size: 1.25rem; }
 
-    /* Hero trasformata in <img> */
+    /* Hero trasformata in <img> con altezza ridotta */
     .hero {
       margin: var(--spacing) auto;
-      max-width: 480px;
+      max-width: var(--intro-max-width);
       border-radius: var(--corner);
       overflow: hidden;
     }
     .hero img {
       display: block;
       width: 100%;
-      height: auto;
+      /* Altezza dinamica ridotta per entrare in un’unica vista */
+      max-height: 40vh;
+      object-fit: contain;
     }
 
     .buttons {
@@ -65,8 +68,8 @@
       gap: var(--spacing);
       justify-content: center;
       padding: 0 var(--spacing) var(--spacing);
-      max-width: 480px;
-      margin: 0 auto;
+      max-width: var(--intro-max-width);
+      margin: 0 auto var(--spacing);
     }
     .buttons a {
       flex: 1;
@@ -77,30 +80,14 @@
       font-weight: 600;
       transition: background .2s, color .2s;
     }
-    .btn-primary {
-      background: var(--purple);
-      color: var(--white);
-    }
+    .btn-primary { background: var(--purple); color: var(--white); }
     .btn-primary:hover { background: #693bcc; }
-    .btn-chat {
-      background: var(--chat);
-      color: var(--white);
-    }
+    .btn-chat { background: var(--chat); color: var(--white); }
     .btn-chat:hover { background: #388e3c; }
-    .btn-training {
-      background: var(--train);
-      color: var(--white);
-    }
+    .btn-training { background: var(--train); color: var(--white); }
     .btn-training:hover { background: #f57c00; }
-
-    /* Stile Disclaimer */
-    .btn-disclaimer {
-      background: var(--grey);
-      color: var(--white);
-    }
-    .btn-disclaimer:hover {
-      background: #424242;
-    }
+    .btn-disclaimer { background: var(--grey); color: var(--white); }
+    .btn-disclaimer:hover { background: #424242; }
 
     footer {
       text-align: center;
@@ -111,6 +98,8 @@
 
     @media (max-width: 480px) {
       .buttons { flex-direction: column; }
+      /* Riduco ancora per schermi piccoli */
+      .hero img { max-height: 30vh; }
     }
   </style>
 </head>
@@ -123,7 +112,6 @@
       <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e in futuro altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
     </div>
 
-    <!-- Hero: immagine reale per mantenere le proporzioni -->
     <section class="hero">
       <img src="images/welcome page.png" alt="Donna in meditazione" />
     </section>
