@@ -24,8 +24,7 @@
       font-family:'Inter',sans-serif;
       background:var(--bg);
       color:#333;
-      display:flex;
-      flex-direction:column;
+      display:flex; flex-direction:column;
       min-height:100vh;
       animation:fadeIn .6s ease-out;
       position:relative;
@@ -44,27 +43,20 @@
       position:relative;
       z-index:2;
     }
-    #closeBtn {
-      position:absolute; right:1rem; top:50%;
-      transform:translateY(-50%);
+    #closeBtn, #audioBtn {
+      position:absolute; top:50%; transform:translateY(-50%);
       background:#d32f2f; color:var(--white);
       border:none; padding:.5rem 1rem;
-      border-radius:var(--corner);
-      cursor:pointer; font-weight:600;
-      transition:background .2s,transform .2s,box-shadow .2s;
+      border-radius:var(--corner); cursor:pointer;
+      font-weight:600; transition:background .2s,transform .2s,box-shadow .2s;
     }
-    #closeBtn:hover {
-      background:#b71c1c;
-      transform:translateY(-50%) scale(1.05);
+    #closeBtn { right:1rem; }
+    #audioBtn { right:8rem; }
+    #closeBtn:hover, #audioBtn:hover {
+      background:#b71c1c; transform:translateY(-50%) scale(1.05);
       box-shadow:0 4px 8px rgba(0,0,0,0.2);
     }
-    main {
-      flex:1;
-      display:flex; flex-direction:column;
-      align-items:center;
-      position:relative;
-      z-index:2;
-    }
+    main { flex:1; display:flex; flex-direction:column; align-items:center; z-index:2; }
 
     .hero {
       position:relative;
@@ -72,26 +64,18 @@
       margin-top:var(--spacing);
     }
     .hero img {
-      display:block;
-      width:100%;
-      max-height:60vh;
-      object-fit:cover;
-      border-radius:var(--corner);
+      display:block; width:100%; max-height:60vh;
+      object-fit:cover; border-radius:var(--corner);
       transition:transform .3s ease-out;
     }
-    .hero:hover img {
-      transform:scale(1.02) rotateY(5deg);
-    }
+    .hero:hover img { transform:scale(1.02) rotateY(5deg); }
 
     .hero .intro {
-      position:absolute;
-      top:45%;
-      left:50%;
+      position:absolute; top:45%; left:50%;
       transform:translate(-50%, -45%);
       width:90%; max-width:360px;
       background:var(--intro-bg);
-      padding:.8rem;
-      border-radius:var(--corner);
+      padding:.8rem; border-radius:var(--corner);
       box-shadow:0 2px 6px rgba(0,0,0,0.1);
       text-align:center;
     }
@@ -105,24 +89,20 @@
       transition:width .3s;
     }
     .hero .intro h2:hover::after { width:100%; }
-    .hero .intro p {
-      font-size:.9rem; line-height:1.4;
-    }
+    .hero .intro p { font-size:.9rem; line-height:1.4; }
 
     .buttons {
-      display:flex; flex-wrap:wrap;
-      gap:var(--spacing);
+      display:flex; flex-wrap:wrap; gap:var(--spacing);
       justify-content:center;
       margin:var(--spacing) auto var(--spacing);
       width:100%; max-width:var(--hero-width);
     }
     .buttons a {
       position:relative; overflow:hidden;
-      flex:1 1 140px;
-      text-decoration:none; text-align:center;
-      padding:var(--spacing);
-      border-radius:var(--corner);
-      font-weight:600; color:var(--white);
+      flex:1 1 140px; text-decoration:none;
+      text-align:center; padding:var(--spacing);
+      border-radius:var(--corner); font-weight:600;
+      color:var(--white);
       transition:background .2s,transform .2s,box-shadow .2s;
     }
     .buttons a:hover {
@@ -160,18 +140,16 @@
       pointer-events:none;
     }
     @keyframes ripple{ to{transform:scale(4);opacity:0;} }
-
-    /* LAYER PER AUDIO PER ESSERE DIETRO TUTTO */
-    #bg-audio { display:none; }
   </style>
 </head>
 <body>
 
-  <!-- AUDIO DI SOTTOFONDO -->
-  <audio id="bg-audio" src="NR%201.wav" loop autoplay></audio>
+  <!-- BACKGROUND AUDIO -->
+  <audio id="bg-audio" src="NR%201.wav" loop preload="auto"></audio>
 
   <header>
     Benvenuto in SynapSenseS
+    <button id="audioBtn">🔊 Audio</button>
     <button id="closeBtn">Chiudi App</button>
   </header>
 
@@ -196,11 +174,18 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // Forza play al primo gesto dell'utente (per browser che bloccano autoplay)
-    window.addEventListener('click', () => {
-      const audio = document.getElementById('bg-audio');
-      if (audio.paused) audio.play();
-    }, { once: true });
+    const audio = document.getElementById('bg-audio');
+    const btn   = document.getElementById('audioBtn');
+
+    btn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        btn.textContent = '🔇 Muto';
+      } else {
+        audio.pause();
+        btn.textContent = '🔊 Audio';
+      }
+    });
 
     // ripple sui pulsanti
     document.querySelectorAll('.buttons a').forEach(btn => {
