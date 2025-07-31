@@ -7,15 +7,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --purple:   #7c4dff;
-      --white:    #fff;
-      --bg:       #f0f2f5;
-      --chat:     #4caf50;
-      --train:    #ff9800;
-      --grey:     #616161;
-      --corner:   12px;
-      --spacing:  1rem;
-      --intro-max-width: 480px;
+      --purple:             #7c4dff;
+      --white:              #fff;
+      --bg:                 #f0f2f5;
+      --chat:               #4caf50;
+      --train:              #ff9800;
+      --auto:               #3f51b5;
+      --grey:               #616161;
+      --corner:             12px;
+      --spacing:            1rem;
+      --intro-max-width:    480px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -40,7 +41,6 @@
       font-weight: 600;
       position: relative;
     }
-    /* Pulsante Chiudi App */
     #closeBtn {
       position: absolute;
       right: 1rem;
@@ -98,7 +98,7 @@
     .hero img {
       display: block;
       width: 100%;
-      max-height: 30vh;             /* qui ridotto */
+      max-height: 40vh;            /* Aumentato su desktop */
       object-fit: contain;
       transition: transform .3s ease-out;
     }
@@ -124,22 +124,18 @@
       padding: var(--spacing);
       border-radius: var(--corner);
       font-weight: 600;
+      color: var(--white);
       transition: background .2s, transform .2s, box-shadow .2s;
     }
     .buttons a:hover {
       transform: scale(1.03);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .btn-primary   { background: var(--purple); color: var(--white); }
-    .btn-primary:hover   { background: #693bcc; }
-    .btn-chat      { background: var(--chat);   color: var(--white); }
-    .btn-chat:hover      { background: #388e3c; }
-    .btn-training  { background: var(--train);  color: var(--white); }
-    .btn-training:hover  { background: #f57c00; }
-    .btn-auto      { background: #3f51b5;     color: var(--white); }
-    .btn-auto:hover      { background: #303f9f; }
-    .btn-disclaimer{ background: var(--grey);   color: var(--white); }
-    .btn-disclaimer:hover{ background: #424242; }
+    .btn-primary    { background: var(--purple); }
+    .btn-chat       { background: var(--chat); }
+    .btn-training   { background: var(--train); }
+    .btn-auto       { background: var(--auto); }
+    .btn-disclaimer { background: var(--grey); }
 
     footer {
       text-align: center;
@@ -149,8 +145,8 @@
     }
 
     @media (max-width: 480px) {
+      .hero img { max-height: 45vh; }  /* Aumentato su mobile */
       .buttons { flex-direction: column; }
-      .hero img { max-height: 25vh; }  /* mobile ancora più ridotto */
     }
 
     /* ripple effect */
@@ -195,7 +191,7 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // ripple effect
+    // ripple sui pulsanti
     document.querySelectorAll('.buttons a').forEach(btn => {
       btn.addEventListener('click', function(e) {
         const circle = document.createElement('span');
@@ -209,11 +205,10 @@
       });
     });
 
-    // pulsante Chiudi App
+    // chiusura app
     document.getElementById('closeBtn').addEventListener('click', () => {
       window.close();
-      // se il browser blocca window.close()
-      alert("Non sono riuscito a chiudere l'app automaticamente.\nChiudi la scheda manualmente o usa il pulsante indietro.");
+      alert("Non sono riuscito a chiudere l'app automaticamente.\nChiudi la scheda manualmente.");
     });
   </script>
 </body>
