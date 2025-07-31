@@ -15,7 +15,7 @@
       --spacing:      1rem;
       --intro-bg:     rgba(255,255,255,0.85);
     }
-    * { box-sizing:border-box; margin:0; padding:0; }
+    * { box-sizing:border-box; margin:0; padding:0 }
     body {
       font-family:'Inter',sans-serif;
       background:var(--bg);
@@ -25,8 +25,8 @@
       animation:fadeIn .6s ease-out;
     }
     @keyframes fadeIn {
-      from { opacity:0; transform:translateY(10px);}
-      to   { opacity:1; transform:translateY(0);}
+      from { opacity:0; transform:translateY(10px) }
+      to   { opacity:1; transform:translateY(0) }
     }
     header {
       display:grid;
@@ -38,36 +38,31 @@
       gap:.5rem;
     }
     header h1 {
-      margin:0;
-      text-align:center;
-      font-size:1.5rem;
-      font-weight:600;
+      margin:0; text-align:center;
+      font-size:1.5rem; font-weight:600;
     }
     header button {
-      background:#d32f2f;
-      color:var(--white);
-      border:none;
-      padding:.5rem 1rem;
+      background:#d32f2f; color:var(--white);
+      border:none; padding:.5rem 1rem;
       border-radius:var(--corner);
-      cursor:pointer;
-      font-weight:600;
+      cursor:pointer; font-weight:600;
       transition:background .2s,transform .2s;
     }
     header button:hover {
-      background:#b71c1c;
-      transform:scale(1.05);
+      background:#b71c1c; transform:scale(1.05);
     }
-    main { flex:1; display:flex; flex-direction:column; align-items:center; }
+    main {
+      flex:1; display:flex; flex-direction:column;
+      align-items:center;
+    }
     .hero {
       position:relative;
       width:100%; max-width:var(--hero-width);
       margin-top:var(--spacing);
     }
     .hero img {
-      width:100%;
-      max-height:60vh;
-      object-fit:cover;
-      border-radius:var(--corner);
+      width:100%; max-height:60vh;
+      object-fit:cover; border-radius:var(--corner);
       transition:transform .3s ease-out;
     }
     .hero:hover img {
@@ -79,8 +74,7 @@
       transform:translate(-50%,-45%);
       width:90%; max-width:360px;
       background:var(--intro-bg);
-      padding:.8rem;
-      border-radius:var(--corner);
+      padding:.8rem; border-radius:var(--corner);
       box-shadow:0 2px 6px rgba(0,0,0,0.1);
       text-align:center;
     }
@@ -89,11 +83,13 @@
       position:relative; display:inline-block;
     }
     .hero .intro h2::after {
-      content:''; position:absolute; left:0; bottom:-3px;
-      width:0; height:3px; background:var(--purple);
+      content:''; position:absolute;
+      left:0; bottom:-3px;
+      width:0; height:3px;
+      background:var(--purple);
       transition:width .3s;
     }
-    .hero .intro h2:hover::after { width:100%; }
+    .hero .intro h2:hover::after { width:100% }
     .hero .intro p {
       font-size:.9rem; line-height:1.4;
     }
@@ -104,35 +100,33 @@
       width:100%; max-width:var(--hero-width);
     }
     .buttons a {
-      flex:1 1 140px;
-      text-decoration:none; text-align:center;
-      padding:var(--spacing); border-radius:var(--corner);
+      flex:1 1 140px; text-decoration:none;
+      text-align:center; padding:var(--spacing);
+      border-radius:var(--corner);
       font-weight:600; color:var(--white);
       transition:transform .2s;
     }
-    .buttons a:hover {
-      transform:scale(1.03);
-    }
-    .btn-primary   { background:var(--purple); }
-    .btn-chat      { background:#4caf50; }
-    .btn-training  { background:#ff9800; }
-    .btn-auto      { background:#3f51b5; }
-    .btn-disclaimer{ background:#616161; }
+    .buttons a:hover { transform:scale(1.03) }
+    .btn-primary   { background:var(--purple) }
+    .btn-chat      { background:#4caf50 }
+    .btn-training  { background:#ff9800 }
+    .btn-auto      { background:#3f51b5 }
+    .btn-disclaimer{ background:#616161 }
     footer {
       text-align:center; padding:.5rem;
       font-size:.75rem; background:#e0e0e0;
       margin-top:auto;
     }
     @media(max-width:480px){
-      header h1 { font-size:1.2rem; }
-      header button { padding:.4rem .8rem; font-size:.9rem; }
-      .hero img { max-height:50vh; }
+      header h1 { font-size:1.2rem }
+      header button { padding:.4rem .8rem; font-size:.9rem }
+      .hero img { max-height:50vh }
       .hero .intro {
         top:50%; transform:translate(-50%,-50%);
         padding:.6rem;
       }
-      .hero .intro h2 { font-size:1.1rem; }
-      .hero .intro p  { font-size:.85rem; }
+      .hero .intro h2 { font-size:1.1rem }
+      .hero .intro p  { font-size:.85rem }
       .buttons {
         flex-direction:column; gap:.5rem;
       }
@@ -155,7 +149,7 @@
   <!-- player audio -->
   <audio id="bg-audio" loop preload="auto">
     <source src="audio/nr1.wav" type="audio/wav">
-    Il tuo browser non supporta il formato WAV.
+    Il tuo browser non supporta l'audio.
   </audio>
 
   <header>
@@ -190,10 +184,19 @@
       const audioBtn = document.getElementById('audioBtn');
       const closeBtn = document.getElementById('closeBtn');
 
-      // al click del tasto audio avvia/metti in pausa
+      // Chrome richiede gesto utente: su primo click/touch partiamo
+      const kickstart = () => {
+        audio.play().catch(console.warn);
+        document.removeEventListener('click', kickstart);
+        document.removeEventListener('touchstart', kickstart);
+      };
+      document.addEventListener('click', kickstart);
+      document.addEventListener('touchstart', kickstart);
+
+      // play/pause toggle
       audioBtn.addEventListener('click', () => {
         if (audio.paused) {
-          audio.play().catch(()=>console.warn('Play prevented'));
+          audio.play().catch(console.warn);
           audioBtn.textContent = '🔇';
         } else {
           audio.pause();
