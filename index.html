@@ -16,7 +16,6 @@
       --corner:   12px;
       --spacing:  1rem;
       --intro-max-width: 480px;
-      --ripple-color: rgba(255,255,255,0.4);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -41,23 +40,25 @@
       font-weight: 600;
       position: relative;
     }
-    /* move-close */
-    #close-btn {
+    /* Pulsante Chiudi App */
+    #closeBtn {
       position: absolute;
-      top: 50%;
       right: 1rem;
+      top: 50%;
       transform: translateY(-50%);
-      background: #c62828;
-      color: #fff;
+      background: #d32f2f;
+      color: var(--white);
       border: none;
-      padding: 0.5rem 1rem;
+      padding: .5rem 1rem;
       border-radius: var(--corner);
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: background .2s;
+      font-weight: 600;
+      transition: background .2s, transform .2s, box-shadow .2s;
     }
-    #close-btn:hover {
+    #closeBtn:hover {
       background: #b71c1c;
+      transform: translateY(-50%) scale(1.05);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     main { flex: 1; }
@@ -85,9 +86,7 @@
       background: var(--purple);
       transition: width .3s ease-out;
     }
-    .intro h2:hover::after {
-      width: 100%;
-    }
+    .intro h2:hover::after { width: 100%; }
 
     .hero {
       margin: var(--spacing) auto;
@@ -98,9 +97,8 @@
     }
     .hero img {
       display: block;
-      width: 90%;               /* scale by width */
-      height: auto;             /* preserve full portrait */
-      margin: 0 auto;
+      width: 100%;
+      max-height: 30vh;             /* qui ridotto */
       object-fit: contain;
       transition: transform .3s ease-out;
     }
@@ -120,26 +118,27 @@
     .buttons a {
       position: relative;
       overflow: hidden;
+      flex: 1 1 140px;
+      text-decoration: none;
+      text-align: center;
       padding: var(--spacing);
       border-radius: var(--corner);
       font-weight: 600;
-      text-decoration: none;
-      color: #fff;
       transition: background .2s, transform .2s, box-shadow .2s;
     }
     .buttons a:hover {
       transform: scale(1.03);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .btn-primary   { background: var(--purple); }
+    .btn-primary   { background: var(--purple); color: var(--white); }
     .btn-primary:hover   { background: #693bcc; }
-    .btn-chat      { background: var(--chat);   }
+    .btn-chat      { background: var(--chat);   color: var(--white); }
     .btn-chat:hover      { background: #388e3c; }
-    .btn-training  { background: var(--train);  }
+    .btn-training  { background: var(--train);  color: var(--white); }
     .btn-training:hover  { background: #f57c00; }
-    .btn-auto      { background: #3949ab; } /* deep indigo */
-    .btn-auto:hover      { background: #283593; }
-    .btn-disclaimer{ background: var(--grey);  }
+    .btn-auto      { background: #3f51b5;     color: var(--white); }
+    .btn-auto:hover      { background: #303f9f; }
+    .btn-disclaimer{ background: var(--grey);   color: var(--white); }
     .btn-disclaimer:hover{ background: #424242; }
 
     footer {
@@ -151,14 +150,14 @@
 
     @media (max-width: 480px) {
       .buttons { flex-direction: column; }
-      .hero img { width: 100%; max-height: 35vh; }
+      .hero img { max-height: 25vh; }  /* mobile ancora più ridotto */
     }
 
     /* ripple effect */
     .ripple {
       position: absolute;
       border-radius: 50%;
-      background: var(--ripple-color);
+      background: rgba(255,255,255,0.4);
       transform: scale(0);
       animation: ripple 0.6s linear;
       pointer-events: none;
@@ -171,7 +170,7 @@
 <body>
   <header>
     Benvenuto in SynapSenseS
-    <button id="close-btn">Chiudi App</button>
+    <button id="closeBtn">Chiudi App</button>
   </header>
 
   <main>
@@ -185,11 +184,11 @@
     </section>
 
     <div class="buttons">
-      <a href="exercises.html" class="btn-primary">30 Esercizi</a>
-      <a href="chat.html"      class="btn-chat">Chat AI</a>
-      <a href="training.html"  class="btn-training">Training Autogeno</a>
-      <a href="autoipnosi.html" class="btn-auto">Autoipnosi Regressiva</a>
-      <a href="Disclaimer.html" class="btn-disclaimer">Disclaimer</a>
+      <a href="exercises.html"   class="btn-primary">30 Esercizi</a>
+      <a href="chat.html"        class="btn-chat">Chat AI</a>
+      <a href="training.html"    class="btn-training">Training Autogeno</a>
+      <a href="autoipnosi.html"  class="btn-auto">Autoipnosi Regressiva</a>
+      <a href="disclaimer.html"  class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
@@ -210,11 +209,12 @@
       });
     });
 
-    // try to close window, fallback to alert
-    document.getElementById('close-btn').onclick = () => {
-      if (window.close) window.close();
-      else alert("Chiudi la scheda manualmente o premi il tasto indietro.");
-    };
+    // pulsante Chiudi App
+    document.getElementById('closeBtn').addEventListener('click', () => {
+      window.close();
+      // se il browser blocca window.close()
+      alert("Non sono riuscito a chiudere l'app automaticamente.\nChiudi la scheda manualmente o usa il pulsante indietro.");
+    });
   </script>
 </body>
 </html>
