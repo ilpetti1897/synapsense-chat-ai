@@ -12,6 +12,7 @@
       --bg:           #f0f2f5;
       --chat:         #4caf50;
       --train:        #ff9800;
+      --auto:         #3f51b5;
       --grey:         #616161;
       --corner:       12px;
       --spacing:      1rem;
@@ -22,7 +23,8 @@
     body {
       font-family: 'Inter',sans-serif;
       background: var(--bg);
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
       min-height: 100vh;
       color: #333;
       animation: fadeIn .5s ease-out;
@@ -38,7 +40,25 @@
       padding: var(--spacing);
       font-size: 1.5rem;
       font-weight: 600;
+      position: relative;
     }
+    /* Chiudi app button */
+    #close-btn {
+      position: absolute;
+      right: var(--spacing);
+      top: 50%;
+      transform: translateY(-50%);
+      background: #b71c1c;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--corner);
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: background .2s;
+    }
+    #close-btn:hover { background: #7f0000; }
     main { flex: 1; }
 
     .intro {
@@ -65,9 +85,7 @@
       background: var(--purple);
       transition: width .3s ease-out;
     }
-    .intro h2:hover::after {
-      width: 100%;
-    }
+    .intro h2:hover::after { width: 100%; }
     .intro p { line-height: 1.4; }
 
     .hero {
@@ -79,13 +97,11 @@
     .hero img {
       display: block;
       width: 100%;
-      max-height: 50vh;     /* aumentato per far entrare tutta la figura */
-      object-fit: contain;  /* mostra l’intera immagine senza crop */
+      max-height: 45vh;
+      object-fit: contain;
       transition: transform .3s ease-out;
     }
-    .hero:hover img {
-      transform: scale(1.02);
-    }
+    .hero:hover img { transform: scale(1.02); }
 
     .buttons {
       display: flex;
@@ -115,13 +131,15 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .btn-primary    { background: var(--purple); }
+    .btn-primary     { background: var(--purple); }
     .btn-primary:hover { background: #693bcc; }
-    .btn-chat       { background: var(--chat); }
-    .btn-chat:hover    { background: #388e3c; }
-    .btn-training   { background: var(--train); }
+    .btn-chat        { background: var(--chat); }
+    .btn-chat:hover     { background: #388e3c; }
+    .btn-training    { background: var(--train); }
     .btn-training:hover { background: #f57c00; }
-    .btn-disclaimer { background: var(--grey); }
+    .btn-auto        { background: var(--auto); }
+    .btn-auto:hover    { background: #303f9f; }
+    .btn-disclaimer  { background: var(--grey); }
     .btn-disclaimer:hover { background: #424242; }
 
     footer {
@@ -133,10 +151,9 @@
 
     @media (max-width: 480px) {
       .buttons { flex-direction: column; }
-      .hero img { max-height: 45vh; }  /* un po’ più grande su smartphone */
+      .hero img { max-height: 40vh; }
     }
 
-    /* ripple effect */
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -145,13 +162,14 @@
       animation: ripple .6s linear;
       pointer-events: none;
     }
-    @keyframes ripple {
-      to { transform: scale(4); opacity: 0; }
-    }
+    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
   </style>
 </head>
 <body>
-  <header>Benvenuto in SynapSenseS</header>
+  <header>
+    Benvenuto in SynapSenseS
+    <button id="close-btn">Chiudi App</button>
+  </header>
 
   <main>
     <div class="intro">
@@ -165,8 +183,9 @@
 
     <div class="buttons">
       <a href="exercises.html" class="btn-primary">30 Esercizi</a>
-      <a href="chat.html"      class="btn-chat">Chat AI</a>
-      <a href="training.html"  class="btn-training">Training Autogeno</a>
+      <a href="chat.html" class="btn-chat">Chat AI</a>
+      <a href="training.html" class="btn-training">Training Autogeno</a>
+      <a href="autoipnosi.html" class="btn-auto">Autoipnosi Regressiva</a>
       <a href="Disclaimer.html" class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
@@ -174,6 +193,7 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
+    // ripple on buttons
     document.querySelectorAll('.buttons a').forEach(btn => {
       btn.addEventListener('click', e => {
         const circle = document.createElement('span');
@@ -187,6 +207,12 @@
         setTimeout(() => circle.remove(), 600);
       });
     });
+    // close app
+    document.getElementById('close-btn').addEventListener('click', () => {
+      window.close();
+      alert('Se la chiusura automatica non funziona, chiudi manualmente la scheda.');
+    });
   </script>
 </body>
 </html>
+
