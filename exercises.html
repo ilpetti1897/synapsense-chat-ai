@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I 30 Esercizi di SynapSenseS</title>
+  <style>
+    /* STILI PRINCIPALI */
+    body { margin:0; padding:0; font-family:Arial,sans-serif; background-color:#ecf0f1; }
+    header {
+      background-color:#8e44ad;
+      color:#fff;
+      padding:1rem;
+      text-align:center;
+      font-size:1.5rem;
+      position:relative;
+    }
+    a.home-button {
+      position:absolute; left:1rem; top:50%; transform:translateY(-50%);
+      background:#4caf50; color:#fff; padding:0.5rem 1rem;
+      border-radius:8px; text-decoration:none; font-size:0.9rem;
+    }
+    a.home-button:hover { background:#389e38; }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1rem; padding:1rem;
+    }
+    .card {
+      background:#fff; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1);
+      padding:1rem; text-align:center; cursor:pointer;
+      transition:transform .2s ease-in-out;
+    }
+    .card:hover { transform:scale(1.03); }
+    .card img {
+      width:100%; height:180px; object-fit:cover; border-radius:8px;
+    }
+    .card h3 { margin-top:.8rem; font-size:1.1rem; }
+    .loader {
+      padding:2rem; text-align:center; font-style:italic; color:#666;
+    }
+    a.button {
+      display:inline-block; margin:1rem 0; background:#8e44ad; color:#fff;
+      padding:.7rem 1.5rem; border-radius:8px; text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    I 30 Esercizi di SynapSenseS
+    <a href="index.html" class="home-button">← Torna alla Home</a>
+  </header>
+
+  <div id="loader" class="loader">Caricamento…</div>
+  <div id="grid" class="grid" style="display:none;"></div>
+
+  <script>
+    const exercises = [
+      {
+        id:1, title:"Respira profondo", image:"1.jpeg",
+        objective:"Calmare mente e corpo riducendo lo stress.",
+        steps:[
+          "Siediti con la schiena dritta o sdraiati in posizione comoda.",
+          "Appoggia una mano sul petto e una sull’addome.",
+          "Inspira dal naso in 4 secondi, facendo sollevare solo l’addome.",
+          "Trattieni l’aria per 2 secondi mantenendo le spalle rilassate.",
+          "Espira lentamente in 6 secondi attraverso la bocca.",
+          "Ripeti 5–8 volte, aumentando gradualmente fino a 10 cicli."
+        ],
+        tips:[
+          "Se ti distrai, riporta l’attenzione al movimento della pancia.",
+          "Utilizza un timer o un’app per respirazione guidata."
+        ]
+      },
+      {
+        id:2, title:"Tecnica dei 5 secondi", image:"2.jpeg",
+        objective:"Superare l’inerzia e iniziare subito compiti rimandati.",
+        steps:[
+          "Appena senti il desiderio di procrastinare conta mentalmente 5-4-3-2-1.",
+          "Al “1” alzati o inizia immediatamente l’azione pianificata.",
+          "Lavora sull’attività per almeno 20 secondi prima di valutare."
+        ],
+        tips:[
+          "Funziona meglio con un obiettivo già ben definito su un foglio.",
+          "Registra le tue sensazioni in un diario per monitorare i progressi."
+        ]
+      },
+      {
+        id:3, title:"Focus su un obiettivo", image:"3.jpeg",
+        objective:"Aumentare chiarezza mentale e motivazione verso uno scopo.",
+        steps:[
+          "Scrivi un obiettivo SMART su carta (Specifico, Misurabile…)",
+          "Imposta timer per 2 minuti e chiudi gli occhi.",
+          "Visualizza ogni passo necessario per raggiungerlo.",
+          "Annota 2 azioni concrete da fare entro oggi."
+        ],
+        tips:[
+          "Usa colori o simboli per rendere più vivida la tua visualizzazione.",
+          "Ripeti l’esercizio ogni mattina per consolidare la focalizzazione."
+        ]
+      },
+      {
+        id:4, title:"Visualizza il tuo successo", image:"4.jpeg",
+        objective:"Rafforzare fiducia e determinazione con l’immaginazione.",
+        steps:[
+          "Trova un luogo tranquillo e metti un timer per 3–5 minuti.",
+          "Chiudi gli occhi e immagina di aver raggiunto un traguardo significativo.",
+          "Concentrati su dettagli sensoriali: suoni, colori, odori.",
+          "Mantieni l’immagine fino a percepire emozioni positive."
+        ],
+        tips:[
+          "Registra la sessione in audio per poterla riascoltare.",
+          "Aggiungi musica strumentale per aumentare l’immersione."
+        ]
+      },
+      {
+        id:5, title:"Silenzia il giudizio interiore", image:"5.jpeg",
+        objective:"Rimuovere pensieri negativi sostituendoli con affermazioni.",
+        steps:[
+          "Quando sorge un pensiero critico, annotalo immediatamente.",
+          "Trasformalo in un’affermazione positiva e scrivila.",
+          "Ripeti l’affermazione ad alta voce 5 volte.",
+          "Rileggi il tuo elenco ogni sera prima di dormire."
+        ],
+        tips:[
+          "Mantieni un journal dedicato e rileggetelo settimanalmente.",
+          "Associa ogni affermazione a un’immagine rilassante."
+        ]
+      },
+      {
+        id:6, title:"La regola dei 20 minuti", image:"6.jpeg",
+        objective:"Superare la resistenza iniziale avviando compiti difficili.",
+        steps:[
+          "Scegli un’attività che stai rimandando.",
+          "Imposta un timer a 20 minuti.",
+          "Lavora ininterrottamente sul compito fino allo scadere.",
+          "Al termine, valuta se continuare o fermarti soddisfatto."
+        ],
+        tips:[
+          "Prepara tutto il materiale prima di iniziare per non fermarti.",
+          "Silenzia notifiche e chiudi schede non necessarie."
+        ]
+      },
+      {
+        id:7, title:"Potenzia la memoria", image:"7.jpeg",
+        objective:"Allenare la memoria di lavoro migliorando la concentrazione.",
+        steps:[
+          "Scrivi 5–7 parole o numeri su un foglio.",
+          "Studiali per 30 secondi ripetendoli mentalmente.",
+          "Copri la lista e prova a riscriverli in ordine.",
+          "Aumenta gradualmente fino a 9–10 elementi."
+        ],
+        tips:[
+          "Crea associazioni visive o storie per ogni elemento.",
+          "Pronuncia ad alta voce per rafforzare il ricordo."
+        ]
+      },
+      {
+        id:8, title:"Rilassamento muscolare progressivo", image:"8.jpeg",
+        objective:"Ridurre tensioni fisiche e mentali con contrazione/rilascio.",
+        steps:[
+          "Sdraiati o siediti con schiena dritta.",
+          "Contrai i muscoli dei piedi per 5s, poi rilassali per 15s.",
+          "Procedi in sequenza gambe, addome, braccia, collo e volto.",
+          "Durante il rilascio, concentrati sulla sensazione di leggerezza."
+        ],
+        tips:[
+          "Respira dolcemente durante tutto l’esercizio.",
+          "Esegui in un luogo silenzioso per massima efficacia."
+        ]
+      },
+      {
+        id:9, title:"Gratitudine scritta", image:"9.jpeg",
+        objective:"Incrementare il benessere annotando aspetti positivi.",
+        steps:[
+          "Alla sera, annota 3–5 cose per cui sei grato.",
+          "Descrivi il motivo e l’impatto emotivo di ciascuna.",
+          "Rileggi mensilmente il tuo diario per osservare progressi."
+        ],
+        tips:[
+          "Includi anche piccoli dettagli (es. il sorriso di un amico).",
+          "Usa un quaderno con copertina vivace per ispirare regolarità."
+        ]
+      },
+      {
+        id:10, title:"Affermazioni positive", image:"10.jpeg",
+        objective:"Rafforzare autostima e mindset proattivo.",
+        steps:[
+          "Scegli un’affermazione che risuona: es. “Merito sereno.”",
+          "Ripetila ad alta voce per 2 minuti davanti a uno specchio.",
+          "Mantieni postura eretta e sguardo fisso.",
+          "Associa un gesto simbolico (pugno alzato, mani sul cuore)."
+        ],
+        tips:[
+          "Registra la tua voce per riascoltarla durante la giornata.",
+          "Alterna più affermazioni in diverse sessioni."
+        ]
+      },
+      {
+        id:11, title:"Leggi una pagina oggi", image:"11.jpeg",
+        objective:"Stimolare concentrazione e creatività con la lettura.",
+        steps:[
+          "Prendi un libro cartaceo e leggi una pagina con calma.",
+          "Sottolinea una frase significativa.",
+          "Scrivi 1–2 righe di riflessione su ciò che hai letto."
+        ],
+        tips:[
+          "Varia i generi letterari per ampliare la prospettiva.",
+          "Leggi in un luogo confortevole e ben illuminato."
+        ]
+      },
+      {
+        id:12, title:"Tecnica Pomodoro", image:"12.jpeg",
+        objective:"Aumentare produttività e gestione del tempo.",
+        steps:[
+          "Imposta timer a 25′ per un singolo compito.",
+          "Lavora senza interruzioni finché il timer suona.",
+          "Fai 5′ di pausa attiva (stretching, camminata).",
+          "Dopo 4 cicli, pausa lunga di 15–30′."
+        ],
+        tips:[
+          "Annota le interruzioni per ridurle nei cicli successivi.",
+          "Usa un timer visivo o un’app dedicata."
+        ]
+      },
+      {
+        id:13, title:"Lascia andare il superfluo", image:"13.jpeg",
+        objective:"Liberare spazio mentale e fisico eliminando inutili.",
+        steps:[
+          "Individua un oggetto, abitudine o pensiero superfluo.",
+          "Decidi di donarlo, buttare o lasciare andare mentalmente.",
+          "Festeggia il rilascio con un gesto simbolico (respiro profondo)."
+        ],
+        tips:[
+          "Inizia da piccole cose per allenare la tua determinazione.",
+          "Annota benefici percepiti dopo ogni rilascio."
+        ]
+      },
+      {
+        id:14, title:"Reset mentale rapido", image:"14.jpeg",
+        objective:"Ricaricare mente e corpo in pochi secondi.",
+        steps:[
+          "Ferma l’attività e chiudi gli occhi.",
+          "Fai 3 respiri profondi contando 4–4–6 secondi.",
+          "Concludi con un sorriso spontaneo per 5–10s."
+        ],
+        tips:[
+          "Usa un promemoria sonoro (campanello, timer breve).",
+          "Collega il gesto a una postura di potere (spalle aperte)."
+        ]
+      },
+      {
+        id:15, title:"Mini meditazione guidata", image:"15.jpeg",
+        objective:"Calmare mente e aumentare la presenza in 3–5 minuti.",
+        steps:[
+          "Apri un’app o video di meditazione breve (3–5′).",
+          "Siediti con schiena dritta, piedi a terra, indossa cuffie.",
+          "Segui la voce concentrandoti su respiro e corpo.",
+          "Se la mente vaga riporta gentilmente l’attenzione alla guida."
+        ],
+        tips:[
+          "Insight Timer o YouTube: cerca “5 minute guided meditation”.",
+          "Annota al termine 2 sensazioni principali (es. relax, chiarezza)."
+        ]
+      },
+      {
+        id:16, title:"Sprint di chiarezza", image:"16.jpeg",
+        objective:"Ordinare i pensieri con writing libero in 2 minuti.",
+        steps:[
+          "Imposta timer per 2′.",
+          "Scrivi senza fermarti tutto ciò che ti passa per la mente.",
+          "Al termine, identifica 3 parole chiave e un’azione concreta."
+        ],
+        tips:[
+          "Non giudicare quello che scrivi, lascia fluire.",
+          "Ripeti regolarmente per monitorare cambiamenti mentali."
+        ]
+      },
+      {
+        id:17, title:"Pensiero positivo al risveglio", image:"17.jpeg",
+        objective:"Iniziare la giornata con mindset propositivo.",
+        steps:[
+          "Prima di aprire gli occhi, pensa a un ricordo felice.",
+          "Ripeti mentalmente “Sono grato per…” per 3 volte.",
+          "Apri gli occhi lentamente portando gratitudine con te."
+        ],
+        tips:[
+          "Tieni un post-it sul comodino con una breve affirmazione.",
+          "Aggiungi un leggero stretch per svegliare il corpo."
+        ]
+      },
+      {
+        id:18, title:"Evita multitasking", image:"18.jpeg",
+        objective:"Incrementare efficienza concentrandosi su un solo compito.",
+        steps:[
+          "Seleziona l’attività prioritaria.",
+          "Silenzia notifiche e chiudi schede inutili.",
+          "Lavora per 60′ senza cambiare focus.",
+          "Valuta produttività e benessere al termine."
+        ],
+        tips:[
+          "Usa un timer per misurare il tempo effettivo di focus.",
+          "Prenditi brevi pause di 2–3′ se senti tensione."
+        ]
+      },
+      {
+        id:19, title:"Torna nel presente", image:"19.jpeg",
+        objective:"Ricollegarsi al corpo in 30 secondi di mindfulness.",
+        steps:[
+          "Chiudi gli occhi per 30s.",
+          "Focalizzati su 3 sensazioni corporee (piedi, respiro, spalle).",
+          "Apri gli occhi e annota brevemente cosa hai sentito."
+        ],
+        tips:[
+          "Associa un leggero suono (campanello) per ancorarti al momento.",
+          "Ripeti ogni qualvolta senti aumento di stress."
+        ]
+      },
+      {
+        id:20, title:"Ascolto profondo", image:"20.jpeg",
+        objective:"Migliorare empatia e qualità delle relazioni.",
+        steps:[
+          "Durante una conversazione, mantieni contatto visivo.",
+          "Ascolta senza interrompere né preparare la risposta.",
+          "Riformula con parole tue quello che hai capito.",
+          "Chiedi conferma: “Ho compreso correttamente se…?”"
+        ],
+        tips:[
+          "Annota parole chiave per mantenere il focus sul parlante.",
+          "Evita distrazioni esterne staccando lo sguardo dal telefono."
+        ]
+      },
+      {
+        id:21, title:"Scrivi un'intenzione", image:"21.jpeg",
+        objective:"Definire un focus chiaro per la giornata.",
+        steps:[
+          "Al mattino, scrivi una frase concreta (es. “Oggi mi ascolterò”).",
+          "Tieni l’intenzione visibile (post-it, sfondo telefono).",
+          "Rileggila durante i momenti di pausa."
+        ],
+        tips:[
+          "Usa colori vivaci per attirare l’occhio.",
+          "Associa un gesto (es. toccare il cuore) quando la leggi."
+        ]
+      },
+      {
+        id:22, title:"Pausa digitale", image:"22.jpeg",
+        objective:"Staccare dagli schermi per 15 minuti di sollievo mentale.",
+        steps:[
+          "Spegni smartphone e disattiva notifiche.",
+          "Fai una breve camminata o osserva un ambiente naturale.",
+          "Esegui 3 respiri profondi contando fino a 5."
+        ],
+        tips:[
+          "Programma pause digitali regolari dopo intensi periodi di lavoro.",
+          "Usa un timer silenzioso per riaccendere lo schermo solo alla fine."
+        ]
+      },
+      {
+        id:23, title:"Sorridi consapevolmente", image:"23.jpeg",
+        objective:"Stimolare benessere emotivo tramite il sorriso.",
+        steps:[
+          "Siediti con postura rilassata.",
+          "Sorridi intenzionalmente per 60 secondi.",
+          "Osserva come cambia la respirazione e l’umore."
+        ],
+        tips:[
+          "Abbina a musica allegra per potenziare l’effetto.",
+          "Ripeti ogni volta che senti tensione."
+        ]
+      },
+      {
+        id:24, title:"Camminata lenta", image:"24.jpeg",
+        objective:"Portare mindfulness nel movimento.",
+        steps:[
+          "Cammina lentamente per 5 minuti concentrandoti sui tuoi passi.",
+          "Nota il contatto del piede col terreno e il respiro.",
+          "Osserva l’ambiente con occhi nuovi."
+        ],
+        tips:[
+          "Scegli un percorso tranquillo e privo di distrazioni.",
+          "Indossa scarpe comode e respirazione diaframmatica."
+        ]
+      },
+      {
+        id:25, title:"Pausa occhi", image:"25.jpeg",
+        objective:"Prevenire l’affaticamento visivo durante il lavoro.",
+        steps:[
+          "Ogni 20 minuti distogli lo sguardo dallo schermo per 20s.",
+          "Guarda un oggetto lontano o chiudi gli occhi.",
+          "Ripeti durante l’intera sessione di lavoro."
+        ],
+        tips:[
+          "Inclina leggermente la testa per rilassare collo e spalle.",
+          "Collegalo alla tecnica Pomodoro."
+        ]
+      },
+      {
+        id:26, title:"Domanda potenziante", image:"26.jpeg",
+        objective:"Sbloccare creatività e azione tramite domande utili.",
+        steps:[
+          "Poni la domanda “Qual è il piccolo passo che posso fare ora?”.",
+          "Scrivi 3 risposte rapide senza giudicare.",
+          "Agisci subito sulla risposta più semplice."
+        ],
+        tips:[
+          "Mantieni un quaderno dedicato a queste riflessioni.",
+          "Rivedi le risposte settimanalmente."
+        ]
+      },
+      {
+        id:27, title:"Stretching veloce", image:"27.jpeg",
+        objective:"Sciogliere tensioni in pochi istanti.",
+        steps:[
+          "Alzati e solleva lentamente le braccia sopra la testa.",
+          "Piega il busto a destra e poi a sinistra, mantieni 10s.",
+          "Ruota spalle e collo lentamente in entrambe le direzioni."
+        ],
+        tips:[
+          "Respira profondamente durante ogni posizione.",
+          "Esegui durante riunioni lunghe o pause caffè."
+        ]
+      },
+      {
+        id:28, title:"Osserva il respiro", image:"28.jpeg",
+        objective:"Accrescere consapevolezza tramite il respiro.",
+        steps:[
+          "Siediti in silenzio per 1 minuto.",
+          "Osserva il flusso del respiro senza modificarlo.",
+          "Nota ritmo, profondità e sensazioni associate.",
+          "Concludi con 3 respiri profondi e consapevoli."
+        ],
+        tips:[
+          "Usa un timer silenzioso per non distrarti.",
+          "Aggiungi un mantra breve se ti aiuta a mantenere focus."
+        ]
+      },
+      {
+        id:29, title:"Visualizza gratitudine", image:"29.jpeg",
+        objective:"EvoCare emozioni positive tramite la mente.",
+        steps:[
+          "Chiudi gli occhi e ricorda un momento gratificante.",
+          "Visualizza dettagli sensoriali (suoni, odori, colori).",
+          "Mantieni la scena per 1 minuto focalizzandoti sulle emozioni."
+        ],
+        tips:[
+          "Scrivi subito dopo le sensazioni provate.",
+          "Ripeti prima di addormentarti per favorire un sonno sereno."
+        ]
+      },
+      {
+        id:30, title:"Celebra ogni piccolo traguardo", image:"30.jpeg",
+        objective:"Rafforzare la motivazione riconoscendo i successi.",
+        steps:[
+          "Identifica un piccolo successo recente (anche minimo).",
+          "Scrivilo su un taccuino e festeggia con un gesto simbolico.",
+          "Condividi la tua vittoria con qualcuno di fiducia."
+        ],
+        tips:[
+          "Tieni un diario dei successi per tracciare i progressi.",
+          "Rileggi le vittorie nei momenti di dubbi o stanchezza."
+        ]
+      }
+    ];
+
+    const grid   = document.getElementById("grid"),
+          loader = document.getElementById("loader");
+
+    function openExercisePage(ex) {
+      const detail = `
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${ex.id} – ${ex.title}</title>
+  <style>
+    body {
+      margin:0; padding:0; font-family:Arial,sans-serif;
+      background:url('images/${ex.image}') no-repeat center center fixed;
+      background-size:cover; color:#fff; text-shadow:1px 1px 4px #000;
+    }
+    .overlay {
+      background:rgba(0,0,0,0.7); padding:2rem; min-height:100vh;
+    }
+    h1 { margin:0 0 1rem; font-size:2rem; }
+    .description {
+      background:#fff; padding:1rem; border-radius:8px; margin-top:1rem;
+    }
+    .description h2, .description p, .description li {
+      color:#000; text-shadow:none;
+    }
+    .description h2 { color:#8e44ad; margin-top:1rem; }
+    .description ol, .description ul { margin-left:1.5rem; }
+    a.button {
+      display:inline-block; margin:1rem 0; background:#8e44ad;
+      color:#fff; padding:0.7rem 1.5rem; border-radius:8px;
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>${ex.id} – ${ex.title}</h1>
+    <div class="description">
+      <h2>Obiettivo</h2>
+      <p>${ex.objective}</p>
+      <h2>Procedura passo-passo</h2>
+      <ol>${ex.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      <h2>Suggerimenti</h2>
+      <ul>${ex.tips.map(t=>`<li>${t}</li>`).join("")}</ul>
+      <p style="font-style:italic;margin-top:1rem;">
+        In caso di dubbi, <a href="chat.html?exercise=${ex.id}">apri la chat AI</a>.
+      </p>
+    </div>
+    <a class="button" href="index.html">← Torna alla Home</a>
+  </div>
+</body>
+</html>`;
+      document.documentElement.innerHTML = detail;
+    }
+
+    function renderGrid() {
+      loader.style.display = "none";
+      grid.style.display   = "grid";
+      exercises.forEach(ex => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML =
+          `<img src="images/${ex.image}" alt="${ex.title}">
+           <h3>${ex.id} – <strong>${ex.title}</strong></h3>`;
+        card.onclick = () => openExercisePage(ex);
+        grid.appendChild(card);
+      });
+    }
+
+    // Al caricamento, mostra la griglia
+    renderGrid();
+  </script>
+</body>
+</html>
