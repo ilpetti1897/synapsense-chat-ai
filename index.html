@@ -24,13 +24,15 @@
       font-family:'Inter',sans-serif;
       background:var(--bg);
       color:#333;
-      display:flex; flex-direction:column;
+      display:flex;
+      flex-direction:column;
       min-height:100vh;
       animation:fadeIn .6s ease-out;
+      position:relative;
     }
     @keyframes fadeIn {
-      from { opacity:0; transform:translateY(10px);}  
-      to   { opacity:1; transform:translateY(0);}       
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
     }
     header {
       background:var(--purple);
@@ -40,6 +42,7 @@
       font-size:1.5rem;
       font-weight:600;
       position:relative;
+      z-index:2;
     }
     #closeBtn {
       position:absolute; right:1rem; top:50%;
@@ -55,7 +58,13 @@
       transform:translateY(-50%) scale(1.05);
       box-shadow:0 4px 8px rgba(0,0,0,0.2);
     }
-    main { flex:1; display:flex; flex-direction:column; align-items:center; }
+    main {
+      flex:1;
+      display:flex; flex-direction:column;
+      align-items:center;
+      position:relative;
+      z-index:2;
+    }
 
     .hero {
       position:relative;
@@ -74,7 +83,6 @@
       transform:scale(1.02) rotateY(5deg);
     }
 
-    /* spostato intro al 45% */
     .hero .intro {
       position:absolute;
       top:45%;
@@ -130,7 +138,7 @@
     footer {
       text-align:center; padding:.5rem;
       font-size:.75rem; background:#e0e0e0;
-      margin-top:auto;
+      margin-top:auto; position:relative; z-index:2;
     }
 
     @media(max-width:480px){
@@ -152,9 +160,16 @@
       pointer-events:none;
     }
     @keyframes ripple{ to{transform:scale(4);opacity:0;} }
+
+    /* LAYER PER AUDIO PER ESSERE DIETRO TUTTO */
+    #bg-audio { display:none; }
   </style>
 </head>
 <body>
+
+  <!-- AUDIO DI SOTTOFONDO -->
+  <audio id="bg-audio" src="NR%201.wav" loop autoplay></audio>
+
   <header>
     Benvenuto in SynapSenseS
     <button id="closeBtn">Chiudi App</button>
@@ -181,6 +196,12 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
+    // Forza play al primo gesto dell'utente (per browser che bloccano autoplay)
+    window.addEventListener('click', () => {
+      const audio = document.getElementById('bg-audio');
+      if (audio.paused) audio.play();
+    }, { once: true });
+
     // ripple sui pulsanti
     document.querySelectorAll('.buttons a').forEach(btn => {
       btn.addEventListener('click', e => {
@@ -195,6 +216,7 @@
         setTimeout(() => circle.remove(), 600);
       });
     });
+
     // chiusura app
     document.getElementById('closeBtn').addEventListener('click', () => {
       window.close();
