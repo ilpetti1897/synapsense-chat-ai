@@ -16,7 +16,8 @@
       --grey:               #616161;
       --corner:             12px;
       --spacing:            1rem;
-      --intro-max-width:    480px;
+      --intro-max-width:    380px; /* RIDOTTO da 480px */
+      --desc-bg:            #f5f0ff; /* lilla chiarissimo */
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -41,7 +42,6 @@
       font-weight: 600;
       position: relative;
     }
-    /* Chiudi App button */
     #closeBtn {
       position: absolute;
       right: 1rem;
@@ -65,8 +65,8 @@
     main { flex: 1; }
 
     .intro {
-      background: var(--white);
-      padding: var(--spacing);
+      background: var(--desc-bg);
+      padding: calc(var(--spacing)/1.5);
       border-radius: var(--corner);
       text-align: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -74,20 +74,24 @@
       margin: var(--spacing) auto 0;
     }
     .intro h2 {
-      margin-bottom: .5rem;
-      font-size: 1.25rem;
+      margin-bottom: .4rem;
+      font-size: 1.2rem;
       position: relative;
       display: inline-block;
     }
     .intro h2::after {
       content: '';
       position: absolute;
-      left: 0; bottom: -4px;
+      left: 0; bottom: -3px;
       width: 0; height: 3px;
       background: var(--purple);
       transition: width .3s ease-out;
     }
     .intro h2:hover::after { width: 100%; }
+    .intro p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
 
     .hero {
       margin: var(--spacing) auto;
@@ -99,8 +103,8 @@
     .hero img {
       display: block;
       width: 100%;
-      max-height: 45vh;
-      object-fit: cover;
+      max-height: 50vh;    /* leggero aumento su desktop */
+      object-fit: cover;   /* per riempire il box, ma mostrando intero il soggetto */
       transition: transform .3s ease-out;
     }
     .hero:hover img {
@@ -136,7 +140,10 @@
     .btn-chat       { background: var(--chat); }
     .btn-training   { background: var(--train); }
     .btn-auto       { background: var(--auto); }
-    .btn-disclaimer { background: var(--grey); }
+    .btn-disclaimer {
+      background: var(--grey);
+      flex: 1 1 100%;      /* tutta larghezza */
+    }
 
     footer {
       text-align: center;
@@ -145,9 +152,8 @@
       background: #e0e0e0;
     }
 
-    /* Mobile adjustments */
     @media (max-width: 480px) {
-      .hero img { max-height: 50vh; }
+      .hero img { max-height: 45vh; }
       .buttons {
         flex-direction: column;
         gap: .5rem;
@@ -161,7 +167,7 @@
       }
       header { font-size: 1.3rem; }
       .intro h2 { font-size: 1.1rem; }
-      .intro p  { font-size: 0.9rem; line-height: 1.3; }
+      .intro p  { font-size: 0.9rem; }
     }
 
     /* ripple effect */
@@ -187,7 +193,7 @@
   <main>
     <div class="intro">
       <h2>Mindfulness sempre con te</h2>
-      <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e in futuro altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
+      <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e, in futuro, altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
     </div>
 
     <section class="hero">
