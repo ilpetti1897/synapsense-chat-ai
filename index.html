@@ -25,6 +25,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      position: relative;
     }
     header {
       background: var(--purple);
@@ -56,7 +57,6 @@
     .hero img {
       display: block;
       width: 100%;
-      /* Aumentata da 40vh a 50vh */
       max-height: 50vh;
       object-fit: contain;
     }
@@ -88,6 +88,26 @@
     .btn-disclaimer { background: var(--grey); color: var(--white); }
     .btn-disclaimer:hover { background: #424242; }
 
+    /* Pulsante close */
+    .btn-close {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      background: #e53935;
+      color: #fff;
+      border: none;
+      border-radius: var(--corner);
+      padding: .5rem 1rem;
+      font-size: .9rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: background .2s;
+      z-index: 100;
+    }
+    .btn-close:hover {
+      background: #b71c1c;
+    }
+
     footer {
       text-align: center;
       padding: .5rem;
@@ -97,7 +117,6 @@
 
     @media (max-width: 480px) {
       .buttons { flex-direction: column; }
-      /* Aumentato anch’esso da 30vh a 40vh */
       .hero img { max-height: 40vh; }
     }
   </style>
@@ -122,6 +141,9 @@
       <a href="Disclaimer.html" class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
+
+  <!-- Pulsante di chiusura app -->
+  <button class="btn-close" onclick="window.close();">Chiudi App</button>
 
   <footer>© 2025 SynapSenseS</footer>
 </body>
