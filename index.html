@@ -1,4 +1,4 @@
-<!DOCTYPE html>    
+<!DOCTYPE html>     
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -7,175 +7,157 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --purple:             #7c4dff;
-      --white:              #fff;
-      --bg:                 #f0f2f5;
-      --chat:               #4caf50;
-      --train:              #ff9800;
-      --auto:               #3f51b5;
-      --grey:               #616161;
-      --corner:             12px;
-      --spacing:            1rem;
-      --intro-max-width:    480px;
+      --purple:          #7c4dff;
+      --white:           #fff;
+      --bg:              #f0f2f5;
+      --chat:            #4caf50;
+      --train:           #ff9800;
+      --auto:            #3f51b5;
+      --grey:            #616161;
+      --corner:          12px;
+      --spacing:         1rem;
+      --intro-width:     400px;
+      --intro-bg:        rgba(255,255,255,0.85);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family:'Inter',sans-serif;
       background: var(--bg);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      color:#333;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
       animation: fadeIn 0.6s ease-out;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
     }
     header {
       background: var(--purple);
       color: var(--white);
-      text-align: center;
+      text-align:center;
       padding: var(--spacing);
-      font-size: 1.5rem;
-      font-weight: 600;
-      position: relative;
+      font-size:1.5rem;
+      font-weight:600;
+      position:relative;
     }
-    /* Chiudi App button */
     #closeBtn {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
+      position:absolute; right:1rem; top:50%;
       transform: translateY(-50%);
-      background: #d32f2f;
-      color: var(--white);
-      border: none;
-      padding: .5rem 1rem;
-      border-radius: var(--corner);
-      cursor: pointer;
-      font-weight: 600;
+      background:#d32f2f; color:var(--white);
+      border:none; padding:.5rem 1rem;
+      border-radius:var(--corner);
+      cursor:pointer; font-weight:600;
       transition: background .2s, transform .2s, box-shadow .2s;
     }
     #closeBtn:hover {
-      background: #b71c1c;
+      background:#b71c1c;
       transform: translateY(-50%) scale(1.05);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow:0 4px 8px rgba(0,0,0,0.2);
     }
 
-    main { flex: 1; }
-
-    .intro {
-      background: var(--white);
-      padding: var(--spacing);
-      border-radius: var(--corner);
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: var(--intro-max-width);
-      margin: var(--spacing) auto 0;
-    }
-    .intro h2 {
-      margin-bottom: .5rem;
-      font-size: 1.25rem;
-      position: relative;
-      display: inline-block;
-    }
-    .intro h2::after {
-      content: '';
-      position: absolute;
-      left: 0; bottom: -4px;
-      width: 0; height: 3px;
-      background: var(--purple);
-      transition: width .3s ease-out;
-    }
-    .intro h2:hover::after { width: 100%; }
+    main { flex:1; position:relative; }
 
     .hero {
-      margin: var(--spacing) auto;
-      max-width: var(--intro-max-width);
-      border-radius: var(--corner);
-      overflow: hidden;
-      perspective: 1000px;
+      margin-top: var(--spacing);
+      display:flex;
+      justify-content:center;
     }
     .hero img {
-      display: block;
-      width: 100%;
-      max-height: 45vh;         /* In desktop */
-      object-fit: cover;        /* Mostra tutto il viso */
+      width:100%; max-width:480px;
+      max-height:60vh; object-fit:cover;
+      border-radius:var(--corner);
       transition: transform .3s ease-out;
     }
     .hero:hover img {
       transform: scale(1.02) rotateY(5deg);
     }
 
+    .intro {
+      position:absolute;
+      top: calc(var(--spacing)*1.5);
+      left:50%; transform:translateX(-50%);
+      width: var(--intro-width);
+      background: var(--intro-bg);
+      padding: calc(var(--spacing)*0.8);
+      border-radius: var(--corner);
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      text-align:center;
+      z-index:1;
+    }
+    .intro h2 {
+      margin-bottom:.4rem;
+      font-size:1.25rem; display:inline-block;
+      position:relative;
+    }
+    .intro h2::after {
+      content:'';
+      position:absolute; left:0; bottom:-3px;
+      width:0; height:3px;
+      background:var(--purple);
+      transition: width .3s;
+    }
+    .intro h2:hover::after { width:100%; }
+    .intro p {
+      font-size:.9rem; line-height:1.4;
+    }
+
     .buttons {
-      display: flex;
-      flex-wrap: wrap;
+      display:flex; flex-wrap:wrap;
       gap: var(--spacing);
-      justify-content: center;
+      justify-content:center;
       padding: 0 var(--spacing) var(--spacing);
-      max-width: var(--intro-max-width);
-      margin: 0 auto var(--spacing);
+      margin: calc(var(--spacing)*2 + 60vh) auto 0;
+      max-width:480px;
     }
     .buttons a {
-      position: relative;
-      overflow: hidden;
-      flex: 1 1 140px;
-      text-decoration: none;
-      text-align: center;
-      padding: var(--spacing);
-      border-radius: var(--corner);
-      font-weight: 600;
-      color: var(--white);
+      position:relative; overflow:hidden;
+      flex:1 1 140px; text-decoration:none;
+      text-align:center; padding:var(--spacing);
+      border-radius:var(--corner);
+      font-weight:600; color:var(--white);
       transition: background .2s, transform .2s, box-shadow .2s;
     }
     .buttons a:hover {
-      transform: scale(1.03);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform:scale(1.03);
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);
     }
-    .btn-primary    { background: var(--purple); }
-    .btn-chat       { background: var(--chat); }
-    .btn-training   { background: var(--train); }
-    .btn-auto       { background: var(--auto); }
-    .btn-disclaimer { background: var(--grey); }
+    .btn-primary  { background:var(--purple); }
+    .btn-chat     { background:var(--chat); }
+    .btn-training{ background:var(--train); }
+    .btn-auto    { background:var(--auto); }
+    .btn-disclaimer{ background:var(--grey); }
 
     footer {
-      text-align: center;
-      padding: .5rem;
-      font-size: .75rem;
-      background: #e0e0e0;
+      text-align:center; padding:.5rem;
+      font-size:.75rem; background:#e0e0e0;
+      margin-top:auto;
     }
 
-    /* Mobile adjustments */
-    @media (max-width: 480px) {
-      .hero img { max-height: 50vh; }
+    @media(max-width:480px) {
+      .hero img { max-height:50vh; }
+      .intro {
+        width:90%;
+        top:1rem;
+      }
       .buttons {
-        flex-direction: column;
-        gap: .5rem;
+        flex-direction:column;
+        margin-top: calc(var(--spacing)*2 + 50vh);
       }
       .buttons a {
-        flex: none;
-        width: 90%;
-        margin: 0 auto;
-        padding: .6rem;
-        font-size: 0.9rem;
+        flex:none; width:90%; margin:0 auto;
+        padding:.6rem; font-size:.9rem;
       }
-      header { font-size: 1.3rem; }
-      .intro h2 { font-size: 1.1rem; }
-      .intro p  { font-size: 0.9rem; line-height: 1.3; }
     }
 
-    /* ripple effect */
     .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-      transform: scale(0);
-      animation: ripple 0.6s linear;
-      pointer-events: none;
+      position:absolute; border-radius:50%;
+      background:rgba(255,255,255,0.4);
+      transform:scale(0); animation:ripple .6s linear;
+      pointer-events:none;
     }
-    @keyframes ripple {
-      to { transform: scale(4); opacity: 0; }
-    }
+    @keyframes ripple { to { transform:scale(4); opacity:0; } }
   </style>
 </head>
 <body>
@@ -185,21 +167,21 @@
   </header>
 
   <main>
+    <div class="hero">
+      <img src="images/welcome page.png" alt="Donna in meditazione" />
+    </div>
+
     <div class="intro">
       <h2>Mindfulness sempre con te</h2>
       <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e in futuro altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
     </div>
 
-    <section class="hero">
-      <img src="images/welcome page.png" alt="Donna in meditazione" />
-    </section>
-
     <div class="buttons">
-      <a href="exercises.html"   class="btn-primary">30 Esercizi</a>
-      <a href="chat.html"        class="btn-chat">Chat AI</a>
-      <a href="training.html"    class="btn-training">Training Autogeno</a>
-      <a href="autoipnosi.html"  class="btn-auto">Autoipnosi Regressiva</a>
-      <a href="disclaimer.html"  class="btn-disclaimer">Disclaimer</a>
+      <a href="exercises.html"  class="btn-primary">30 Esercizi</a>
+      <a href="chat.html"       class="btn-chat">Chat AI</a>
+      <a href="training.html"   class="btn-training">Training Autogeno</a>
+      <a href="autoipnosi.html" class="btn-auto">Autoipnosi Regressiva</a>
+      <a href="disclaimer.html" class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
@@ -207,23 +189,23 @@
 
   <script>
     // ripple sui bottoni
-    document.querySelectorAll('.buttons a').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        const circle = document.createElement('span');
-        const d = Math.max(this.clientWidth, this.clientHeight);
-        circle.style.width = circle.style.height = d + 'px';
-        circle.style.left = e.clientX - this.getBoundingClientRect().left - d/2 + 'px';
-        circle.style.top  = e.clientY - this.getBoundingClientRect().top  - d/2 + 'px';
+    document.querySelectorAll('.buttons a').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        const circle=document.createElement('span');
+        const d=Math.max(btn.clientWidth,btn.clientHeight);
+        circle.style.width=circle.style.height=d+'px';
+        const rect=btn.getBoundingClientRect();
+        circle.style.left=e.clientX-rect.left-d/2+'px';
+        circle.style.top=e.clientY-rect.top-d/2+'px';
         circle.classList.add('ripple');
-        this.appendChild(circle);
-        setTimeout(() => circle.remove(), 600);
+        btn.appendChild(circle);
+        setTimeout(()=>circle.remove(),600);
       });
     });
-
     // chiusura app
-    document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('closeBtn').addEventListener('click',()=>{
       window.close();
-      alert("Non sono riuscito a chiudere l'app automaticamente.\nChiudi la scheda manualmente.");
+      alert("Non sono riuscito a chiudere automaticamente. Chiudi la scheda manualmente.");
     });
   </script>
 </body>
