@@ -1,132 +1,133 @@
-<!DOCTYPE html>     
+<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SynapSenseS Welcome</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --purple:          #7c4dff;
-      --white:           #fff;
-      --bg:              #f0f2f5;
-      --chat:            #4caf50;
-      --train:           #ff9800;
-      --auto:            #3f51b5;
-      --grey:            #616161;
-      --corner:          12px;
-      --spacing:         1rem;
-      --intro-width:     400px;
-      --intro-bg:        rgba(255,255,255,0.85);
+      --purple:       #7c4dff;
+      --white:        #fff;
+      --bg:           #f0f2f5;
+      --chat:         #4caf50;
+      --train:        #ff9800;
+      --auto:         #3f51b5;
+      --grey:         #616161;
+      --corner:       12px;
+      --spacing:      1rem;
+      --hero-width:   480px;
+      --intro-bg:     rgba(255,255,255,0.85);
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
     body {
       font-family:'Inter',sans-serif;
-      background: var(--bg);
+      background:var(--bg);
       color:#333;
-      display:flex;
-      flex-direction:column;
+      display:flex; flex-direction:column;
       min-height:100vh;
-      animation: fadeIn 0.6s ease-out;
+      animation:fadeIn .6s ease-out;
     }
     @keyframes fadeIn {
-      from { opacity:0; transform: translateY(10px); }
-      to   { opacity:1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(10px);}
+      to   { opacity:1; transform:translateY(0);}
     }
     header {
-      background: var(--purple);
-      color: var(--white);
+      background:var(--purple);
+      color:var(--white);
       text-align:center;
-      padding: var(--spacing);
+      padding:var(--spacing);
       font-size:1.5rem;
       font-weight:600;
       position:relative;
     }
     #closeBtn {
       position:absolute; right:1rem; top:50%;
-      transform: translateY(-50%);
+      transform:translateY(-50%);
       background:#d32f2f; color:var(--white);
       border:none; padding:.5rem 1rem;
       border-radius:var(--corner);
       cursor:pointer; font-weight:600;
-      transition: background .2s, transform .2s, box-shadow .2s;
+      transition:background .2s,transform .2s,box-shadow .2s;
     }
     #closeBtn:hover {
       background:#b71c1c;
-      transform: translateY(-50%) scale(1.05);
+      transform:translateY(-50%) scale(1.05);
       box-shadow:0 4px 8px rgba(0,0,0,0.2);
     }
+    main { flex:1; display:flex; flex-direction:column; align-items:center; }
 
-    main { flex:1; position:relative; }
-
+    /* HERO + INTRO OVERLAY */
     .hero {
-      margin-top: var(--spacing);
-      display:flex;
-      justify-content:center;
+      position:relative;
+      width:100%; max-width:var(--hero-width);
+      margin-top:var(--spacing);
     }
     .hero img {
-      width:100%; max-width:480px;
-      max-height:60vh; object-fit:cover;
+      display:block;
+      width:100%;
+      height:auto;
+      max-height:60vh;
+      object-fit:cover;
       border-radius:var(--corner);
-      transition: transform .3s ease-out;
+      transition:transform .3s ease-out;
     }
     .hero:hover img {
-      transform: scale(1.02) rotateY(5deg);
+      transform:scale(1.02) rotateY(5deg);
     }
-
     .intro {
       position:absolute;
-      top: calc(var(--spacing)*1.5);
-      left:50%; transform:translateX(-50%);
-      width: var(--intro-width);
-      background: var(--intro-bg);
-      padding: calc(var(--spacing)*0.8);
-      border-radius: var(--corner);
+      top:1rem; left:50%;
+      transform:translateX(-50%);
+      width:90%; max-width:360px;
+      background:var(--intro-bg);
+      padding:.8rem;
+      border-radius:var(--corner);
       box-shadow:0 2px 6px rgba(0,0,0,0.1);
       text-align:center;
-      z-index:1;
     }
     .intro h2 {
+      font-size:1.25rem;
       margin-bottom:.4rem;
-      font-size:1.25rem; display:inline-block;
-      position:relative;
+      position:relative; display:inline-block;
     }
     .intro h2::after {
       content:'';
       position:absolute; left:0; bottom:-3px;
       width:0; height:3px;
       background:var(--purple);
-      transition: width .3s;
+      transition:width .3s;
     }
     .intro h2:hover::after { width:100%; }
     .intro p {
       font-size:.9rem; line-height:1.4;
     }
 
+    /* BUTTONS */
     .buttons {
       display:flex; flex-wrap:wrap;
-      gap: var(--spacing);
+      gap:var(--spacing);
       justify-content:center;
-      padding: 0 var(--spacing) var(--spacing);
-      margin: calc(var(--spacing)*2 + 60vh) auto 0;
-      max-width:480px;
+      margin:var(--spacing) auto var(--spacing);
+      width:100%; max-width:var(--hero-width);
     }
     .buttons a {
       position:relative; overflow:hidden;
-      flex:1 1 140px; text-decoration:none;
-      text-align:center; padding:var(--spacing);
+      flex:1 1 140px;
+      text-decoration:none; text-align:center;
+      padding:var(--spacing);
       border-radius:var(--corner);
       font-weight:600; color:var(--white);
-      transition: background .2s, transform .2s, box-shadow .2s;
+      transition:background .2s,transform .2s,box-shadow .2s;
     }
     .buttons a:hover {
       transform:scale(1.03);
       box-shadow:0 4px 12px rgba(0,0,0,0.15);
     }
-    .btn-primary  { background:var(--purple); }
-    .btn-chat     { background:var(--chat); }
-    .btn-training{ background:var(--train); }
-    .btn-auto    { background:var(--auto); }
+    .btn-primary   { background:var(--purple); }
+    .btn-chat      { background:var(--chat); }
+    .btn-training  { background:var(--train); }
+    .btn-auto      { background:var(--auto); }
     .btn-disclaimer{ background:var(--grey); }
 
     footer {
@@ -135,29 +136,26 @@
       margin-top:auto;
     }
 
-    @media(max-width:480px) {
+    @media(max-width:480px){
       .hero img { max-height:50vh; }
-      .intro {
-        width:90%;
-        top:1rem;
-      }
-      .buttons {
-        flex-direction:column;
-        margin-top: calc(var(--spacing)*2 + 50vh);
-      }
+      .intro { width:95%; }
+      .buttons { flex-direction:column; }
       .buttons a {
         flex:none; width:90%; margin:0 auto;
         padding:.6rem; font-size:.9rem;
       }
+      header { font-size:1.3rem; }
+      .intro h2 { font-size:1.1rem; }
     }
 
+    /* ripple */
     .ripple {
       position:absolute; border-radius:50%;
       background:rgba(255,255,255,0.4);
       transform:scale(0); animation:ripple .6s linear;
       pointer-events:none;
     }
-    @keyframes ripple { to { transform:scale(4); opacity:0; } }
+    @keyframes ripple{ to{transform:scale(4);opacity:0;} }
   </style>
 </head>
 <body>
@@ -168,20 +166,19 @@
 
   <main>
     <div class="hero">
-      <img src="images/welcome page.png" alt="Donna in meditazione" />
-    </div>
-
-    <div class="intro">
-      <h2>Mindfulness sempre con te</h2>
-      <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e in futuro altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
+      <img src="images/welcome page.png" alt="Donna in meditazione">
+      <div class="intro">
+        <h2>Mindfulness sempre con te</h2>
+        <p>Accedi a 30 esercizi pratici di mindfulness, impara il training autogeno e in futuro altre tecniche, oppure parla liberamente con il tuo mental coach AI in qualsiasi momento.</p>
+      </div>
     </div>
 
     <div class="buttons">
-      <a href="exercises.html"  class="btn-primary">30 Esercizi</a>
-      <a href="chat.html"       class="btn-chat">Chat AI</a>
-      <a href="training.html"   class="btn-training">Training Autogeno</a>
-      <a href="autoipnosi.html" class="btn-auto">Autoipnosi Regressiva</a>
-      <a href="disclaimer.html" class="btn-disclaimer">Disclaimer</a>
+      <a href="exercises.html"   class="btn-primary">30 Esercizi</a>
+      <a href="chat.html"        class="btn-chat">Chat AI</a>
+      <a href="training.html"    class="btn-training">Training Autogeno</a>
+      <a href="autoipnosi.html"  class="btn-auto">Autoipnosi Regressiva</a>
+      <a href="disclaimer.html"  class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
@@ -189,23 +186,23 @@
 
   <script>
     // ripple sui bottoni
-    document.querySelectorAll('.buttons a').forEach(btn=>{
-      btn.addEventListener('click',e=>{
-        const circle=document.createElement('span');
-        const d=Math.max(btn.clientWidth,btn.clientHeight);
-        circle.style.width=circle.style.height=d+'px';
-        const rect=btn.getBoundingClientRect();
-        circle.style.left=e.clientX-rect.left-d/2+'px';
-        circle.style.top=e.clientY-rect.top-d/2+'px';
+    document.querySelectorAll('.buttons a').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const circle = document.createElement('span');
+        const d = Math.max(btn.clientWidth, btn.clientHeight);
+        circle.style.width = circle.style.height = d + 'px';
+        const rect = btn.getBoundingClientRect();
+        circle.style.left = e.clientX - rect.left - d/2 + 'px';
+        circle.style.top  = e.clientY - rect.top  - d/2 + 'px';
         circle.classList.add('ripple');
         btn.appendChild(circle);
-        setTimeout(()=>circle.remove(),600);
+        setTimeout(() => circle.remove(), 600);
       });
     });
-    // chiusura app
-    document.getElementById('closeBtn').addEventListener('click',()=>{
+    // chiudi app
+    document.getElementById('closeBtn').addEventListener('click', () => {
       window.close();
-      alert("Non sono riuscito a chiudere automaticamente. Chiudi la scheda manualmente.");
+      alert("Non sono riuscito a chiudere l'app automaticamente.\nChiudi manualmente la scheda.");
     });
   </script>
 </body>
