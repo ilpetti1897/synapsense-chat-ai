@@ -104,7 +104,7 @@
       display: block;
       width: 100%;
       max-height: 50vh;    /* leggero aumento su desktop */
-      object-fit: cover;   /* per riempire il box, ma mostrando intero il soggetto */
+      object-fit: cover;   /* riempie il box mantenendo il soggetto intero */
       transition: transform .3s ease-out;
     }
     .hero:hover img {
@@ -142,7 +142,8 @@
     .btn-auto       { background: var(--auto); }
     .btn-disclaimer {
       background: var(--grey);
-      flex: 1 1 100%;      /* tutta larghezza */
+      flex: 1 1 100%;      /* occupa tutta la larghezza disponibile */
+      color: #f0f0f0;      /* bianco sporco per miglior contrasto */
     }
 
     footer {
@@ -205,7 +206,7 @@
       <a href="chat.html"        class="btn-chat">Chat AI</a>
       <a href="training.html"    class="btn-training">Training Autogeno</a>
       <a href="autoipnosi.html"  class="btn-auto">Autoipnosi Regressiva</a>
-      <a href="disclaimer.html"  class="btn-disclaimer">Disclaimer</a>
+      <a href="Disclaimer.html"  class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
