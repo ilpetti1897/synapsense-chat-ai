@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>   
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -12,7 +12,6 @@
       --bg:       #f0f2f5;
       --chat:     #4caf50;
       --train:    #ff9800;
-      --auto:     #455a64;
       --grey:     #616161;
       --corner:   12px;
       --spacing:  1rem;
@@ -42,20 +41,25 @@
       font-weight: 600;
       position: relative;
     }
-    .close-btn {
+    /* move-close */
+    #close-btn {
       position: absolute;
-      right: var(--spacing);
-      top: 50%; transform: translateY(-50%);
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
       background: #c62828;
-      color: var(--white);
+      color: #fff;
       border: none;
-      border-radius: var(--corner);
       padding: 0.5rem 1rem;
+      border-radius: var(--corner);
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: background .2s, transform .2s;
+      transition: background .2s;
     }
-    .close-btn:hover { background: #b71c1c; transform: scale(1.05); }
+    #close-btn:hover {
+      background: #b71c1c;
+    }
+
     main { flex: 1; }
 
     .intro {
@@ -81,7 +85,9 @@
       background: var(--purple);
       transition: width .3s ease-out;
     }
-    .intro h2:hover::after { width: 100%; }
+    .intro h2:hover::after {
+      width: 100%;
+    }
 
     .hero {
       margin: var(--spacing) auto;
@@ -92,51 +98,49 @@
     }
     .hero img {
       display: block;
-      width: 100%;
-      max-height: 45vh;
-      object-fit: cover;
+      width: 90%;               /* scale by width */
+      height: auto;             /* preserve full portrait */
+      margin: 0 auto;
+      object-fit: contain;
       transition: transform .3s ease-out;
     }
-    .hero:hover img { transform: scale(1.02) rotateY(5deg); }
+    .hero:hover img {
+      transform: scale(1.02) rotateY(5deg);
+    }
 
     .buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: calc(var(--spacing) / 2);
+      gap: var(--spacing);
       justify-content: center;
       padding: 0 var(--spacing) var(--spacing);
       max-width: var(--intro-max-width);
       margin: 0 auto var(--spacing);
     }
-    .buttons a, .close-btn {
-      position: relative;
-    }
     .buttons a {
-      flex: none;
-      min-width: 120px;
-      text-decoration: none;
-      text-align: center;
-      padding: .75rem 1rem;
+      position: relative;
+      overflow: hidden;
+      padding: var(--spacing);
       border-radius: var(--corner);
       font-weight: 600;
-      color: var(--white);
-      transition: transform .2s, box-shadow .2s;
-      overflow: hidden;
+      text-decoration: none;
+      color: #fff;
+      transition: background .2s, transform .2s, box-shadow .2s;
     }
     .buttons a:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
     .btn-primary   { background: var(--purple); }
-    .btn-chat      { background: var(--chat); }
-    .btn-training  { background: var(--train); }
-    .btn-auto      { background: var(--auto); }
-    .btn-disclaimer{ background: var(--grey); }
-    .btn-primary:hover, .btn-primary:focus   { background: #693bcc; }
-    .btn-chat:hover,    .btn-chat:focus      { background: #388e3c; }
-    .btn-training:hover,.btn-training:focus  { background: #f57c00; }
-    .btn-auto:hover,    .btn-auto:focus      { background: #1e2d33; }
-    .btn-disclaimer:hover,.btn-disclaimer:focus { background: #424242; }
+    .btn-primary:hover   { background: #693bcc; }
+    .btn-chat      { background: var(--chat);   }
+    .btn-chat:hover      { background: #388e3c; }
+    .btn-training  { background: var(--train);  }
+    .btn-training:hover  { background: #f57c00; }
+    .btn-auto      { background: #3949ab; } /* deep indigo */
+    .btn-auto:hover      { background: #283593; }
+    .btn-disclaimer{ background: var(--grey);  }
+    .btn-disclaimer:hover{ background: #424242; }
 
     footer {
       text-align: center;
@@ -147,17 +151,27 @@
 
     @media (max-width: 480px) {
       .buttons { flex-direction: column; }
-      .hero img  { max-height: 35vh; }
+      .hero img { width: 100%; max-height: 35vh; }
     }
 
-    .ripple { position: absolute; border-radius: 50%; background: var(--ripple-color); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; }
-    @keyframes ripple { to { transform: scale(4); opacity: 0; }}
+    /* ripple effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--ripple-color);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple {
+      to { transform: scale(4); opacity: 0; }
+    }
   </style>
 </head>
 <body>
   <header>
     Benvenuto in SynapSenseS
-    <button class="close-btn" onclick="closeApp()">Chiudi App</button>
+    <button id="close-btn">Chiudi App</button>
   </header>
 
   <main>
@@ -172,20 +186,17 @@
 
     <div class="buttons">
       <a href="exercises.html" class="btn-primary">30 Esercizi</a>
-      <a href="chat.html" class="btn-chat">Chat AI</a>
-      <a href="training.html" class="btn-training">Training Autogeno</a>
+      <a href="chat.html"      class="btn-chat">Chat AI</a>
+      <a href="training.html"  class="btn-training">Training Autogeno</a>
       <a href="autoipnosi.html" class="btn-auto">Autoipnosi Regressiva</a>
-      <a href="disclaimer.html" class="btn-disclaimer">Disclaimer</a>
+      <a href="Disclaimer.html" class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    function closeApp() {
-      window.close();
-      alert('Se la chiusura automatica non funziona, chiudi la scheda manualmente.');
-    }
+    // ripple effect
     document.querySelectorAll('.buttons a').forEach(btn => {
       btn.addEventListener('click', function(e) {
         const circle = document.createElement('span');
@@ -198,8 +209,12 @@
         setTimeout(() => circle.remove(), 600);
       });
     });
+
+    // try to close window, fallback to alert
+    document.getElementById('close-btn').onclick = () => {
+      if (window.close) window.close();
+      else alert("Chiudi la scheda manualmente o premi il tasto indietro.");
+    };
   </script>
 </body>
 </html>
-
-
