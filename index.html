@@ -57,7 +57,6 @@
     }
     main { flex:1; display:flex; flex-direction:column; align-items:center; }
 
-    /* HERO + INTRO OVERLAY */
     .hero {
       position:relative;
       width:100%; max-width:var(--hero-width);
@@ -75,10 +74,13 @@
     .hero:hover img {
       transform:scale(1.02) rotateY(5deg);
     }
-    .intro {
+
+    /* → qui ho cambiato solo top/transform → */
+    .hero .intro {
       position:absolute;
-      top:1rem; left:50%;
-      transform:translateX(-50%);
+      top:35%;
+      left:50%;
+      transform:translate(-50%, -35%);
       width:90%; max-width:360px;
       background:var(--intro-bg);
       padding:.8rem;
@@ -87,15 +89,12 @@
       text-align:center;
     }
     .intro h2 {
-      font-size:1.25rem;
-      margin-bottom:.4rem;
+      font-size:1.25rem; margin-bottom:.4rem;
       position:relative; display:inline-block;
     }
     .intro h2::after {
-      content:'';
-      position:absolute; left:0; bottom:-3px;
-      width:0; height:3px;
-      background:var(--purple);
+      content:''; position:absolute; left:0; bottom:-3px;
+      width:0; height:3px; background:var(--purple);
       transition:width .3s;
     }
     .intro h2:hover::after { width:100%; }
@@ -103,7 +102,6 @@
       font-size:.9rem; line-height:1.4;
     }
 
-    /* BUTTONS */
     .buttons {
       display:flex; flex-wrap:wrap;
       gap:var(--spacing);
@@ -135,7 +133,6 @@
       font-size:.75rem; background:#e0e0e0;
       margin-top:auto;
     }
-
     @media(max-width:480px){
       .hero img { max-height:50vh; }
       .intro { width:95%; }
@@ -147,8 +144,6 @@
       header { font-size:1.3rem; }
       .intro h2 { font-size:1.1rem; }
     }
-
-    /* ripple */
     .ripple {
       position:absolute; border-radius:50%;
       background:rgba(255,255,255,0.4);
@@ -185,22 +180,20 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // ripple sui bottoni
-    document.querySelectorAll('.buttons a').forEach(btn => {
-      btn.addEventListener('click', e => {
-        const circle = document.createElement('span');
-        const d = Math.max(btn.clientWidth, btn.clientHeight);
-        circle.style.width = circle.style.height = d + 'px';
-        const rect = btn.getBoundingClientRect();
-        circle.style.left = e.clientX - rect.left - d/2 + 'px';
-        circle.style.top  = e.clientY - rect.top  - d/2 + 'px';
+    document.querySelectorAll('.buttons a').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        const circle=document.createElement('span');
+        const d=Math.max(btn.clientWidth,btn.clientHeight);
+        circle.style.width=circle.style.height=d+'px';
+        const r=btn.getBoundingClientRect();
+        circle.style.left=e.clientX-r.left-d/2+'px';
+        circle.style.top =e.clientY-r.top -d/2+'px';
         circle.classList.add('ripple');
         btn.appendChild(circle);
-        setTimeout(() => circle.remove(), 600);
+        setTimeout(()=>circle.remove(),600);
       });
     });
-    // chiudi app
-    document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('closeBtn').addEventListener('click',()=>{
       window.close();
       alert("Non sono riuscito a chiudere l'app automaticamente.\nChiudi manualmente la scheda.");
     });
