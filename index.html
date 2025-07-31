@@ -1,4 +1,4 @@
-<!DOCTYPE html>   
+<!DOCTYPE html>  
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -25,7 +25,6 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      position: relative;
     }
     header {
       background: var(--purple);
@@ -36,6 +35,7 @@
       font-weight: 600;
     }
     main { flex: 1; }
+
     .intro {
       background: var(--white);
       padding: var(--spacing);
@@ -46,6 +46,7 @@
       margin: var(--spacing) auto 0;
     }
     .intro h2 { margin-bottom: .5rem; font-size: 1.25rem; }
+
     .hero {
       margin: var(--spacing) auto;
       max-width: var(--intro-max-width);
@@ -55,9 +56,11 @@
     .hero img {
       display: block;
       width: 100%;
+      /* Aumentata da 40vh a 50vh */
       max-height: 50vh;
       object-fit: contain;
     }
+
     .buttons {
       display: flex;
       flex-wrap: wrap;
@@ -67,7 +70,7 @@
       max-width: var(--intro-max-width);
       margin: 0 auto var(--spacing);
     }
-    .buttons a, #close-btn {
+    .buttons a {
       flex: 1;
       text-decoration: none;
       text-align: center;
@@ -75,7 +78,6 @@
       border-radius: var(--corner);
       font-weight: 600;
       transition: background .2s, color .2s;
-      cursor: pointer;
     }
     .btn-primary { background: var(--purple); color: var(--white); }
     .btn-primary:hover { background: #693bcc; }
@@ -85,24 +87,17 @@
     .btn-training:hover { background: #f57c00; }
     .btn-disclaimer { background: var(--grey); color: var(--white); }
     .btn-disclaimer:hover { background: #424242; }
-    /* Nuovo stile per il tasto chiudi */
-    #close-btn {
-      position: fixed;
-      right: 1rem;
-      bottom: 1rem;
-      background: #e53935;
-      color: #fff;
-      max-width: 120px;
-    }
-    #close-btn:hover { background: #b71c1c; }
+
     footer {
       text-align: center;
       padding: .5rem;
       font-size: .75rem;
       background: #e0e0e0;
     }
+
     @media (max-width: 480px) {
       .buttons { flex-direction: column; }
+      /* Aumentato anch’esso da 30vh a 40vh */
       .hero img { max-height: 40vh; }
     }
   </style>
@@ -121,28 +116,13 @@
     </section>
 
     <div class="buttons">
-      <a href="exercises.html" class="btn-primary">30 Esercizi</a>
-      <a href="chat.html" class="btn-chat">Chat AI</a>
-      <a href="training.html" class="btn-training">Training Autogeno</a>
+      <a href="exercises.html" class="btn-primary">30 Esercizi</a>
+      <a href="chat.html" class="btn-chat">Chat AI</a>
+      <a href="training.html" class="btn-training">Training Autogeno</a>
       <a href="Disclaimer.html" class="btn-disclaimer">Disclaimer</a>
     </div>
   </main>
 
   <footer>© 2025 SynapSenseS</footer>
-
-  <!-- Pulsante “Chiudi App” -->
-  <button id="close-btn">Chiudi App</button>
-
-  <script>
-    document.getElementById('close-btn').addEventListener('click', () => {
-      // Proviamo a chiudere la finestra
-      window.open('', '_self');
-      window.close();
-      // Se non dovesse funzionare, avvisiamo l'utente
-      setTimeout(() => {
-        alert('Non sono riuscito a chiudere l’app automaticamente. Chiudi la scheda manualmente o usa il pulsante indietro.');
-      }, 200);
-    });
-  </script>
 </body>
 </html>
