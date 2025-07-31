@@ -153,8 +153,11 @@
 </head>
 <body>
 
-  <!-- player audio in loop -->
-  <audio id="bg-audio" src="audio/NR1.WAV" loop preload="auto"></audio>
+  <!-- player audio in loop con <source> -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="audio/NR1.WAV" type="audio/wav">
+    Il tuo browser non supporta il formato WAV.
+  </audio>
 
   <header>
     <button id="audioBtn">🔊</button>
@@ -188,7 +191,7 @@
       const audioBtn = document.getElementById('audioBtn');
       const closeBtn = document.getElementById('closeBtn');
 
-      // Chrome richiede un gesto utente per partire: avviamo su primo click/touch
+      // Kickstart per sbloccare l'audio sui browser moderni
       const kickstart = () => {
         audio.play().catch(()=>{});
         document.removeEventListener('click', kickstart);
