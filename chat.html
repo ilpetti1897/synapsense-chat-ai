@@ -1,0 +1,298 @@
+<!DOCTYPE html> 
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SynapSenseS Mental Coach Chat AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --chat-green:    #4caf50;
+      --bg-gradient:   linear-gradient(135deg, #e0f7fa 0%, #fffde7 100%);
+      --white:         #fff;
+      --fg:            #333;
+      --radius:        8px;
+      --spacing:       1rem;
+    }
+    * { box-sizing: border-box; margin:0; padding:0 }
+    body {
+      font-family: 'Inter',sans-serif;
+      display: flex; flex-direction: column;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--fg);
+    }
+    /* audio + titolo + close */
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      background: var(--chat-green);
+      color: var(--white);
+      padding: var(--spacing);
+      gap: .5rem;
+    }
+    header button {
+      background: #d32f2f; color: var(--white);
+      border: none;
+      padding: .5rem 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background .2s, transform .2s;
+    }
+    header button:hover {
+      background: #b71c1c;
+      transform: scale(1.05);
+    }
+    header h1 {
+      margin: 0;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    header a.home-btn {
+      display: none; /* non serve, usiamo la X */
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing);
+    }
+    .controls {
+      display: flex; flex-wrap: wrap;
+      gap: var(--spacing);
+      align-items: center;
+      margin-bottom: var(--spacing);
+    }
+    .controls label {
+      display: flex; align-items: center;
+      gap: .25rem; font-weight: 600;
+    }
+    select, textarea {
+      flex: 1;
+      font-size: 1rem;
+      padding: .5rem var(--spacing);
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+    textarea {
+      resize: vertical; min-height: 4rem;
+    }
+    button#sendBtn {
+      background: var(--chat-green);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      padding: .75rem 1.5rem;
+      margin-left: auto;
+    }
+    button:disabled {
+      opacity: .6;
+      cursor: default;
+    }
+    .chat-box {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(6px);
+      border-radius: var(--radius);
+      padding: var(--spacing);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex: 1; overflow-y: auto;
+    }
+    .chat-box p {
+      margin: 0 0 1em;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: .5rem;
+      background: #e0e0e0;
+      font-size: .85rem;
+    }
+    @media(max-width:480px){
+      .controls { flex-direction: column; }
+      button#sendBtn { width: 100%; margin-left: 0; }
+      header { grid-template-columns: auto 1fr auto; }
+      header h1 { font-size: 1.1rem; }
+      header button { padding: .4rem .8rem; font-size: .9rem; }
+    }
+
+    /* ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transform: scale(0);
+      animation: ripple .6s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple { to { transform: scale(4); opacity: 0 } }
+  </style>
+</head>
+<body>
+
+  <!-- audio in loop -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="audio/nr1.mp3" type="audio/mp3">
+    Il tuo browser non supporta l’audio.
+  </audio>
+
+  <header>
+    <button id="audioBtn">🔊</button>
+    <h1>SynapSenseS Mental Coach Chat AI</h1>
+    <button id="closeBtn">✕</button>
+  </header>
+
+  <main>
+    <div class="controls">
+      <label><input type="radio" name="mode" value="chat"       checked> Chat libera</label>
+      <label><input type="radio" name="mode" value="exercise"> Consigli 30 esercizi</label>
+      <label><input type="radio" name="mode" value="autogeno"> Consigli Training Autogeno</label>
+      <label><input type="radio" name="mode" value="autoipnosi"> Consigli Autoipnosi</label>
+
+      <select id="exerciseSelect"   style="display:none"></select>
+      <select id="autogenoSelect"   style="display:none">
+        <option value="1">1 – Pesantezza</option>
+        <option value="2">2 – Calore</option>
+        <option value="3">3 – Battito cardiaco</option>
+        <option value="4">4 – Respiro</option>
+        <option value="5">5 – Plesso solare</option>
+        <option value="6">6 – Fronte fresca</option>
+      </select>
+      <select id="autoipnosiSelect" style="display:none">
+        <option value="1">1 – In treno</option>
+        <option value="2">2 – Il calendario</option>
+        <option value="3">3 – L’orologio</option>
+        <option value="4">4 – Il ponte affettivo</option>
+      </select>
+
+      <textarea id="messageInput" placeholder="Scrivi qui il tuo messaggio…"></textarea>
+      <button id="sendBtn">Invia</button>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <p>Scegli tra Chat libera, Consigli sui 30 esercizi, Training Autogeno o Autoipnosi Regressiva</p>
+    </div>
+  </main>
+
+  <footer>© 2025 SynapSenseS</footer>
+
+  <script>
+    const WORKER_URL = 'https://synapsense-agent.ilpetti1897.workers.dev';
+    const modeRadios = [...document.querySelectorAll('input[name="mode"]')];
+    const exSelect   = document.getElementById('exerciseSelect');
+    const autoSelect = document.getElementById('autogenoSelect');
+    const ipnoSelect = document.getElementById('autoipnosiSelect');
+    const msgInput   = document.getElementById('messageInput');
+    const sendBtn    = document.getElementById('sendBtn');
+    const chatBox    = document.getElementById('chatBox');
+    const audio      = document.getElementById('bg-audio');
+    const audioBtn   = document.getElementById('audioBtn');
+    const closeBtn   = document.getElementById('closeBtn');
+    let history      = [];
+
+    // popola esercizi
+    fetch(WORKER_URL + '/exercises')
+      .then(r => r.json())
+      .then(exs => {
+        exSelect.innerHTML = exs.map(e =>
+          `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
+        ).join('');
+      });
+
+    function resetChat() {
+      history = [];
+      chatBox.innerHTML = '<p>Scegli tra Chat libera, Consigli sui 30 esercizi, Training Autogeno o Autoipnosi Regressiva</p>';
+      msgInput.value = '';
+    }
+
+    function updateMode() {
+      const m = document.querySelector('input[name="mode"]:checked').value;
+      exSelect.style.display    = m==='exercise'   ? 'block':'none';
+      autoSelect.style.display  = m==='autogeno'    ? 'block':'none';
+      ipnoSelect.style.display  = m==='autoipnosi'  ? 'block':'none';
+      switch(m){
+        case 'exercise': msgInput.placeholder="Dubbio sull’esercizio…"; break;
+        case 'autogeno': msgInput.placeholder="Dubbio sul Training…";  break;
+        case 'autoipnosi': msgInput.placeholder="Dubbio sull’Autoipnosi…"; break;
+        default: msgInput.placeholder="Scrivi qui il tuo messaggio…";
+      }
+      resetChat();
+    }
+    modeRadios.forEach(r=>r.addEventListener('change',updateMode));
+    exSelect.addEventListener('change',resetChat);
+    autoSelect.addEventListener('change',resetChat);
+    ipnoSelect.addEventListener('change',resetChat);
+    window.addEventListener('DOMContentLoaded', updateMode);
+
+    sendBtn.addEventListener('click', async () => {
+      const mode  = document.querySelector('input[name="mode"]:checked').value;
+      const text  = msgInput.value.trim();
+      if(!text) return alert('Inserisci un testo da inviare.');
+      const exerciseId   = mode==='exercise'? exSelect.value:null;
+      const autogenoStep = mode==='autogeno'? autoSelect.value:null;
+      const autoipnStep  = mode==='autoipnosi'? ipnoSelect.value:null;
+      // mostra utente
+      chatBox.insertAdjacentHTML('beforeend', `<p><strong>Tu:</strong> ${text}</p>`);
+      history.push({role:'user',content:text});
+      sendBtn.disabled=true;
+      try {
+        const res = await fetch(WORKER_URL + '/chat', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({mode,exerciseId,topic:mode,autogenoStep,autoipnosiStep:autoipnStep,history})
+        });
+        const {reply,error} = await res.json();
+        if(error) throw new Error(error);
+        reply.split(/\r?\n{2,}/).forEach(par => {
+          const t=par.trim(); if(!t) return;
+          chatBox.insertAdjacentHTML('beforeend', `<p><strong>AI:</strong> ${t}</p>`);
+        });
+        history.push({role:'assistant',content:reply});
+        chatBox.scrollTop=chatBox.scrollHeight;
+      } catch {
+        chatBox.insertAdjacentHTML('beforeend','<p>Errore di connessione. Riprova più tardi.</p>');
+      } finally {
+        sendBtn.disabled=false;
+        msgInput.value='';
+      }
+    });
+
+    // audio play on first gesture
+    const kickstart = ()=>{ audio.play().catch(()=>{}); 
+      document.removeEventListener('click', kickstart);
+      document.removeEventListener('touchstart', kickstart);
+    };
+    document.addEventListener('click', kickstart);
+    document.addEventListener('touchstart', kickstart);
+
+    audioBtn.addEventListener('click', ()=>{
+      if(audio.paused){ audio.play().catch(()=>{}); audioBtn.textContent='🔇'; }
+      else          { audio.pause(); audioBtn.textContent='🔊'; }
+    });
+    closeBtn.addEventListener('click', ()=>{
+      window.close();
+      alert("Chiudi manualmente la scheda, per favore.");
+    });
+
+    // ripple
+    document.querySelectorAll('button, select, textarea').forEach(el=>{
+      el.addEventListener('click', e=>{
+        const c=document.createElement('span'), d=Math.max(el.clientWidth,el.clientHeight);
+        c.style.width=c.style.height=`${d}px`;
+        const r=el.getBoundingClientRect();
+        c.style.left=`${e.clientX-r.left-d/2}px`;
+        c.style.top =`${e.clientY-r.top -d/2}px`;
+        c.className='ripple';
+        el.appendChild(c);
+        setTimeout(()=>c.remove(),600);
+      });
+    });
+  </script>
+</body>
+</html>
