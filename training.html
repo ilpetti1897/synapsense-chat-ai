@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Training Autogeno</title>
+  <style>
+    :root {
+      --train: #ff9800;
+      --white: #fff;
+      --bg: #f0f2f5;
+      --overlay: rgba(0,0,0,0.7);
+      --radius: 8px;
+      --spacing: 1rem;
+      --font: 'Inter', Arial, sans-serif;
+      --card-bg: #fff;
+      --card-shadow: rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin:0; padding:0 }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: #333;
+    }
+    header {
+      background: var(--train);
+      color: var(--white);
+      padding: var(--spacing);
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    main { padding: var(--spacing); }
+    .intro-box {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px var(--card-shadow);
+      padding: var(--spacing);
+      margin-bottom: var(--spacing);
+      line-height: 1.5;
+    }
+    .intro-box h2 { color: var(--train); margin-bottom: .5rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: var(--spacing);
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px var(--card-shadow);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .card:hover { transform: scale(1.03) }
+    .card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .card h3 {
+      padding: .5rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    /* dettaglio */
+    .detail {
+      background: var(--overlay);
+      color: var(--white);
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .detail-content {
+      background: var(--card-bg);
+      color: #000;
+      border-radius: var(--radius);
+      max-width: 600px;
+      margin: auto;
+      padding: var(--spacing);
+      line-height: 1.5;
+    }
+    .detail-content h1 { margin-top:0; color: var(--train); }
+    .detail-content h2 { margin-top:1rem; color: var(--train); }
+    .detail-content ol,
+    .detail-content ul { margin-left: 1.5rem; }
+    .detail-content a.close {
+      display: inline-block;
+      margin-top: var(--spacing);
+      background: var(--train);
+      color: var(--white);
+      padding: .6rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>Training Autogeno</header>
+  <main>
+    <div class="intro-box">
+      <h2>Cos’è il Training Autogeno?</h2>
+      <p>È una sequenza di 6 esercizi mentali che inducono rilassamento profondo e consapevolezza corporea, ripetendo brevi formule interiori.</p>
+      <ol>
+        <li>Pesantezza</li>
+        <li>Calore</li>
+        <li>Pulsazioni cardiache</li>
+        <li>Respiro</li>
+        <li>Plesso solare</li>
+        <li>Fronte fresca</li>
+      </ol>
+    </div>
+
+    <div class="grid" id="grid">
+      <!-- Le 6 card saranno popolate via JS -->
+    </div>
+  </main>
+
+  <script>
+    // dati dei 6 esercizi
+    const exercises = [
+      {
+        id:1, title:"Pesantezza",
+        img:"images/training/1.jpg",
+        objective:"Favorire il rilassamento muscolare lasciando andare il peso degli arti.",
+        steps:[
+          "Siediti in posizione comoda, schiena dritta.",
+          "Chiudi gli occhi e respira lentamente.",
+          "Ripeti mentalmente “le mie braccia e gambe sono pesanti” per 1–2 minuti.",
+          "Concentrati sulla sensazione di gravità che ti radica al suolo."
+        ],
+        tips:[
+          "Metti una mano su un braccio per percepirne il peso.",
+          "Esegui in un ambiente silenzioso."
+        ]
+      },
+      {
+        id:2, title:"Calore",
+        img:"images/training/2.jpg",
+        objective:"Indurre vasodilatazione mentale e sensazione di tepore.",
+        steps:[
+          "Rimani comodo, mantieni gli occhi chiusi.",
+          "Visualizza un calore che sale dai piedi fino alla sommità del capo.",
+          "Ripeti “sento un piacevole calore in tutto il corpo” per 1–2 minuti."
+        ],
+        tips:[
+          "Associa la formula a un’immagine (es. un tramonto dorato).",
+          "Mantieni la respirazione lenta e regolare."
+        ]
+      },
+      {
+        id:3, title:"Pulsazioni",
+        img:"images/training/3.jpg",
+        objective:"Sincronizzarsi con il ritmo naturale del proprio cuore.",
+        steps:[
+          "Appoggia una mano sulla zona del cuore.",
+          "Ascolta il battito senza modificarlo.",
+          "Ripeti “il mio cuore batte calmo e regolare” per 1–2 minuti."
+        ],
+        tips:[
+          "Se possibile stenditi e rilassa il torace.",
+          "Non forzare il ritmo, semplicemente osserva."
+        ]
+      },
+      {
+        id:4, title:"Respiro",
+        img:"images/training/4.jpg",
+        objective:"Rendere consapevole e profondo il respiro spontaneo.",
+        steps:[
+          "Chiudi gli occhi e lascia che il respiro fluisca naturalmente.",
+          "Ripeti “il mio respiro è lento e profondo” per 1–2 minuti.",
+          "Segui mentalmente l’aria che entra e esce."
+        ],
+        tips:[
+          "Mantieni le mani sul ventre per sentire il gonfiarsi addominale.",
+          "Se distratto, torna alla formula e al respiro."
+        ]
+      },
+      {
+        id:5, title:"Plesso solare",
+        img:"images/training/5.jpg",
+        objective:"Concentrare energia e calore nell’area addominale.",
+        steps:[
+          "Dirigi la consapevolezza all’addome.",
+          "Ripeti “sento un piacevole calore al plesso solare” per 1–2 minuti.",
+          "Immagina un fuoco interno che riscalda quell’area."
+        ],
+        tips:[
+          "Mantieni la colonna rilassata.",
+          "Visualizza il calore come una luce dorata."
+        ]
+      },
+      {
+        id:6, title:"Fronte fresca",
+        img:"images/training/6.jpg",
+        objective:"Rinfrescare la mente e ridurre tensioni alla fronte.",
+        steps:[
+          "Immagina acqua fresca che scorre sulla fronte.",
+          "Ripeti “la mia fronte è fresca e leggera” per 1–2 minuti.",
+          "Senti la tensione sciogliersi."
+        ],
+        tips:[
+          "Biasta immaginare una cascata leggera.",
+          "Puoi accompagnare con un fazzoletto fresco sulla fronte."
+        ]
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+
+    // crea le 6 card
+    exercises.forEach(ex => {
+      const c = document.createElement('div');
+      c.className = 'card';
+      c.innerHTML = `
+        <img src="${ex.img}" alt="${ex.title}">
+        <h3>${ex.title}</h3>
+      `;
+      c.onclick = ()=> showDetail(ex);
+      grid.appendChild(c);
+    });
+
+    // mostra overlay di dettaglio
+    function showDetail(ex) {
+      const overlay = document.createElement('div');
+      overlay.className = 'detail';
+      overlay.innerHTML = `
+        <div class="detail-content">
+          <h1>${ex.title}</h1>
+          <h2>Obiettivo</h2>
+          <p>${ex.objective}</p>
+          <h2>Procedura</h2>
+          <ol>${ex.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+          <h2>Consigli</h2>
+          <ul>${ex.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+          <a href="#" class="close">← Chiudi</a>
+        </div>
+      `;
+      overlay.querySelector('.close').onclick = e => {
+        e.preventDefault();
+        document.body.removeChild(overlay);
+      };
+      document.body.appendChild(overlay);
+    }
+  </script>
+</body>
+</html>
