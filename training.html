@@ -38,8 +38,22 @@
       padding: var(--spacing);
       margin-bottom: var(--spacing);
       line-height: 1.5;
+      text-align: center;
     }
     .intro-box h2 { color: var(--train); margin-bottom: .5rem; }
+    .intro-box ol { margin: 1rem 0; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .intro-box a.home {
+      display: inline-block;
+      margin-top: var(--spacing);
+      background: var(--train);
+      color: var(--white);
+      padding: .6rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .intro-box a.home:hover { background: #e68900; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
@@ -64,7 +78,8 @@
       font-size: 1.1rem;
       text-align: center;
     }
-    /* dettaglio */
+
+    /* dettaglio overlay */
     .detail {
       background: var(--overlay);
       color: var(--white);
@@ -72,6 +87,7 @@
       top:0; left:0; right:0; bottom:0;
       overflow-y: auto;
       padding: 2rem;
+      z-index: 10;
     }
     .detail-content {
       background: var(--card-bg);
@@ -86,17 +102,28 @@
     .detail-content h2 { margin-top:1rem; color: var(--train); }
     .detail-content ol,
     .detail-content ul { margin-left: 1.5rem; }
-    .detail-content a.close {
-      display: inline-block;
+    .detail-content .actions {
       margin-top: var(--spacing);
+      display: flex;
+      gap: var(--spacing);
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .detail-content .actions a {
       background: var(--train);
       color: var(--white);
       padding: .6rem 1rem;
       border-radius: var(--radius);
       text-decoration: none;
       font-weight: 600;
+      transition: background .2s;
     }
+    .detail-content .actions a:hover { background: #e68900; }
 
+    @media(max-width:480px){
+      .intro-box ol { font-size: .9rem; }
+      .detail-content { padding: .8rem; }
+    }
   </style>
 </head>
 <body>
@@ -105,7 +132,7 @@
   <main>
     <div class="intro-box">
       <h2>Cos’è il Training Autogeno?</h2>
-      <p>È una sequenza di 6 esercizi mentali che inducono rilassamento profondo e consapevolezza corporea, ripetendo brevi formule interiori.</p>
+      <p>È una pratica in 6 formule mentali che induce rilassamento profondo e consapevolezza corporea.</p>
       <ol>
         <li>Pesantezza</li>
         <li>Calore</li>
@@ -114,19 +141,17 @@
         <li>Plesso solare</li>
         <li>Fronte fresca</li>
       </ol>
+      <a href="index.html" class="home">← Torna alla Home</a>
     </div>
 
     <div class="grid" id="grid">
-      <!-- Le 6 card saranno popolate via JS -->
+      <!-- le card verranno popolate via JS -->
     </div>
   </main>
 
   <script>
-    // dati dei 6 esercizi
     const exercises = [
-      {
-        id:1, title:"Pesantezza",
-        img:"images/training/1.jpg",
+      { id:1, title:"Pesantezza", img:"images/training/1.jpg",
         objective:"Favorire il rilassamento muscolare lasciando andare il peso degli arti.",
         steps:[
           "Siediti in posizione comoda, schiena dritta.",
@@ -139,93 +164,80 @@
           "Esegui in un ambiente silenzioso."
         ]
       },
-      {
-        id:2, title:"Calore",
-        img:"images/training/2.jpg",
+      { id:2, title:"Calore", img:"images/training/2.jpg",
         objective:"Indurre vasodilatazione mentale e sensazione di tepore.",
         steps:[
-          "Rimani comodo, mantieni gli occhi chiusi.",
+          "Mantieni gli occhi chiusi e rilassati.",
           "Visualizza un calore che sale dai piedi fino alla sommità del capo.",
           "Ripeti “sento un piacevole calore in tutto il corpo” per 1–2 minuti."
         ],
         tips:[
           "Associa la formula a un’immagine (es. un tramonto dorato).",
-          "Mantieni la respirazione lenta e regolare."
+          "Respira in modo uniforme."
         ]
       },
-      {
-        id:3, title:"Pulsazioni",
-        img:"images/training/3.jpg",
+      { id:3, title:"Pulsazioni", img:"images/training/3.jpg",
         objective:"Sincronizzarsi con il ritmo naturale del proprio cuore.",
         steps:[
-          "Appoggia una mano sulla zona del cuore.",
+          "Appoggia una mano sul petto, in corrispondenza del cuore.",
           "Ascolta il battito senza modificarlo.",
           "Ripeti “il mio cuore batte calmo e regolare” per 1–2 minuti."
         ],
         tips:[
-          "Se possibile stenditi e rilassa il torace.",
-          "Non forzare il ritmo, semplicemente osserva."
+          "Stenditi se possibile per maggiore comodità.",
+          "Non forzare il ritmo, sii un osservatore."
         ]
       },
-      {
-        id:4, title:"Respiro",
-        img:"images/training/4.jpg",
+      { id:4, title:"Respiro", img:"images/training/4.jpg",
         objective:"Rendere consapevole e profondo il respiro spontaneo.",
         steps:[
-          "Chiudi gli occhi e lascia che il respiro fluisca naturalmente.",
+          "Lascia che il respiro fluisca naturalmente.",
           "Ripeti “il mio respiro è lento e profondo” per 1–2 minuti.",
-          "Segui mentalmente l’aria che entra e esce."
+          "Segui mentalmente il flusso dell’aria."
         ],
         tips:[
-          "Mantieni le mani sul ventre per sentire il gonfiarsi addominale.",
-          "Se distratto, torna alla formula e al respiro."
+          "Metti le mani sul ventre per sentire il gonfiarsi addominale.",
+          "Riporta l’attenzione sulla formula se ti distrai."
         ]
       },
-      {
-        id:5, title:"Plesso solare",
-        img:"images/training/5.jpg",
+      { id:5, title:"Plesso solare", img:"images/training/5.jpg",
         objective:"Concentrare energia e calore nell’area addominale.",
         steps:[
           "Dirigi la consapevolezza all’addome.",
           "Ripeti “sento un piacevole calore al plesso solare” per 1–2 minuti.",
-          "Immagina un fuoco interno che riscalda quell’area."
+          "Immagina una luce dorata che scalda l’addome."
         ],
         tips:[
           "Mantieni la colonna rilassata.",
-          "Visualizza il calore come una luce dorata."
+          "Visualizza la luce in movimento."
         ]
       },
-      {
-        id:6, title:"Fronte fresca",
-        img:"images/training/6.jpg",
-        objective:"Rinfrescare la mente e ridurre tensioni alla fronte.",
+      { id:6, title:"Fronte fresca", img:"images/training/6.jpg",
+        objective:"Rinfrescare la mente e ridurre tensioni della fronte.",
         steps:[
-          "Immagina acqua fresca che scorre sulla fronte.",
+          "Immagina una brezza fresca sulla fronte.",
           "Ripeti “la mia fronte è fresca e leggera” per 1–2 minuti.",
           "Senti la tensione sciogliersi."
         ],
         tips:[
-          "Biasta immaginare una cascata leggera.",
-          "Puoi accompagnare con un fazzoletto fresco sulla fronte."
+          "Puoi usare un fazzoletto fresco per intensificare la sensazione.",
+          "Mantieni lo sguardo morbido."
         ]
       }
     ];
 
     const grid = document.getElementById('grid');
-
-    // crea le 6 card
     exercises.forEach(ex => {
-      const c = document.createElement('div');
-      c.className = 'card';
-      c.innerHTML = `
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
         <img src="${ex.img}" alt="${ex.title}">
         <h3>${ex.title}</h3>
       `;
-      c.onclick = ()=> showDetail(ex);
-      grid.appendChild(c);
+      card.onclick = () => showDetail(ex);
+      grid.appendChild(card);
     });
 
-    // mostra overlay di dettaglio
     function showDetail(ex) {
       const overlay = document.createElement('div');
       overlay.className = 'detail';
@@ -238,7 +250,10 @@
           <ol>${ex.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
           <h2>Consigli</h2>
           <ul>${ex.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
-          <a href="#" class="close">← Chiudi</a>
+          <div class="actions">
+            <a href="chat.html">Chat AI</a>
+            <a href="#" class="close">Chiudi</a>
+          </div>
         </div>
       `;
       overlay.querySelector('.close').onclick = e => {
