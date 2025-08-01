@@ -1,0 +1,275 @@
+<!DOCTYPE html> 
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Training Autogeno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --train:        #ff9800;
+      --white:        #fff;
+      --bg:           #f0f2f5;
+      --overlay:      rgba(0,0,0,0.7);
+      --radius:       8px;
+      --spacing:      1rem;
+      --font:         'Inter', Arial, sans-serif;
+      --card-bg:      #fff;
+      --card-shadow:  rgba(0,0,0,0.1);
+      --audio-bg:     #d32f2f;
+    }
+    * { box-sizing: border-box; margin:0; padding:0 }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    /* player audio */
+    audio { display: none; }
+    /* header con audio e close */
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      background: var(--train);
+      padding: var(--spacing);
+    }
+    #audioBtn, #closeBtn {
+      background: var(--audio-bg);
+      color: var(--white);
+      border: none;
+      padding: .5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform .2s;
+    }
+    #audioBtn:hover, #closeBtn:hover { transform: scale(1.1) }
+    #closeBtn { background: #b71c1c }
+    header h1 {
+      margin:0;
+      text-align:center;
+      color: var(--white);
+      font-size: 1.5rem;
+      font-weight:600;
+    }
+    main { padding: var(--spacing); flex:1 }
+    .intro-box {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px var(--card-shadow);
+      padding: var(--spacing);
+      margin-bottom: var(--spacing);
+      line-height: 1.5;
+      text-align: center;
+    }
+    .intro-box h2 { color: var(--train); margin-bottom: .5rem; }
+    .intro-box ol { margin: 1rem 0; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .intro-box a.home {
+      display: inline-block;
+      margin-top: var(--spacing);
+      background: var(--train);
+      color: var(--white);
+      padding: .6rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .intro-box a.home:hover { background: #e68900; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: var(--spacing);
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px var(--card-shadow);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .card:hover { transform: scale(1.03) }
+    .card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .card h3 {
+      padding: .5rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* dettaglio overlay */
+    .detail {
+      background: var(--overlay);
+      color: var(--white);
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      overflow-y: auto;
+      padding: 2rem;
+      z-index: 10;
+    }
+    .detail-content {
+      background: var(--card-bg);
+      color: #000;
+      border-radius: var(--radius);
+      max-width: 600px;
+      margin: auto;
+      padding: var(--spacing);
+      line-height: 1.5;
+    }
+    .detail-content h1 { margin-top:0; color: var(--train); }
+    .detail-content h2 { margin-top:1rem; color: var(--train); }
+    .detail-content ol,
+    .detail-content ul { margin-left: 1.5rem; }
+    .detail-content .actions {
+      margin-top: var(--spacing);
+      display: flex;
+      gap: var(--spacing);
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .detail-content .actions a {
+      background: var(--train);
+      color: var(--white);
+      padding: .6rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .detail-content .actions a:hover { background: #e68900; }
+
+    @media(max-width:480px){
+      .intro-box ol { font-size: .9rem; }
+      .detail-content { padding: .8rem; }
+      header { grid-template-columns: auto auto auto }
+    }
+    /* ripple effect */
+    .ripple {
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,0.4);
+      transform:scale(0);
+      animation:ripple .6s linear;
+      pointer-events:none;
+    }
+    @keyframes ripple{ to{transform:scale(4);opacity:0;} }
+  </style>
+</head>
+<body>
+
+  <!-- audio di sfondo -->
+  <audio id="bg-audio" src="audio/nr1.mp3" loop preload="auto"></audio>
+
+  <header>
+    <button id="audioBtn">🔊</button>
+    <h1>Training Autogeno</h1>
+    <button id="closeBtn">✕</button>
+  </header>
+
+  <main>
+    <div class="intro-box">
+      <h2>Cos’è il Training Autogeno?</h2>
+      <p>È una pratica in 6 formule mentali che induce rilassamento profondo e consapevolezza corporea.</p>
+      <ol>
+        <li>Esercizio della pesantezza</li>
+        <li>Esercizio del calore</li>
+        <li>Esercizio del cuore</li>
+        <li>Esercizio del respiro</li>
+        <li>Esercizio del plesso solare</li>
+        <li>Esercizio della fronte fresca</li>
+      </ol>
+      <a href="index.html" class="home">← Torna alla Home</a>
+    </div>
+
+    <div class="grid" id="grid">
+      <!-- le card verranno popolate via JS -->
+    </div>
+  </main>
+
+  <script>
+    // AUDIO HANDLER
+    const audio    = document.getElementById('bg-audio');
+    const audioBtn = document.getElementById('audioBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const kickstart = () => {
+      audio.play().catch(()=>{});
+      document.removeEventListener('click', kickstart);
+      document.removeEventListener('touchstart', kickstart);
+    };
+    document.addEventListener('click', kickstart);
+    document.addEventListener('touchstart', kickstart);
+    audioBtn.addEventListener('click', ()=>{
+      if(audio.paused){ audio.play(); audioBtn.textContent='🔇'; }
+      else         { audio.pause(); audioBtn.textContent='🔊'; }
+    });
+    closeBtn.addEventListener('click', ()=>{
+      window.close();
+      alert("Chiudi manualmente la scheda, per favore.");
+    });
+
+    // DATI ESERCIZI
+    const exercises = [
+      { id:1, title:"Esercizio della pesantezza", img:"images/training/1.jpg",
+        objective:"Favorire il rilassamento muscolare lasciando andare il peso degli arti.",
+        steps:[ /* ... */ ],
+        tips:[ /* ... */ ]
+      },
+      /* ... altri 5 esercizi ... */
+    ];
+    const grid = document.getElementById('grid');
+    exercises.forEach(ex => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${ex.img}" alt="${ex.title}">
+        <h3>${ex.title}</h3>
+      `;
+      card.onclick = e => {
+        const c = document.createElement('span');
+        const d = Math.max(card.clientWidth,card.clientHeight);
+        c.style.width=c.style.height=d+'px';
+        const r=card.getBoundingClientRect();
+        c.style.left=e.clientX-r.left-d/2+'px';
+        c.style.top=e.clientY-r.top-d/2+'px';
+        c.className='ripple';
+        card.append(c);
+        setTimeout(()=>c.remove(),600);
+        showDetail(ex);
+      };
+      grid.appendChild(card);
+    });
+
+    function showDetail(ex) {
+      const overlay = document.createElement('div');
+      overlay.className = 'detail';
+      overlay.innerHTML = `
+        <div class="detail-content">
+          <h1>${ex.title}</h1>
+          <h2>Obiettivo</h2><p>${ex.objective}</p>
+          <h2>Procedura</h2>
+          <ol>${ex.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+          <h2>Consigli</h2>
+          <ul>${ex.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+          <div class="actions">
+            <a href="chat.html">In caso di dubbi apri Chat AI</a>
+            <a href="#" class="close">Chiudi</a>
+          </div>
+        </div>
+      `;
+      overlay.querySelector('.close').onclick = e => {
+        e.preventDefault(); overlay.remove();
+      };
+      document.body.appendChild(overlay);
+    }
+  </script>
+</body>
+</html>
