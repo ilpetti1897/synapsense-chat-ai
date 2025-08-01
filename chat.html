@@ -68,12 +68,11 @@
       transition: transform .2s;
     }
     #closeBtn:hover { transform: scale(1.1) }
-    /* titolo centrato */
+    /* titolo */
     header h1 {
       grid-column: 1/4;
       justify-self: center;
       color: var(--white);
-      margin-top: .5rem;
       font-size: 1.25rem;
     }
     main {
@@ -135,7 +134,6 @@
       .controls { flex-direction: column }
       #sendBtn { width: 100%; margin-left: 0 }
       header { grid-template-columns: auto auto auto }
-      header h1 { grid-column: auto }
     }
     .ripple {
       position: absolute;
@@ -200,7 +198,6 @@
     const audioBtn = document.getElementById('audioBtn');
     const closeBtn = document.getElementById('closeBtn');
 
-    // avvia al primo click/touch
     const kickstart = ()=> {
       audio.play().catch(()=>{});
       document.removeEventListener('click', kickstart);
@@ -224,7 +221,6 @@
       alert("Chiudi manualmente la scheda, per favore.");
     });
 
-
     // ** CHAT LOGIC **
     const WORKER_URL    = 'https://synapsense-agent.ilpetti1897.workers.dev';
     const modeRadios    = [...document.querySelectorAll('input[name="mode"]')];
@@ -236,7 +232,6 @@
     const chatBox       = document.getElementById('chatBox');
     let history         = [];
 
-    // Popola 30 esercizi
     fetch(WORKER_URL + '/exercises')
       .then(r => r.json())
       .then(exs => {
@@ -273,14 +268,14 @@
     window.addEventListener('DOMContentLoaded', updateMode);
 
     sendBtn.addEventListener('click', async ()=>{
-      const mode           = document.querySelector('input[name="mode"]:checked').value;
-      const text           = messageInput.value.trim();
-      const exerciseId     = mode==='exercise'   ? exSelect.value    : null;
-      const topic          = mode==='autogeno'   ? 'autogeno'
+      const mode            = document.querySelector('input[name="mode"]:checked').value;
+      const text            = messageInput.value.trim();
+      const exerciseId      = mode==='exercise'   ? exSelect.value    : null;
+      const topic           = mode==='autogeno'   ? 'autogeno'
                           : mode==='autoipnosi'? 'autoipnosi'
                           : null;
-      const autogenoStep   = mode==='autogeno'   ? autoSelect.value  : null;
-      const autoipnosiStep = mode==='autoipnosi'? ipnoSelect.value  : null;
+      const autogenoStep    = mode==='autogeno'   ? autoSelect.value  : null;
+      const autoipnosiStep  = mode==='autoipnosi'? ipnoSelect.value  : null;
 
       if(!text) return alert('Inserisci un testo da inviare.');
 
