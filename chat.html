@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>  
 <html lang="it">
 <head>
   <meta charset="UTF-8"/>
@@ -16,118 +16,146 @@
     }
     * { box-sizing: border-box; margin:0; padding:0 }
     body {
-      font-family:'Inter',sans-serif;
-      display:flex; flex-direction:column;
-      min-height:100vh;
-      background:#f0f2f5;
-      color:var(--fg);
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0f7fa 0%, #fffde7 100%);
+      color: var(--fg);
     }
     header {
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      align-items:center;
-      background:var(--chat-green);
-      padding:var(--spacing);
-      gap:.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      background: var(--chat-green);
+      padding: var(--spacing);
+      gap: .5rem;
     }
-    header button {
-      background:var(--audio-bg);
-      color:var(--white);
-      border:none;
-      padding:.5rem;
-      border-radius:50%;
-      cursor:pointer;
-      font-size:1.1rem;
-      transition:transform .2s;
+    /* pulsante audio */
+    #audioBtn {
+      background: var(--audio-bg);
+      color: var(--white);
+      border: none;
+      padding: .5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform .2s;
     }
-    header button:hover { transform:scale(1.1) }
-    header a.home-btn {
-      justify-self:center;
-      color:var(--white);
-      text-decoration:none;
-      font-weight:600;
-      padding:.5rem 1rem;
-      border:2px solid var(--white);
-      border-radius:var(--radius);
-      transition:background .2s;
+    #audioBtn:hover { transform: scale(1.1) }
+    /* home */
+    a.home-btn {
+      justify-self: center;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: .5rem 1rem;
+      border: 2px solid var(--white);
+      border-radius: var(--radius);
+      transition: background .2s;
     }
-    header a.home-btn:hover { background:rgba(255,255,255,0.2) }
-    header #closeBtn {
-      background:#b71c1c;
-      border-radius:50%;
-      padding:.5rem;
+    a.home-btn:hover { background: rgba(255,255,255,0.2) }
+    /* close */
+    #closeBtn {
+      background: #b71c1c;
+      color: var(--white);
+      border: none;
+      padding: .5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform .2s;
     }
-    header #closeBtn:hover { transform:scale(1.1) }
+    #closeBtn:hover { transform: scale(1.1) }
+    /* titolo centrato */
     header h1 {
-      grid-column:1/4;
-      justify-self:center;
-      color:var(--white);
-      margin-top:0.5rem;
-      font-size:1.25rem;
+      grid-column: 1/4;
+      justify-self: center;
+      color: var(--white);
+      margin-top: .5rem;
+      font-size: 1.25rem;
     }
     main {
-      flex:1;
-      display:flex; flex-direction:column;
-      padding:var(--spacing);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing);
     }
     .controls {
-      display:flex; flex-wrap:wrap;
-      gap:var(--spacing); align-items:center;
-      margin-bottom:var(--spacing);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing);
+      align-items: center;
+      margin-bottom: var(--spacing);
     }
-    .controls label { display:flex; align-items:center; gap:.25rem; font-weight:600 }
+    .controls label {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      font-weight: 600;
+    }
     select, textarea {
-      flex:1; font-size:1rem;
-      padding:.5rem var(--spacing);
-      border:1px solid #ccc;
-      border-radius:var(--radius);
-      background:#fff;
+      flex: 1;
+      font-size: 1rem;
+      padding: .5rem var(--spacing);
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      background: #fff;
     }
-    textarea { resize:vertical; min-height:4rem }
+    textarea { resize: vertical; min-height: 4rem }
     #sendBtn {
-      background:var(--chat-green);
-      color:var(--white);
-      border:none;
-      border-radius:var(--radius);
-      padding:.75rem 1.5rem;
-      cursor:pointer;
-      font-weight:600;
-      margin-left:auto;
+      background: var(--chat-green);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      padding: .75rem 1.5rem;
+      margin-left: auto;
     }
-    #sendBtn:disabled { opacity:.6; cursor:default }
+    #sendBtn:disabled { opacity: .6; cursor: default }
     .chat-box {
-      flex:1;
-      background:rgba(255,255,255,0.8);
-      border-radius:var(--radius);
-      padding:var(--spacing);
-      overflow-y:auto;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(6px);
+      border-radius: var(--radius);
+      padding: var(--spacing);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex: 1;
+      overflow-y: auto;
     }
-    .chat-box p { margin:0 0 1em; line-height:1.6 }
-    footer { text-align:center; padding:.5rem; background:#e0e0e0; font-size:.85rem }
+    .chat-box p { margin: 0 0 1em; line-height: 1.6 }
+    footer {
+      text-align: center;
+      padding: .5rem;
+      background: #e0e0e0;
+      font-size: .85rem;
+    }
     @media(max-width:480px){
-      .controls { flex-direction:column }
-      #sendBtn { width:100%; margin-left:0 }
-      header { grid-template-columns:auto auto auto; text-align:center }
-      header h1 { grid-column:auto; }
+      .controls { flex-direction: column }
+      #sendBtn { width: 100%; margin-left: 0 }
+      header { grid-template-columns: auto auto auto }
+      header h1 { grid-column: auto }
     }
     .ripple {
-      position:absolute; border-radius:50%;
-      background:rgba(255,255,255,0.4);
-      transform:scale(0); animation:ripple .6s linear;
-      pointer-events:none;
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transform: scale(0);
+      animation: ripple .6s linear;
+      pointer-events: none;
     }
-    @keyframes ripple { to{transform:scale(4);opacity:0;} }
+    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
   </style>
 </head>
 <body>
 
-  <!-- audio di sfondo -->
+  <!-- player audio -->
   <audio id="bg-audio" src="audio/nr1.mp3" loop preload="auto"></audio>
 
   <header>
     <button id="audioBtn">🔊</button>
-    <a href="index.html" class="home-btn">← Home</a>
+    <a href="index.html" class="home-btn">← Torna alla Home</a>
     <button id="closeBtn">✕</button>
     <h1>SynapSenseS Mental Coach Chat AI</h1>
   </header>
@@ -167,126 +195,126 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const audio    = document.getElementById('bg-audio');
-      const audioBtn = document.getElementById('audioBtn');
-      const closeBtn = document.getElementById('closeBtn');
+    // ** AUDIO **
+    const audio    = document.getElementById('bg-audio');
+    const audioBtn = document.getElementById('audioBtn');
+    const closeBtn = document.getElementById('closeBtn');
 
-      // avvia audio al primo gesto utente
-      const kickstart = ()=> {
-        audio.play().catch(()=>{});
-        document.removeEventListener('click', kickstart);
-        document.removeEventListener('touchstart', kickstart);
-      };
-      document.addEventListener('click', kickstart);
-      document.addEventListener('touchstart', kickstart);
+    // avvia al primo click/touch
+    const kickstart = ()=> {
+      audio.play().catch(()=>{});
+      document.removeEventListener('click', kickstart);
+      document.removeEventListener('touchstart', kickstart);
+    };
+    document.addEventListener('click', kickstart);
+    document.addEventListener('touchstart', kickstart);
 
-      audioBtn.addEventListener('click', ()=>{
-        if(audio.paused){
-          audio.play();
-          audioBtn.textContent = '🔇';
-        } else {
-          audio.pause();
-          audioBtn.textContent = '🔊';
-        }
+    audioBtn.addEventListener('click', ()=>{
+      if(audio.paused){
+        audio.play();
+        audioBtn.textContent = '🔇';
+      } else {
+        audio.pause();
+        audioBtn.textContent = '🔊';
+      }
+    });
+
+    closeBtn.addEventListener('click', ()=>{
+      window.close();
+      alert("Chiudi manualmente la scheda, per favore.");
+    });
+
+
+    // ** CHAT LOGIC **
+    const WORKER_URL    = 'https://synapsense-agent.ilpetti1897.workers.dev';
+    const modeRadios    = [...document.querySelectorAll('input[name="mode"]')];
+    const exSelect      = document.getElementById('exerciseSelect');
+    const autoSelect    = document.getElementById('autogenoSelect');
+    const ipnoSelect    = document.getElementById('autoipnosiSelect');
+    const messageInput  = document.getElementById('messageInput');
+    const sendBtn       = document.getElementById('sendBtn');
+    const chatBox       = document.getElementById('chatBox');
+    let history         = [];
+
+    // Popola 30 esercizi
+    fetch(WORKER_URL + '/exercises')
+      .then(r => r.json())
+      .then(exs => {
+        exSelect.innerHTML = exs.map(e =>
+          `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
+        ).join('');
       });
 
-      closeBtn.addEventListener('click', ()=>{
-        window.close();
-        alert("Chiudi manualmente la scheda, per favore.");
-      });
+    function resetChat() {
+      history = [];
+      chatBox.innerHTML = '<p>Scegli tra Chat libera, Consigli sui 30 esercizi, Training Autogeno o Autoipnosi Regressiva</p>';
+      messageInput.value = '';
+    }
 
+    function updateMode() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      exSelect.style.display    = mode==='exercise'   ? 'block':'none';
+      autoSelect.style.display  = mode==='autogeno'    ? 'block':'none';
+      ipnoSelect.style.display  = mode==='autoipnosi'  ? 'block':'none';
+      messageInput.placeholder = mode==='exercise'
+        ? "Scrivi qui il tuo dubbio sull’esercizio…"
+        : mode==='autogeno'
+          ? "Scrivi qui il tuo dubbio sul Training Autogeno…"
+          : mode==='autoipnosi'
+            ? "Scrivi qui il tuo dubbio sull’Autoipnosi…"
+            : "Scrivi qui il tuo messaggio…";
+      resetChat();
+    }
 
-      // *** CHAT LOGIC ***
-      const WORKER_URL    = 'https://synapsense-agent.ilpetti1897.workers.dev';
-      const modeRadios    = [...document.querySelectorAll('input[name="mode"]')];
-      const exSelect      = document.getElementById('exerciseSelect');
-      const autoSelect    = document.getElementById('autogenoSelect');
-      const ipnoSelect    = document.getElementById('autoipnosiSelect');
-      const messageInput  = document.getElementById('messageInput');
-      const sendBtn       = document.getElementById('sendBtn');
-      const chatBox       = document.getElementById('chatBox');
-      let history         = [];
+    modeRadios.forEach(r=>r.addEventListener('change', updateMode));
+    exSelect  .addEventListener('change', resetChat);
+    autoSelect.addEventListener('change', resetChat);
+    ipnoSelect.addEventListener('change', resetChat);
+    window.addEventListener('DOMContentLoaded', updateMode);
 
-      // Popola 30 esercizi
-      fetch(WORKER_URL + '/exercises')
-        .then(r => r.json())
-        .then(exs => {
-          exSelect.innerHTML = exs.map(e =>
-            `<option value="${e.id}">${e.id} – ${e.titolo}</option>`
-          ).join('');
+    sendBtn.addEventListener('click', async ()=>{
+      const mode           = document.querySelector('input[name="mode"]:checked').value;
+      const text           = messageInput.value.trim();
+      const exerciseId     = mode==='exercise'   ? exSelect.value    : null;
+      const topic          = mode==='autogeno'   ? 'autogeno'
+                          : mode==='autoipnosi'? 'autoipnosi'
+                          : null;
+      const autogenoStep   = mode==='autogeno'   ? autoSelect.value  : null;
+      const autoipnosiStep = mode==='autoipnosi'? ipnoSelect.value  : null;
+
+      if(!text) return alert('Inserisci un testo da inviare.');
+
+      chatBox.insertAdjacentHTML('beforeend',
+        `<p><strong>Tu:</strong> ${text}</p>`
+      );
+      history.push({ role:'user', content:text });
+
+      sendBtn.disabled = true;
+      try {
+        const res = await fetch(WORKER_URL+'/chat', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ mode, exerciseId, topic, autogenoStep, autoipnosiStep, history })
         });
+        const { reply, error } = await res.json();
+        if(error) throw new Error(error);
 
-      function resetChat() {
-        history = [];
-        chatBox.innerHTML = '<p>Scegli tra Chat libera, Consigli sui 30 esercizi, Training Autogeno o Autoipnosi Regressiva</p>';
+        reply.split(/\r?\n{2,}/).forEach(par=>{
+          const t=par.trim(); if(!t) return;
+          chatBox.insertAdjacentHTML('beforeend',
+            `<p><strong>AI:</strong> ${t}</p>`
+          );
+        });
+        history.push({ role:'assistant', content:reply });
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch {
+        chatBox.insertAdjacentHTML('beforeend',
+          `<p>Errore di connessione. Riprova più tardi.</p>`
+        );
+      } finally {
+        sendBtn.disabled = false;
         messageInput.value = '';
       }
-
-      function updateMode() {
-        const mode = document.querySelector('input[name="mode"]:checked').value;
-        exSelect.style.display   = mode==='exercise'  ? 'block':'none';
-        autoSelect.style.display = mode==='autogeno'    ? 'block':'none';
-        ipnoSelect.style.display = mode==='autoipnosi'? 'block':'none';
-        messageInput.placeholder = mode==='exercise'
-          ? "Scrivi qui il tuo dubbio sull’esercizio…"
-          : mode==='autogeno'
-            ? "Scrivi qui il tuo dubbio sul Training Autogeno…"
-            : mode==='autoipnosi'
-              ? "Scrivi qui il tuo dubbio sull’Autoipnosi…"
-              : "Scrivi qui il tuo messaggio…";
-        resetChat();
-      }
-      modeRadios.forEach(r=>r.addEventListener('change', updateMode));
-      exSelect   .addEventListener('change', resetChat);
-      autoSelect .addEventListener('change', resetChat);
-      ipnoSelect .addEventListener('change', resetChat);
-      window.addEventListener('DOMContentLoaded', updateMode);
-
-      sendBtn.addEventListener('click', async ()=> {
-        const mode          = document.querySelector('input[name="mode"]:checked').value;
-        const text          = messageInput.value.trim();
-        const exerciseId    = mode==='exercise'   ? exSelect.value   : null;
-        const topic         = mode==='autogeno'   ? 'autogeno'
-                           : mode==='autoipnosi'? 'autoipnosi'
-                           : null;
-        const autogenoStep  = mode==='autogeno'   ? autoSelect.value : null;
-        const autoipnosiStep= mode==='autoipnosi'? ipnoSelect.value : null;
-
-        if(!text) return alert('Inserisci un testo da inviare.');
-
-        chatBox.insertAdjacentHTML('beforeend',
-          `<p><strong>Tu:</strong> ${text}</p>`
-        );
-        history.push({ role:'user', content:text });
-
-        sendBtn.disabled = true;
-        try {
-          const res = await fetch(WORKER_URL + '/chat', {
-            method:'POST',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify({ mode, exerciseId, topic, autogenoStep, autoipnosiStep, history })
-          });
-          const { reply, error } = await res.json();
-          if(error) throw new Error(error);
-
-          reply.split(/\r?\n{2,}/).forEach(par=>{
-            const t=par.trim(); if(!t) return;
-            chatBox.insertAdjacentHTML('beforeend',
-              `<p><strong>AI:</strong> ${t}</p>`
-            );
-          });
-          history.push({ role:'assistant', content:reply });
-          chatBox.scrollTop = chatBox.scrollHeight;
-        } catch {
-          chatBox.insertAdjacentHTML('beforeend',
-            `<p>Errore di connessione. Riprova più tardi.</p>`
-          );
-        } finally {
-          sendBtn.disabled = false;
-          messageInput.value = '';
-        }
-      });
     });
   </script>
 </body>
