@@ -193,11 +193,10 @@
   <footer>© 2025 SynapSenseS</footer>
 
   <script>
-    // ** AUDIO **
+    // AUDIO HANDLER
     const audio    = document.getElementById('bg-audio');
     const audioBtn = document.getElementById('audioBtn');
     const closeBtn = document.getElementById('closeBtn');
-
     const kickstart = ()=> {
       audio.play().catch(()=>{});
       document.removeEventListener('click', kickstart);
@@ -205,23 +204,16 @@
     };
     document.addEventListener('click', kickstart);
     document.addEventListener('touchstart', kickstart);
-
     audioBtn.addEventListener('click', ()=>{
-      if(audio.paused){
-        audio.play();
-        audioBtn.textContent = '🔇';
-      } else {
-        audio.pause();
-        audioBtn.textContent = '🔊';
-      }
+      if(audio.paused){ audio.play(); audioBtn.textContent='🔇'; }
+      else         { audio.pause(); audioBtn.textContent='🔊'; }
     });
-
     closeBtn.addEventListener('click', ()=>{
       window.close();
       alert("Chiudi manualmente la scheda, per favore.");
     });
 
-    // ** CHAT LOGIC **
+    // CHAT LOGIC
     const WORKER_URL    = 'https://synapsense-agent.ilpetti1897.workers.dev';
     const modeRadios    = [...document.querySelectorAll('input[name="mode"]')];
     const exSelect      = document.getElementById('exerciseSelect');
@@ -248,21 +240,19 @@
 
     function updateMode() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      exSelect.style.display    = mode==='exercise'   ? 'block':'none';
-      autoSelect.style.display  = mode==='autogeno'    ? 'block':'none';
-      ipnoSelect.style.display  = mode==='autoipnosi'  ? 'block':'none';
-      messageInput.placeholder = mode==='exercise'
-        ? "Scrivi qui il tuo dubbio sull’esercizio…"
-        : mode==='autogeno'
-          ? "Scrivi qui il tuo dubbio sul Training Autogeno…"
-          : mode==='autoipnosi'
-            ? "Scrivi qui il tuo dubbio sull’Autoipnosi…"
-            : "Scrivi qui il tuo messaggio…";
+      exSelect.style.display   = mode==='exercise'   ? 'block':'none';
+      autoSelect.style.display = mode==='autogeno'    ? 'block':'none';
+      ipnoSelect.style.display = mode==='autoipnosi'  ? 'block':'none';
+      messageInput.placeholder = 
+        mode==='exercise'   ? "Scrivi qui il tuo dubbio sull’esercizio…" :
+        mode==='autogeno'   ? "Scrivi qui il tuo dubbio sul Training Autogeno…" :
+        mode==='autoipnosi' ? "Scrivi qui il tuo dubbio sull’Autoipnosi…" :
+                              "Scrivi qui il tuo messaggio…";
       resetChat();
     }
 
     modeRadios.forEach(r=>r.addEventListener('change', updateMode));
-    exSelect  .addEventListener('change', resetChat);
+    exSelect .addEventListener('change', resetChat);
     autoSelect.addEventListener('change', resetChat);
     ipnoSelect.addEventListener('change', resetChat);
     window.addEventListener('DOMContentLoaded', updateMode);
@@ -271,11 +261,11 @@
       const mode            = document.querySelector('input[name="mode"]:checked').value;
       const text            = messageInput.value.trim();
       const exerciseId      = mode==='exercise'   ? exSelect.value    : null;
-      const topic           = mode==='autogeno'   ? 'autogeno'
+      const topic           = mode==='autogeno'   ? 'autogeno' 
                           : mode==='autoipnosi'? 'autoipnosi'
                           : null;
       const autogenoStep    = mode==='autogeno'   ? autoSelect.value  : null;
-      const autoipnosiStep  = mode==='autoipnosi'? ipnoSelect.value  : null;
+      const autoStep        = mode==='autoipnosi'? ipnoSelect.value  : null;
 
       if(!text) return alert('Inserisci un testo da inviare.');
 
@@ -289,7 +279,7 @@
         const res = await fetch(WORKER_URL+'/chat', {
           method:'POST',
           headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify({ mode, exerciseId, topic, autogenoStep, autoipnosiStep, history })
+          body: JSON.stringify({ mode, exerciseId, topic, autogenoStep, autoStep, history })
         });
         const { reply, error } = await res.json();
         if(error) throw new Error(error);
