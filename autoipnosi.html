@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autoipnosi Regressiva</title>
+  <style>
+    :root {
+      --auto:       #3f51b5;
+      --white:      #fff;
+      --bg:         #f0f2f5;
+      --overlay:    rgba(0,0,0,0.7);
+      --radius:     8px;
+      --spacing:    1rem;
+      --font:       'Inter', Arial, sans-serif;
+      --card-bg:    #fff;
+      --card-shadow:rgba(0,0,0,0.1);
+    }
+    * { box-sizing:border-box; margin:0; padding:0 }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color:#333;
+    }
+    header {
+      background: var(--auto);
+      color: var(--white);
+      padding: var(--spacing);
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight:600;
+    }
+    main { padding: var(--spacing); }
+    .intro-box {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px var(--card-shadow);
+      padding: var(--spacing);
+      margin-bottom: var(--spacing);
+      line-height:1.5;
+      text-align:center;
+    }
+    .intro-box h2 { color: var(--auto); margin-bottom:.5rem; }
+    .intro-box p { max-width:600px; margin:0 auto 1rem; }
+    .intro-box ol {
+      text-align:left;
+      display:inline-block;
+      margin:0 auto;
+      padding-left:1.2rem;
+    }
+    .intro-box a.home {
+      display:inline-block;
+      margin-top:var(--spacing);
+      background:var(--auto);
+      color:var(--white);
+      padding:.6rem 1rem;
+      border-radius:var(--radius);
+      text-decoration:none;
+      font-weight:600;
+      transition:background .2s;
+    }
+    .intro-box a.home:hover { background:#334296; }
+
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:var(--spacing);
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px var(--card-shadow);
+      cursor:pointer;
+      overflow:hidden;
+      transition:transform .2s;
+    }
+    .card:hover { transform:scale(1.03) }
+    .card img {
+      width:100%; height:140px; object-fit:cover;
+    }
+    .card h3 {
+      padding:.5rem; text-align:center; font-size:1.1rem;
+    }
+
+    /* overlay dettaglio */
+    .detail {
+      position:fixed; top:0;left:0;right:0;bottom:0;
+      background:var(--overlay); overflow-y:auto;
+      padding:2rem; z-index:10;
+    }
+    .detail-content {
+      background:var(--card-bg); color:#000;
+      max-width:600px; margin:auto;
+      border-radius:var(--radius); padding:var(--spacing);
+      line-height:1.5;
+    }
+    .detail-content h1 {
+      margin-top:0; color:var(--auto);
+    }
+    .detail-content h2 {
+      margin-top:1rem; color:var(--auto);
+    }
+    .detail-content ol,
+    .detail-content ul { margin-left:1.5rem; }
+    .detail-content .actions {
+      margin-top:var(--spacing);
+      display:flex; gap:var(--spacing); flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .detail-content .actions a {
+      background:var(--auto);
+      color:var(--white);
+      padding:.6rem 1rem;
+      border-radius:var(--radius);
+      text-decoration:none;
+      font-weight:600;
+      transition:background .2s;
+    }
+    .detail-content .actions a:hover { background:#334296; }
+
+    @media(max-width:480px){
+      .intro-box ol { font-size:.9rem; }
+      .detail-content { padding:.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>Autoipnosi Regressiva</header>
+
+  <main>
+    <div class="intro-box">
+      <h2>Cos’è l’Autoipnosi Regressiva?</h2>
+      <p>
+        È una tecnica che ci guida, attraverso suggestioni immaginative, a rivisitare ricordi o emozioni perdute,
+        per osservarle da un nuovo punto di vista e alleggerirne l’impatto.
+      </p>
+      <h2>Tecniche Principali</h2>
+      <ol>
+        <li>Il Viaggio in Treno</li>
+        <li>Il Calendario Inverso</li>
+        <li>Le Lancette Reverse</li>
+        <li>Il Ponte delle Emozioni</li>
+      </ol>
+      <a href="index.html" class="home">← Torna alla Home</a>
+    </div>
+
+    <div class="grid" id="grid">
+      <!-- schede tecniche verranno popolate qui -->
+    </div>
+  </main>
+
+  <script>
+    const techniques = [
+      {
+        id:1, title:"Il Viaggio in Treno", img:"images/auto/1.jpg",
+        objective:"Navigare indietro nel tempo come passeggero, fino al ricordo chiave.",
+        steps:[
+          "Chiudi gli occhi e immagina una stazione luminosa.",
+          "Sali su un treno che procede lentamente all’indietro.",
+          "Guarda dal finestrino scene della tua vita che scorrono in senso inverso.",
+          "Quando arrivi a un momento importante, scendi e rivivilo con calma."
+        ],
+        tips:[
+          "Scegli un ricordo non troppo doloroso la prima volta.",
+          "Annota sensazioni e immagini appena riapri gli occhi."
+        ]
+      },
+      {
+        id:2, title:"Il Calendario Inverso", img:"images/auto/2.jpg",
+        objective:"Scorrere mentalmente le date all’indietro fino all’evento significativo.",
+        steps:[
+          "Visualizza un calendario gigante con i giorni che si muovono in senso antiorario.",
+          "Segui ogni giorno mentre cambia, contando fino a fermarti su una data rilevante.",
+          "Frena mentalmente e concentra l’attenzione sul ricordo di quella specifica giornata."
+        ],
+        tips:[
+          "Immagina il suono delle pagine che si voltano.",
+          "Senti il passaggio del tempo ridursi man mano che procedi."
+        ]
+      },
+      {
+        id:3, title:"Le Lancette Reverse", img:"images/auto/3.jpg",
+        objective:"Accelerare o rallentare la percezione del tempo per estraniarsi dall’emozione.",
+        steps:[
+          "Pensa a un grande orologio davanti a te.",
+          "Osserva le lancette muoversi all’indietro, prima lentamente, poi più velocemente.",
+          "Ad ogni giro mentale, rivivi un frammento del ricordo fino a distaccarti dall’emozione."
+        ],
+        tips:[
+          "Puoi variare la velocità per dosare l’intensità.",
+          "Usa un mantra breve per mantenerti presente."
+        ]
+      },
+      {
+        id:4, title:"Il Ponte delle Emozioni", img:"images/auto/4.jpg",
+        objective:"Separare l’esperienza dall’emozione, rivivendo il ricordo come spettatore.",
+        steps:[
+          "Immagina un ponte che collega il presente al momento vissuto.",
+          "Attraversalo lentamente, osservando te stesso nell’evento da fuori.",
+          "Rivedi le emozioni ma sentiti al sicuro al di fuori della scena."
+        ],
+        tips:[
+          "Mantieni la distanza mentale per non farti sopraffare.",
+          "Ripeti mentalmente: “Sono un osservatore consapevole”."
+        ]
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+    techniques.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${t.img}" alt="${t.title}">
+        <h3>${t.title}</h3>
+      `;
+      card.onclick = () => showDetail(t);
+      grid.appendChild(card);
+    });
+
+    function showDetail(t) {
+      const overlay = document.createElement('div');
+      overlay.className = 'detail';
+      overlay.innerHTML = `
+        <div class="detail-content">
+          <h1>${t.title}</h1>
+          <h2>Obiettivo</h2>
+          <p>${t.objective}</p>
+          <h2>Procedura</h2>
+          <ol>${t.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+          <h2>Consigli</h2>
+          <ul>${t.tips.map(x=>`<li>${x}</li>`).join('')}</ul>
+          <div class="actions">
+            <a href="chat.html">Chat AI</a>
+            <a href="#" class="close">Chiudi</a>
+          </div>
+        </div>
+      `;
+      overlay.querySelector('.close').onclick = e => {
+        e.preventDefault();
+        overlay.remove();
+      };
+      document.body.appendChild(overlay);
+    }
+  </script>
+
+</body>
+</html>
